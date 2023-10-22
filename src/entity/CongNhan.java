@@ -16,6 +16,7 @@ public class CongNhan {
 	private int caLamViec;
 	private double phuCap;
 	private LocalDate ngayBatDauLamViec;
+	private Xuong xuong;
 
 	public CongNhan() {
 		super();
@@ -23,7 +24,7 @@ public class CongNhan {
 	}
 
 	public CongNhan(String maCN, byte[] anhDaiDien, String ho, String ten, boolean gioiTinh, String cCCD, String diaChi,
-			String soDienThoai, String chuyenMon, int caLamViec, double phuCap, LocalDate ngayBatDauLamViec) {
+			String soDienThoai, String chuyenMon, int caLamViec, double phuCap, LocalDate ngayBatDauLamViec, Xuong xuong) {
 		super();
 		this.maCN = maCN;
 		this.anhDaiDien = anhDaiDien;
@@ -37,6 +38,7 @@ public class CongNhan {
 		this.caLamViec = caLamViec;
 		this.phuCap = phuCap;
 		this.ngayBatDauLamViec = ngayBatDauLamViec;
+		this.xuong = xuong;
 	}
 
 	public CongNhan(String maCN) {
@@ -134,6 +136,14 @@ public class CongNhan {
 
 	public String getMaCN() {
 		return maCN;
+	}
+
+	public Xuong getXuong() {
+		return xuong;
+	}
+
+	public void setXuong(Xuong xuong) {
+		this.xuong = xuong;
 	}
 
 	@Override
