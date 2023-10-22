@@ -47,13 +47,13 @@ create table CongNhan (
 
 create table BangLuongCongNhan (
 	maLuongCN nvarchar(12) not null primary key,
+	maCN nvarchar(8),
 	thang int,
 	nam int,
 	sanLuong int,
 	soNgayNghiKhongPhep int,
 	tienPhat float,
 	luongTong float,
-	maCN nvarchar(8),
 	constraint FK_BLCN foreign key (maCN)
 	references CongNhan(maCN)
 )
@@ -61,12 +61,10 @@ create table BangLuongCongNhan (
 create table ChamCongCongNhan (
 	maCC nvarchar(12) not null primary key,
 	ngayCham date not null,
-	soGioTangCa int,
-	ghiChu nvarchar(100),
-	coPhep bit,
-	vangMat bit,
-	sanLuong int,
 	maCN nvarchar(8),
+	soGioTangCa int,
+	sanLuong int,
+	ghiChu nvarchar(100),
 	constraint FK_CCCN foreign key (maCN)
 	references CongNhan(maCN)
 )
@@ -123,8 +121,8 @@ create table BoPhan (
 create table NhanVien (
 	maNV nvarchar(8) not null primary key,
 	anhDaiDien varbinary(max),
+	ho nvarchar (100) not null,
 	ten nvarchar (10) not null,
-	hoDem nvarchar (100) not null,
 	gioiTinh bit,
 	soDienThoai nvarchar(11),
 	diaChi nvarchar (100),
@@ -143,26 +141,27 @@ create table NhanVien (
 
 create table BangLuongNhanVien (
 	maLuongNV nvarchar(12) not null primary key,
+	maNV nvarchar(8),
 	thang int,
 	nam int,
 	soNgayDiLam date,
 	soNgayNghiKhongPhep int,
 	tienPhat float,
 	luongTong float,
-	maNV nvarchar(8),
 	constraint FK_BLNV foreign key (maNV)
 	references NhanVien(maNV)
 )
 
 create table ChamCongNhanVien (
 	maChamCong nvarchar(12) not null primary key,
+	maNV nvarchar(8),
 	ngayCham date not null,
 	soGioTangCa int,
 	caLam int,
-	ghiChu nvarchar(100),
-	coPhep bit,
+	coMat bit,
 	vangMat bit,
-	maNV nvarchar(8),
+	coPhep bit,
+	ghiChu nvarchar(100),
 	constraint FK_CCNV foreign key (maNV)
 	references NhanVien(maNV)
 )
