@@ -30,15 +30,16 @@ create table Xuong (
 create table CongNhan (
 	maCN nvarchar(8) not null primary key,
 	anhDaiDien varbinary(max),
+	ho nvarchar (100) not null,
 	ten nvarchar (10) not null,
-	hoDem nvarchar (100) not null,
 	gioiTinh bit,
-	soDienThoai nvarchar(11),
-	diaChi nvarchar (100),
 	cCCD nvarchar(12) not null,
-	ngayBatDauLamViec date not null,
-	caLamViec int,
+	diaChi nvarchar (100),
+	soDienThoai nvarchar(11),
 	chuyenMon nvarchar(20),
+	caLamViec int,
+	phuCap float,
+	ngayBatDauLamViec date not null,
 	maXuong nvarchar(3),
 	constraint FK_Xuong foreign key (maXuong)
 	references Xuong(maXuong)
@@ -134,6 +135,7 @@ create table NhanVien (
 	luongCoBan float,
 	thangBacLuong int,
 	heSoLuong float,
+	phuCap float,
 	maBP nvarchar(4),
 	constraint FK_BP foreign key (maBP)
 	references BoPhan(maBoPhan)
