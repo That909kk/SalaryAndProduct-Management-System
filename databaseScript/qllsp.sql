@@ -123,8 +123,8 @@ create table BoPhan (
 create table NhanVien (
 	maNV nvarchar(8) not null primary key,
 	anhDaiDien varbinary(max),
+	ho nvarchar (100) not null,
 	ten nvarchar (10) not null,
-	hoDem nvarchar (100) not null,
 	gioiTinh bit,
 	soDienThoai nvarchar(11),
 	diaChi nvarchar (100),
