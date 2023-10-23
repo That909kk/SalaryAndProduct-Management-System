@@ -1,10 +1,13 @@
 package gUI;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -17,20 +20,23 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.MouseInputListener;
 
 import connectDB.ConnectDB;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javax.swing.ImageIcon;
 
-public class DangNhap_GUI extends JFrame implements ActionListener {
+public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
 	private JTextField txtTK;
 	private JPasswordField pwdMK;
 	private JButton btnDN;
 	private JButton btnDK;
-	private JLabel lblNewLabel;
+	private JLabel lblBackGround;
+	private JLabel lblLinkQMK;
+	private JPanel pnlForm;
 
 	public static void main(String[] args) {
 		DangNhap_GUI dangNhap = new DangNhap_GUI();
@@ -65,63 +71,70 @@ public class DangNhap_GUI extends JFrame implements ActionListener {
 		contentPane.add(pnlBackGround);
 		pnlBackGround.setLayout(null);
 		
-		lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(0, 0, 455, 461);
-		lblNewLabel.setIcon(new ImageIcon("img\\background\\coins_resize.jpg"));
-		pnlBackGround.add(lblNewLabel);
+		lblBackGround = new JLabel("");
+		lblBackGround.setBounds(0, 0, 455, 461);
+		lblBackGround.setIcon(new ImageIcon("img\\background\\coins_resize.jpg"));
+		pnlBackGround.add(lblBackGround);
 		
-		JLabel lblTitle = new JLabel("Đăng nhập");
+		pnlForm = new JPanel();
+		pnlForm.setBackground(new Color(240, 248, 255));
+		pnlForm.setBounds(454, 0, 430, 461);
+		contentPane.add(pnlForm);
+		pnlForm.setLayout(null);
+		
+		JLabel lblTitle = new JLabel("ĐĂNG NHẬP");
+		lblTitle.setBounds(100, 39, 240, 80);
+		pnlForm.add(lblTitle);
 		lblTitle.setBackground(new Color(255, 255, 255));
-		lblTitle.setBounds(555, 36, 240, 80);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitle.setFont(new Font("Tahoma", Font.BOLD, 32));
-		contentPane.add(lblTitle);
 		
 		JLabel lblTaiKhoan = new JLabel("Tài khoản:");
-		lblTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTaiKhoan.setBounds(490, 127, 80, 20);
-		contentPane.add(lblTaiKhoan);
+		lblTaiKhoan.setBounds(29, 130, 88, 20);
+		pnlForm.add(lblTaiKhoan);
+		lblTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		txtTK = new JTextField();
+		txtTK.setBounds(29, 158, 370, 40);
+		pnlForm.add(txtTK);
 		txtTK.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtTK.setBounds(490, 156, 360, 40);
-		contentPane.add(txtTK);
 		txtTK.setColumns(10);
 		
 		JLabel lblMatKhau = new JLabel("Mật khẩu:");
-		lblMatKhau.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMatKhau.setBounds(490, 219, 80, 20);
-		contentPane.add(lblMatKhau);
+		lblMatKhau.setBounds(29, 220, 88, 20);
+		pnlForm.add(lblMatKhau);
+		lblMatKhau.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
 		pwdMK = new JPasswordField();
-		pwdMK.setBounds(490, 250, 360, 40);
-		contentPane.add(pwdMK);
+		pwdMK.setBounds(29, 251, 370, 40);
+		pnlForm.add(pwdMK);
 		
-		btnDK = new JButton("Đăng kí");
+		btnDK = new JButton("Đăng ký");
+		btnDK.setBounds(250, 327, 150, 50);
+		pnlForm.add(btnDK);
 		btnDK.setBackground(new Color(255, 255, 255));
 		btnDK.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnDK.setBounds(700, 335, 150, 50);
-		contentPane.add(btnDK);
 		
 		btnDN = new JButton("Đăng nhập");
+		btnDN.setBounds(29, 327, 150, 50);
+		pnlForm.add(btnDN);
 		btnDN.setBackground(new Color(255, 255, 255));
 		btnDN.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnDN.setBounds(490, 335, 150, 50);
-		contentPane.add(btnDN);
 		
-		JLabel lblLinkQMK = new JLabel("Quên mật khẩu?");
+		lblLinkQMK = new JLabel("Quên mật khẩu?");
+		lblLinkQMK.setBounds(280, 388, 120, 40);
+		pnlForm.add(lblLinkQMK);
 		lblLinkQMK.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblLinkQMK.setBounds(730, 400, 120, 30);
-		contentPane.add(lblLinkQMK);
+		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblLinkQMK.addMouseListener(this);
+		btnDN.addActionListener(this);
 		
 		btnDK.addActionListener(this);
-		btnDN.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-Object obj = e.getSource();
+		Object obj = e.getSource();
 		
 		if (obj.equals(btnDN)) {
 			TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
@@ -149,4 +162,30 @@ Object obj = e.getSource();
 		}
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		lblLinkQMK.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		lblLinkQMK.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
 }
