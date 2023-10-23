@@ -37,12 +37,6 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 	private JLabel lblBackGround;
 	private JLabel lblLinkQMK;
 	private JPanel pnlForm;
-
-	public static void main(String[] args) {
-		DangNhap_GUI dangNhap = new DangNhap_GUI();
-		dangNhap.setVisible(true);
-	}
-
 	/**
 	 * Create the frame.
 	 */
