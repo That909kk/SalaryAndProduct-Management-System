@@ -177,7 +177,7 @@ create table BangPhanCongXuong (
 	references NhanVien(maNV)
 )
 
-create table taiKhoan (
+create table TaiKhoan (
 	maTK nvarchar (2) not null primary key,
 	taiKhoan nvarchar(20),
 	matKhau nvarchar(16),
