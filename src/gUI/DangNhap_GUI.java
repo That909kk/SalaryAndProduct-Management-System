@@ -1,10 +1,13 @@
 package gUI;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -17,20 +20,22 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.MouseInputListener;
 
 import connectDB.ConnectDB;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javax.swing.ImageIcon;
 
-public class DangNhap_GUI extends JFrame implements ActionListener {
+public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener, MouseInputListener {
 
 	private JPanel contentPane;
 	private JTextField txtTK;
 	private JPasswordField pwdMK;
 	private JButton btnDN;
 	private JButton btnDK;
-	private JLabel lblNewLabel;
+	private JLabel lblBackGround;
+	private JLabel lblLinkQMK;
 
 	public static void main(String[] args) {
 		DangNhap_GUI dangNhap = new DangNhap_GUI();
@@ -65,12 +70,12 @@ public class DangNhap_GUI extends JFrame implements ActionListener {
 		contentPane.add(pnlBackGround);
 		pnlBackGround.setLayout(null);
 		
-		lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(0, 0, 455, 461);
-		lblNewLabel.setIcon(new ImageIcon("img\\background\\coins_resize.jpg"));
-		pnlBackGround.add(lblNewLabel);
+		lblBackGround = new JLabel("");
+		lblBackGround.setBounds(0, 0, 455, 461);
+		lblBackGround.setIcon(new ImageIcon("img\\background\\coins_resize.jpg"));
+		pnlBackGround.add(lblBackGround);
 		
-		JLabel lblTitle = new JLabel("Đăng nhập");
+		JLabel lblTitle = new JLabel("ĐĂNG NHẬP");
 		lblTitle.setBackground(new Color(255, 255, 255));
 		lblTitle.setBounds(555, 36, 240, 80);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
@@ -78,50 +83,52 @@ public class DangNhap_GUI extends JFrame implements ActionListener {
 		contentPane.add(lblTitle);
 		
 		JLabel lblTaiKhoan = new JLabel("Tài khoản:");
-		lblTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTaiKhoan.setBounds(490, 127, 80, 20);
+		lblTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblTaiKhoan.setBounds(490, 120, 88, 20);
 		contentPane.add(lblTaiKhoan);
 		
 		txtTK = new JTextField();
 		txtTK.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtTK.setBounds(490, 156, 360, 40);
+		txtTK.setBounds(490, 149, 360, 40);
 		contentPane.add(txtTK);
 		txtTK.setColumns(10);
 		
 		JLabel lblMatKhau = new JLabel("Mật khẩu:");
-		lblMatKhau.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblMatKhau.setBounds(490, 219, 80, 20);
+		lblMatKhau.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblMatKhau.setBounds(490, 210, 88, 20);
 		contentPane.add(lblMatKhau);
 		
 		pwdMK = new JPasswordField();
-		pwdMK.setBounds(490, 250, 360, 40);
+		pwdMK.setBounds(490, 241, 360, 40);
 		contentPane.add(pwdMK);
 		
-		btnDK = new JButton("Đăng kí");
+		btnDK = new JButton("Đăng ký");
 		btnDK.setBackground(new Color(255, 255, 255));
 		btnDK.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnDK.setBounds(700, 335, 150, 50);
+		btnDK.setBounds(700, 310, 150, 50);
 		contentPane.add(btnDK);
 		
 		btnDN = new JButton("Đăng nhập");
 		btnDN.setBackground(new Color(255, 255, 255));
 		btnDN.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnDN.setBounds(490, 335, 150, 50);
+		btnDN.setBounds(490, 310, 150, 50);
 		contentPane.add(btnDN);
 		
-		JLabel lblLinkQMK = new JLabel("Quên mật khẩu?");
+		lblLinkQMK = new JLabel("Quên mật khẩu?");
 		lblLinkQMK.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblLinkQMK.setBounds(730, 400, 120, 30);
+		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblLinkQMK.setBounds(730, 390, 120, 40);
 		contentPane.add(lblLinkQMK);
 		
 		btnDK.addActionListener(this);
 		btnDN.addActionListener(this);
+		lblLinkQMK.addMouseMotionListener(this);
+		lblLinkQMK.addMouseListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-Object obj = e.getSource();
+		Object obj = e.getSource();
 		
 		if (obj.equals(btnDN)) {
 			TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
@@ -147,6 +154,45 @@ Object obj = e.getSource();
 			DangKy_GUI dangKy = new DangKy_GUI();
 			dangKy.setVisible(true);
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		lblLinkQMK.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		lblLinkQMK.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
