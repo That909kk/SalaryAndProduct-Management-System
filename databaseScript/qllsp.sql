@@ -182,6 +182,7 @@ create table TaiKhoan (
 	taiKhoan nvarchar(20),
 	matKhau nvarchar(16),
 	maNV nvarchar(8),
+	ngayDNCuoi date
 	constraint FK_TKNV foreign key (maNV)
 	references NhanVien(maNV)
 )
@@ -196,7 +197,7 @@ go
 insert into Xuong values
 	('MA1', N'Xưởng may 1', ''),
 	('NH1', N'Xưởng nhuộm 1', ''),
-	('NH2', N'Xưởng nhuộm 1', ''),
+	('NH2', N'Xưởng nhuộm 2', ''),
 	('GC1', N'Xưởng gia công 1', ''),
 	('DG1', N'Xưởng đóng gói 1', '')
 go

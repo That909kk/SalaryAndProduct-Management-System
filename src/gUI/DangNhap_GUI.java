@@ -33,7 +33,6 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 	private JTextField txtTK;
 	private JPasswordField pwdMK;
 	private JButton btnDN;
-	private JButton btnDK;
 	private JLabel lblBackGround;
 	private JLabel lblLinkQMK;
 	private JPanel pnlForm;
@@ -103,27 +102,20 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		pwdMK.setBounds(29, 251, 370, 40);
 		pnlForm.add(pwdMK);
 		
-		btnDK = new JButton("Đăng ký");
-		btnDK.setBounds(250, 327, 150, 50);
-		pnlForm.add(btnDK);
-		btnDK.setBackground(new Color(255, 255, 255));
-		btnDK.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
 		btnDN = new JButton("Đăng nhập");
-		btnDN.setBounds(29, 327, 150, 50);
+		btnDN.setBounds(130, 330, 180, 60);
 		pnlForm.add(btnDN);
 		btnDN.setBackground(new Color(255, 255, 255));
-		btnDN.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnDN.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
 		lblLinkQMK = new JLabel("Quên mật khẩu?");
-		lblLinkQMK.setBounds(280, 388, 120, 40);
+		lblLinkQMK.setForeground(new Color(30, 144, 255));
+		lblLinkQMK.setBounds(130, 410, 180, 40);
 		pnlForm.add(lblLinkQMK);
-		lblLinkQMK.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblLinkQMK.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLinkQMK.addMouseListener(this);
 		btnDN.addActionListener(this);
-		
-		btnDK.addActionListener(this);
 	}
 
 	@Override
@@ -138,6 +130,9 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 			
 			TaiKhoan tonTai = taiKhoan_DAO.soSanhPWD(tk, mk);
 			
+			GiaoDienChinh_GUI main = new GiaoDienChinh_GUI();
+			main.setVisible(true);
+			
 			if (tonTai != null) {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
 				this.dispose();
@@ -149,16 +144,17 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 			}
 		}
 		
-		if (obj.equals(btnDK)) {
-			this.dispose();
-			DangKy_GUI dangKy = new DangKy_GUI();
-			dangKy.setVisible(true);
-		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		Object o = e.getSource();
 		
+		if (o.equals(lblLinkQMK)) {
+			QuenMatKhau_GUI quenMK = new QuenMatKhau_GUI();
+			this.dispose();
+			quenMK.setVisible(true);
+		}
 	}
 
 	@Override
