@@ -3,12 +3,15 @@ package gUI;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -22,7 +25,7 @@ import connectDB.ConnectDB;
  * Tạo bởi: Huỳnh Kim Thành - 21086351
  * ngày: 25/10/2023
  */
-public class DoiMatKhau_GUI extends JFrame {
+public class DoiMatKhau_GUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JPanel pnlForm;
@@ -30,7 +33,7 @@ public class DoiMatKhau_GUI extends JFrame {
 
 	private JTextField txtTK;
 	private JPasswordField pwdMK;
-	private JButton btnDK;
+	private JButton btnXacNhan;
 	private JPasswordField passwordField;
 	/**
 	 * Create the frame.
@@ -99,11 +102,11 @@ public class DoiMatKhau_GUI extends JFrame {
 		pwdMK.setBounds(29, 209, 370, 40);
 		pnlForm.add(pwdMK);
 		
-		btnDK = new JButton("Xác Nhận");
-		btnDK.setBounds(144, 360, 160, 50);
-		pnlForm.add(btnDK);
-		btnDK.setBackground(new Color(255, 255, 255));
-		btnDK.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnXacNhan = new JButton("Xác Nhận");
+		btnXacNhan.setBounds(144, 360, 160, 50);
+		pnlForm.add(btnXacNhan);
+		btnXacNhan.setBackground(new Color(255, 255, 255));
+		btnXacNhan.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
 		JLabel lblNhpLiMt = new JLabel("Nhập lại mật khẩu mới:");
 		lblNhpLiMt.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -113,5 +116,21 @@ public class DoiMatKhau_GUI extends JFrame {
 		passwordField = new JPasswordField();
 		passwordField.setBounds(29, 289, 370, 40);
 		pnlForm.add(passwordField);
+		
+		btnXacNhan.addActionListener(this);
 	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		
+		if (o.equals(btnXacNhan)) {
+			int chon = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn đổi mật khẩu?", "Lưu ý", JOptionPane.YES_NO_OPTION);
+			
+			if (chon == JOptionPane.YES_OPTION) {
+				
+			}
+		}
+	}
+	
+	
 }
