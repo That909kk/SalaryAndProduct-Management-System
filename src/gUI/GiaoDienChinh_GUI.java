@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
@@ -194,9 +195,13 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		Object o = e.getSource();
 		
 		if (o.equals(btnDangXuat)) {
-			DangNhap_GUI dangNhap = new DangNhap_GUI();
-			this.dispose();
-			dangNhap.setVisible(true);
+			int chon = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn đăng xuất", "Lưu Ý", JOptionPane.YES_NO_OPTION);
+			
+			if (chon == JOptionPane.YES_OPTION) {
+				DangNhap_GUI dangNhap = new DangNhap_GUI();
+				this.dispose();
+				dangNhap.setVisible(true);
+			}	
 		}
 		
 		if (o.equals(btnDoiMK)) {
