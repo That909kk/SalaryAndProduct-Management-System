@@ -17,7 +17,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import connectDB.ConnectDB;
-
+/**
+ * Lớp này dùng để tạo giao diện đổi mật khẩu
+ * Tạo bởi: Huỳnh Kim Thành - 21086351
+ * ngày: 25/10/2023
+ */
 public class DoiMatKhau_GUI extends JFrame {
 
 	private JPanel contentPane;
@@ -27,13 +31,12 @@ public class DoiMatKhau_GUI extends JFrame {
 	private JTextField txtTK;
 	private JPasswordField pwdMK;
 	private JButton btnDK;
-	
-	private JLabel lblLinkBack;
 	private JPasswordField passwordField;
 	/**
 	 * Create the frame.
 	 */
 	public DoiMatKhau_GUI() {
+		super("Màn hình đổi mật khẩu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(900, 500);
 		setLocationRelativeTo(null);
@@ -97,17 +100,10 @@ public class DoiMatKhau_GUI extends JFrame {
 		pnlForm.add(pwdMK);
 		
 		btnDK = new JButton("Xác Nhận");
-		btnDK.setBounds(144, 349, 160, 50);
+		btnDK.setBounds(144, 360, 160, 50);
 		pnlForm.add(btnDK);
 		btnDK.setBackground(new Color(255, 255, 255));
 		btnDK.setFont(new Font("Tahoma", Font.BOLD, 20));
-		
-		lblLinkBack = new JLabel("Trở lại Trang Chính");
-		lblLinkBack.setForeground(new Color(0, 255, 255));
-		lblLinkBack.setBounds(144, 410, 160, 40);
-		pnlForm.add(lblLinkBack);
-		lblLinkBack.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLinkBack.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		JLabel lblNhpLiMt = new JLabel("Nhập lại mật khẩu mới:");
 		lblNhpLiMt.setFont(new Font("Tahoma", Font.PLAIN, 18));

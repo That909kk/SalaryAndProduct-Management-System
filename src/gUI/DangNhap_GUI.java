@@ -26,7 +26,11 @@ import connectDB.ConnectDB;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javax.swing.ImageIcon;
-
+/**
+ * Lớp này dùng để tạo giao diện đăng nhập
+ * Tạo bởi: Huỳnh Kim Thành - 21086351
+ * ngày: 25/10/2023
+ */
 public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
@@ -110,7 +114,7 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		
 		lblLinkQMK = new JLabel("Quên mật khẩu?");
 		lblLinkQMK.setForeground(new Color(30, 144, 255));
-		lblLinkQMK.setBounds(130, 410, 180, 40);
+		lblLinkQMK.setBounds(130, 401, 180, 40);
 		pnlForm.add(lblLinkQMK);
 		lblLinkQMK.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));

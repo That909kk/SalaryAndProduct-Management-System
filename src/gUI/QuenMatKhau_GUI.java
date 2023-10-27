@@ -19,7 +19,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import connectDB.ConnectDB;
-
+/**
+ * Lớp này dùng để tạo giao diện quên mật khẩu
+ * Tạo bởi: Huỳnh Kim Thành - 21086351
+ * ngày: 25/10/2023
+ */
 public class QuenMatKhau_GUI extends JFrame implements ActionListener, MouseListener {
 	private JPanel contentPane;
 	private JPanel pnlForm;
@@ -32,7 +36,7 @@ public class QuenMatKhau_GUI extends JFrame implements ActionListener, MouseList
 	
 	public QuenMatKhau_GUI() {
 		
-		super("Đăng Ký");
+		super("Quên mật khẩu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(900, 500);
 		setLocationRelativeTo(null);
@@ -92,7 +96,7 @@ public class QuenMatKhau_GUI extends JFrame implements ActionListener, MouseList
 		btnDK.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
 		lblLinkQMK = new JLabel("Trở lại Đăng Nhập");
-		lblLinkQMK.setForeground(new Color(0, 255, 255));
+		lblLinkQMK.setForeground(new Color(30, 144, 255));
 		lblLinkQMK.setBounds(136, 370, 160, 40);
 		pnlForm.add(lblLinkQMK);
 		lblLinkQMK.setHorizontalAlignment(SwingConstants.CENTER);

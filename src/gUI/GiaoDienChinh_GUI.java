@@ -20,7 +20,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-
+/**
+ * Lớp này dùng để tạo giao diện chính
+ * Tạo bởi: Huỳnh Kim Thành - 21086351
+ * ngày: 25/10/2023
+ */
 public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
@@ -38,6 +42,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	 * Create the frame.
 	 */
 	public GiaoDienChinh_GUI() {
+		super("Màn hình chính");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
