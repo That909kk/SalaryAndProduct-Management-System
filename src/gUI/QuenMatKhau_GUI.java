@@ -95,9 +95,9 @@ public class QuenMatKhau_GUI extends JFrame implements ActionListener, MouseList
 		btnDK.setBackground(new Color(255, 255, 255));
 		btnDK.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
-		lblLinkQMK = new JLabel("Trở lại Đăng Nhập");
+		lblLinkQMK = new JLabel("<html><u>Trở lại Đăng Nhập</u></html>");
 		lblLinkQMK.setForeground(new Color(30, 144, 255));
-		lblLinkQMK.setBounds(136, 370, 160, 40);
+		lblLinkQMK.setBounds(270, 410, 160, 40);
 		pnlForm.add(lblLinkQMK);
 		lblLinkQMK.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));

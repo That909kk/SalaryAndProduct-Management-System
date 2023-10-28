@@ -100,24 +100,24 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		pnlBackGround.setLayout(null);
 		
 		JLabel lblDNCuoi = new JLabel("Lần đăng nhập cuối:");
-		lblDNCuoi.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblDNCuoi.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblDNCuoi.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblDNCuoi.setBounds(10, 590, 154, 30);
+		lblDNCuoi.setBounds(10, 590, 167, 30);
 		pnlBackGround.add(lblDNCuoi);
 		
 		txtDate = new JTextField();
 		txtDate.setBackground(new Color(224, 255, 255));
 		txtDate.setEditable(false);
 		txtDate.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtDate.setBounds(161, 590, 160, 30);
+		txtDate.setBounds(176, 590, 160, 30);
 		pnlBackGround.add(txtDate);
 		txtDate.setColumns(30);
 		txtDate.setBorder(null);
 		
 		JLabel lblTongNhanVien = new JLabel("Tổng số nhân viên hiện có:");
 		lblTongNhanVien.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblTongNhanVien.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTongNhanVien.setBounds(40, 117, 200, 30);
+		lblTongNhanVien.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblTongNhanVien.setBounds(10, 116, 241, 30);
 		pnlBackGround.add(lblTongNhanVien);
 		
 		txtNumberNV = new JTextField();
@@ -126,7 +126,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		txtNumberNV.setColumns(30);
 		txtNumberNV.setBorder(null);
 		txtNumberNV.setBackground(new Color(224, 255, 255));
-		txtNumberNV.setBounds(239, 117, 160, 30);
+		txtNumberNV.setBounds(261, 116, 160, 30);
 		pnlBackGround.add(txtNumberNV);
 		
 		txtNumHD = new JTextField();
@@ -135,13 +135,13 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		txtNumHD.setColumns(30);
 		txtNumHD.setBorder(null);
 		txtNumHD.setBackground(new Color(224, 255, 255));
-		txtNumHD.setBounds(203, 158, 160, 30);
+		txtNumHD.setBounds(220, 157, 160, 30);
 		pnlBackGround.add(txtNumHD);
 		
 		JLabel lblHopDong = new JLabel("Số hợp đồng hiện có:");
 		lblHopDong.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblHopDong.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblHopDong.setBounds(40, 158, 170, 30);
+		lblHopDong.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblHopDong.setBounds(10, 158, 200, 30);
 		pnlBackGround.add(lblHopDong);
 		
 		btnDangXuat = new JButton("Đăng Xuất");
@@ -163,8 +163,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		pnlBackGround.add(btnCaiDat);
 		
 		JLabel lblUser = new JLabel("Xin Chào! ");
-		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblUser.setBounds(920, 11, 80, 30);
+		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblUser.setBounds(918, 11, 82, 30);
 		pnlBackGround.add(lblUser);
 		
 		txtName = new JTextField();
@@ -212,6 +212,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(btnDoiMK)) {
 			DoiMatKhau_GUI doiMK = new DoiMatKhau_GUI();
 			doiMK.setVisible(true);
+			doiMK.setAlwaysOnTop(true);
+			this.setEnabled(false);
 		}
 		
 		if (o.equals(btnCaiDat)) {

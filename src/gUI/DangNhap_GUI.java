@@ -112,7 +112,7 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		btnDN.setBackground(new Color(255, 255, 255));
 		btnDN.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
-		lblLinkQMK = new JLabel("Quên mật khẩu?");
+		lblLinkQMK = new JLabel("<html><u>Quên mật khẩu?</u></html>");
 		lblLinkQMK.setForeground(new Color(30, 144, 255));
 		lblLinkQMK.setBounds(130, 401, 180, 40);
 		pnlForm.add(lblLinkQMK);
@@ -134,12 +134,11 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 			
 			TaiKhoan tonTai = taiKhoan_DAO.soSanhPWD(tk, mk);
 			
-			GiaoDienChinh_GUI main = new GiaoDienChinh_GUI();
-			main.setVisible(true);
-			
 			if (tonTai != null) {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
 				this.dispose();
+				GiaoDienChinh_GUI main = new GiaoDienChinh_GUI();
+				main.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Tài khoản hoặc mật khẩu sai");
 				txtTK.requestFocus();

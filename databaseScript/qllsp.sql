@@ -231,3 +231,8 @@ VALUES
     (N'NV230009', N'Lê Văn', N'Đức', 1, N'222122223222', '1994-03-20', N'56 Chế Lan Viên, Quận Tân Phú', 'QLXU', N'0123079456', '2023-03-15', 6, 2, 3150000, 2.3, 630000, null),
     (N'NV230010', N'Hoàng Thị', N'Diệu', 0, N'013114111111', '2002-08-05', N'20 Nguyễn Văn Bảo, Quận Gò Vấp', 'BPKT', N'0947605021', '2023-02-01', 4, 1, 3550000, 1.8, 430000, null)
 go
+
+insert into TaiKhoan (maTK, taiKhoan, matKhau, maNV)
+values
+	(N'TK230004', '230004', HASHBYTES('MD5', '230004'), N'NV230004')
+go

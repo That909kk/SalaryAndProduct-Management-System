@@ -1,5 +1,7 @@
 package dao;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,9 +53,26 @@ private ArrayList<TaiKhoan> listTK;
 	
 	public TaiKhoan soSanhPWD(String tk, String mk) {
 		TaiKhoan temp = null;
+		String pwdHash = "";
 		
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
+		
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(mk.getBytes());
+			byte[] digest = md.digest();
+			StringBuilder sb = new StringBuilder();
+			for (byte b: digest) {
+				sb.append(String.format("%02x", b));
+			}
+			
+			pwdHash = sb.toString().toUpperCase().substring(0, 16);
+		} catch (NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		}
+		
+		System.out.println(pwdHash);
 		
 		PreparedStatement stmt = null;
 		
@@ -61,7 +80,7 @@ private ArrayList<TaiKhoan> listTK;
 			String sql = "Select * from TaiKhoan where taiKhoan = ? and matKhau = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, tk);
-			stmt.setString(2, mk);
+			stmt.setString(2, pwdHash);
 			ResultSet rs = stmt.executeQuery();
 			
 			while (rs.next()) {
