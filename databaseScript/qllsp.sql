@@ -234,5 +234,7 @@ go
 
 insert into TaiKhoan (maTK, taiKhoan, matKhau, maNV)
 values
-	(N'TK230004', '230004', HASHBYTES('MD5', '230004'), N'NV230004')
+	(N'TK230004', '230004', CONVERT(varchar(16), HASHBYTES('MD5', '230004'), 2), N'NV230004')
 go
+
+select * from TaiKhoan
