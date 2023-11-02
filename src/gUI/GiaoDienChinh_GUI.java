@@ -215,6 +215,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		mnHome.addMouseListener(this);
 		mntmPCCD.addActionListener(this);
+		mntmPCCN.addActionListener(this);
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
@@ -246,12 +247,22 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		if (o.equals(mntmPCCD)) {
 			PhanChiaCongDoan_GUI pccd = new PhanChiaCongDoan_GUI();
-			this.getContentPane().remove(pnlBackGround);
+			this.getContentPane().removeAll();
+			getContentPane().add(menuBar);
 			getContentPane().add(pccd.getPCCDUI());
 			this.revalidate();
 			this.repaint();
 			this.setTitle("Phân chia công đoạn");
-			mntmPCCD.requestFocus();
+		}
+		
+		if (o.equals(mntmPCCN)) {
+			PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
+			this.getContentPane().removeAll();
+			this.getContentPane().add(menuBar);
+			this.getContentPane().add(pccn.getPCCNGUI());
+			this.revalidate();
+			this.repaint();
+			this.setTitle("Phân chia công nhân");
 		}
 	}
 	
