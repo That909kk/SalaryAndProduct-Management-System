@@ -5,11 +5,11 @@ package gUI;
  * ngày: 2/11/2023
  */
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -21,11 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.jdatepicker.JDatePicker;
-import com.toedter.calendar.JDayChooser;
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-import java.awt.ScrollPane;
 
 public class PhanChiaCongDoan_GUI extends JFrame {
 
@@ -165,25 +161,30 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		JButton btnXem = new JButton("Xem chi tiết");
 		btnXem.setBackground(new Color(255, 255, 255));
 		btnXem.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnXem.setBounds(10, 177, 140, 50);
+		btnXem.setBounds(10, 177, 150, 50);
+		btnXem.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
 		pnlThongTinCongDoan.add(btnXem);
 		
 		JButton btnThem = new JButton("Thêm");
 		btnThem.setBackground(new Color(255, 255, 255));
 		btnThem.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnThem.setBounds(160, 177, 140, 50);
+		btnThem.setBounds(166, 177, 140, 50);
+		btnThem.setIcon(new ImageIcon("img\\icons\\icons8-add-user-20.png"));
 		pnlThongTinCongDoan.add(btnThem);
 		
 		JButton btnSua = new JButton("Sửa");
 		btnSua.setBackground(new Color(255, 255, 255));
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnSua.setBounds(314, 177, 140, 50);
+		btnSua.setIcon(new ImageIcon("img\\icons\\icons8-pencil-20.png"));
 		pnlThongTinCongDoan.add(btnSua);
 		
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.setBackground(new Color(255, 255, 255));
 		btnXoa.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnXoa.setBounds(464, 177, 140, 50);
+		btnXoa.setIcon(new ImageIcon("img\\icons\\icons8-delete-20.png"));
+		btnXoa.setIconTextGap(6);
 		pnlThongTinCongDoan.add(btnXoa);
 		
 		JDateChooser dcNgayBatDau = new JDateChooser();
@@ -246,12 +247,16 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		JButton btnTim = new JButton("");
 		btnTim.setBackground(new Color(255, 255, 255));
 		btnTim.setBounds(432, 590, 30, 30);
+		btnTim.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
 		pnlPCCD.add(btnTim);
+		
 		
 		JButton btnHoanTat = new JButton("Hoàn tất");
 		btnHoanTat.setBackground(new Color(255, 255, 255));
 		btnHoanTat.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnHoanTat.setBounds(1114, 585, 140, 40);
+		btnHoanTat.setIcon(new ImageIcon("img\\icons\\icons8-checked-checkbox-24.png"));
+		btnHoanTat.setIconTextGap(6);
 		pnlPCCD.add(btnHoanTat);
 		
 		return pnlPCCD;

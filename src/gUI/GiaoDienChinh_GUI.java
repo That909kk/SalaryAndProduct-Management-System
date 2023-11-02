@@ -198,7 +198,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel.setIcon(new ImageIcon("T:\\SalaryProductManagementSystem\\SalaryProductsManagementSystem\\img\\icons\\icons8-user-30.png"));
+		lblNewLabel.setIcon(new ImageIcon("img\\icons\\icons8-user-30.png"));
 		lblNewLabel.setBounds(1205, 11, 30, 30);
 		pnlBackGround.add(lblNewLabel);
 		
