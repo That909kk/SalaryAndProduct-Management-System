@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JMenuItem;
+import java.awt.Rectangle;
+import javax.swing.border.EmptyBorder;
 /**
  * Lớp này dùng để tạo giao diện chính
  * Tạo bởi: Huỳnh Kim Thành - 21086351
@@ -88,11 +90,13 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnCongDoan);
 		
-		mntmPCCD = new JMenuItem("Phân chia công đoạn");
+		mntmPCCD = new JMenuItem("Phân Chia Công Đoạn");
+		mntmPCCD.setBorder(new EmptyBorder(10, 5, 10, 0));
 		mntmPCCD.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		mnCongDoan.add(mntmPCCD);
 		
-		mntmPCCN = new JMenuItem("Phân công công nhân");
+		mntmPCCN = new JMenuItem("Phân Công Công Nhân");
+		mntmPCCN.setBorder(new EmptyBorder(10, 5, 10, 0));
 		mntmPCCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		mnCongDoan.add(mntmPCCN);
 		
@@ -257,8 +261,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		if (o.equals(mnHome)) {
 			this.getContentPane().removeAll();
-			this.add(menuBar);
-			this.add(pnlBackGround);
+			getContentPane().add(menuBar);
+			getContentPane().add(pnlBackGround);
 			this.revalidate();
 			this.repaint();
 		}

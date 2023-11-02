@@ -59,7 +59,7 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 	public JPanel getPCCDUI() {
 		JPanel pnlPCCD = new JPanel();
 		pnlPCCD.setBackground(new Color(240, 248, 255));
-		pnlPCCD.setBounds(0, 49, 1264, 632);
+		pnlPCCD.setBounds(0, 50, 1264, 632);
 		pnlPCCD.setLayout(null);
 		
 		
@@ -162,7 +162,7 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		btnXem.setBackground(new Color(255, 255, 255));
 		btnXem.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnXem.setBounds(10, 177, 150, 50);
-		btnXem.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
+		btnXem.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
 		pnlThongTinCongDoan.add(btnXem);
 		
 		JButton btnThem = new JButton("Thêm");
