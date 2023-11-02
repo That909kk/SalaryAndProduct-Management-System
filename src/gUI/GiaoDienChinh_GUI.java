@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JMenuItem;
 /**
  * Lớp này dùng để tạo giao diện chính
  * Tạo bởi: Huỳnh Kim Thành - 21086351
@@ -37,6 +38,16 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private JButton btnDangXuat;
 	private JButton btnDoiMK;
 	private JButton btnCaiDat;
+	private JMenu mnNhanVien;
+	private JMenu mnCongDoan;
+	private JMenu mnLuong;
+	private JMenu mnHopDong;
+	private JMenu mnTroGiup;
+	private JMenu mnGioiThieu;
+	private JMenuItem mntmPCCD;
+	private JMenuItem mntmPCCN;
+	private JPanel pnlBackGround;
+	private JMenuBar menuBar;
 	
 	/**
 	 * Create the frame.
@@ -52,7 +63,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(255, 255, 255));
 		menuBar.setBounds(0, 0, 1264, 50);
 		contentPane.add(menuBar);
@@ -68,32 +79,40 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
 		menuBar.add(mnCongNhan);
 		
-		JMenu mnNhanVien = new JMenu("  NHÂN VIÊN  ");
+		mnNhanVien = new JMenu("  NHÂN VIÊN  ");
 		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnNhanVien);
 		
-		JMenu mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
+		mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
 		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
 		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnCongDoan);
 		
-		JMenu mnLuong = new JMenu("  LƯƠNG  ");
+		mntmPCCD = new JMenuItem("Phân chia công đoạn");
+		mntmPCCD.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnCongDoan.add(mntmPCCD);
+		
+		mntmPCCN = new JMenuItem("Phân công công nhân");
+		mntmPCCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnCongDoan.add(mntmPCCN);
+		
+		mnLuong = new JMenu("  LƯƠNG  ");
 		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnLuong);
 		
-		JMenu mnHopDong = new JMenu("  HỢP ĐỒNG  ");
+		mnHopDong = new JMenu("  HỢP ĐỒNG  ");
 		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnHopDong);
 		
-		JMenu mnTroGiup = new JMenu("  TRỢ GIÚP  ");
+		mnTroGiup = new JMenu("  TRỢ GIÚP  ");
 		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnTroGiup);
 		
-		JMenu mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
+		mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
 		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnGioiThieu);
 		
-		JPanel pnlBackGround = new JPanel();
+		pnlBackGround = new JPanel();
 		pnlBackGround.setBackground(new Color(224, 255, 255));
 		pnlBackGround.setBounds(0, 50, 1264, 631);
 		contentPane.add(pnlBackGround);
@@ -191,6 +210,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		pnlBackGround.add(lblBackGround);
 		
 		mnHome.addMouseListener(this);
+		mntmPCCD.addActionListener(this);
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
@@ -219,6 +239,16 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(btnCaiDat)) {
 			
 		}
+		
+		if (o.equals(mntmPCCD)) {
+			PhanChiaCongDoan_GUI pccd = new PhanChiaCongDoan_GUI();
+			this.getContentPane().remove(pnlBackGround);
+			getContentPane().add(pccd.PCCD());
+			this.revalidate();
+			this.repaint();
+			this.setTitle("Phân chia công đoạn");
+			mntmPCCD.requestFocus();
+		}
 	}
 	
 	@Override
@@ -226,9 +256,15 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		Object o = e.getSource();
 		
 		if (o.equals(mnHome)) {
-			QuenMatKhau_GUI quen = new QuenMatKhau_GUI();
-			quen.setVisible(true);
+			this.getContentPane().removeAll();
+			this.add(menuBar);
+			this.add(pnlBackGround);
+			this.revalidate();
+			this.repaint();
 		}
+		
+		
+		
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
