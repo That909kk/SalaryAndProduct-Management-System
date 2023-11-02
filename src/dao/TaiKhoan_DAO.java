@@ -72,8 +72,6 @@ private ArrayList<TaiKhoan> listTK;
 			e1.printStackTrace();
 		}
 		
-		System.out.println(pwdHash);
-		
 		PreparedStatement stmt = null;
 		
 		try {
