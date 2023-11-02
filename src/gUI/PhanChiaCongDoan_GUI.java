@@ -56,11 +56,11 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		contentPane.add(this.PCCD());
+		contentPane.add(this.getPCCDUI());
 		
 	}
 	
-	public JPanel PCCD() {
+	public JPanel getPCCDUI() {
 		JPanel pnlPCCD = new JPanel();
 		pnlPCCD.setBackground(new Color(240, 248, 255));
 		pnlPCCD.setBounds(0, 49, 1264, 632);

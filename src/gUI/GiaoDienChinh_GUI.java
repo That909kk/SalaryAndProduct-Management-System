@@ -243,7 +243,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(mntmPCCD)) {
 			PhanChiaCongDoan_GUI pccd = new PhanChiaCongDoan_GUI();
 			this.getContentPane().remove(pnlBackGround);
-			getContentPane().add(pccd.PCCD());
+			getContentPane().add(pccd.getPCCDUI());
 			this.revalidate();
 			this.repaint();
 			this.setTitle("Phân chia công đoạn");
