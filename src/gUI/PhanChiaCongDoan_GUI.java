@@ -3,6 +3,7 @@ package gUI;
  * Lớp này dùng để tạo giao diện phân chia công đoạn
  * Tạo bởi: Huỳnh Kim Thành - 21086351
  * ngày: 2/11/2023
+ * Ngày cập nhật mới nhất: 3/11/2023
  */
 import java.awt.Color;
 import java.awt.Font;
