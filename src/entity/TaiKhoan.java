@@ -1,22 +1,26 @@
 package entity;
 
+import java.time.LocalDate;
+
 public class TaiKhoan {
 	private String maTK;
 	private String taiKhoan;
 	private String matKhau;
 	private NhanVien nv;
+	private LocalDate ngayDNCuoi;
 
 	public TaiKhoan() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public TaiKhoan(String maTK, String taiKhoan, String matKhau, NhanVien nv) {
+	public TaiKhoan(String maTK, String taiKhoan, String matKhau, NhanVien nv, LocalDate ngayDNCuoi) {
 		super();
 		this.maTK = maTK;
 		this.taiKhoan = taiKhoan;
 		this.matKhau = matKhau;
 		this.nv = nv;
+		this.ngayDNCuoi = ngayDNCuoi;
 	}
 
 	public TaiKhoan(String maTK) {
@@ -52,9 +56,17 @@ public class TaiKhoan {
 		return maTK;
 	}
 
+	public LocalDate getNgayDNCuoi() {
+		return ngayDNCuoi;
+	}
+
+	public void setNgayDNCuoi(LocalDate ngayDNCuoi) {
+		this.ngayDNCuoi = ngayDNCuoi;
+	}
+
 	@Override
 	public String toString() {
-		return "TaiKhoan [maTK=" + maTK + ", taiKhoan=" + taiKhoan + ", matKhau=" + matKhau + ", nv=" + nv + "]";
+		return "";
 	}
 
 	@Override
