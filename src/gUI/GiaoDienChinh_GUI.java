@@ -169,20 +169,23 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		btnDangXuat = new JButton("Đăng Xuất");
 		btnDangXuat.setBackground(new Color(255, 255, 255));
-		btnDangXuat.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnDangXuat.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnDangXuat.setBounds(1094, 560, 160, 60);
+		btnDangXuat.setIcon(new ImageIcon("img\\icons\\icons8-logout-32.png"));
 		pnlBackGround.add(btnDangXuat);
 		
 		btnDoiMK = new JButton("Đổi Mật Khẩu");
 		btnDoiMK.setBackground(new Color(255, 255, 255));
-		btnDoiMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnDoiMK.setBounds(924, 560, 160, 60);
+		btnDoiMK.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnDoiMK.setBounds(904, 560, 180, 60);
+		btnDoiMK.setIcon(new ImageIcon("img\\icons\\icons8-change-password-32.png"));
 		pnlBackGround.add(btnDoiMK);
 		
 		btnCaiDat = new JButton("Cài Đặt");
 		btnCaiDat.setBackground(new Color(255, 255, 255));
-		btnCaiDat.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnCaiDat.setBounds(754, 560, 160, 60);
+		btnCaiDat.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnCaiDat.setBounds(734, 560, 160, 60);
+		btnCaiDat.setIcon(new ImageIcon("img\\icons\\icons8-setting-24.png"));
 		pnlBackGround.add(btnCaiDat);
 		
 		JLabel lblUser = new JLabel("Xin Chào! ");
