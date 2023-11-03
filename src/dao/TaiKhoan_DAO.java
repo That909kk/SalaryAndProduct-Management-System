@@ -6,7 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 
 import connectDB.ConnectDB;
 import entity.NhanVien;
@@ -86,8 +90,11 @@ private ArrayList<TaiKhoan> listTK;
 				String taiKhoan = rs.getString(2);
 				String matKhau = rs.getString(3);
 				NhanVien maNV = new NhanVien(rs.getString(4));
+				java.sql.Date ngay = rs.getDate(5);
 				
-				temp = new TaiKhoan(maTK, taiKhoan, matKhau, maNV);
+				LocalDate ngayDNCuoi = ngay.toLocalDate();
+				
+				temp = new TaiKhoan(maTK, taiKhoan, matKhau, maNV, ngayDNCuoi);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

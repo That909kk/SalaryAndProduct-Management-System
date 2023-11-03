@@ -42,7 +42,6 @@ public class DoiMatKhau_GUI extends JFrame implements ActionListener, WindowList
 	 */
 	public DoiMatKhau_GUI() {
 		super("Màn hình đổi mật khẩu");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(900, 500);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -119,6 +118,7 @@ public class DoiMatKhau_GUI extends JFrame implements ActionListener, WindowList
 		pnlForm.add(passwordField);
 		
 		btnXacNhan.addActionListener(this);
+		this.addWindowListener(this);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -131,6 +131,7 @@ public class DoiMatKhau_GUI extends JFrame implements ActionListener, WindowList
 				
 			}
 		}
+		
 	}
 	@Override
 	public void windowOpened(WindowEvent e) {
@@ -140,11 +141,10 @@ public class DoiMatKhau_GUI extends JFrame implements ActionListener, WindowList
 	@Override
 	public void windowClosing(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+		this.setVisible(false);
 	}
 	@Override
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override

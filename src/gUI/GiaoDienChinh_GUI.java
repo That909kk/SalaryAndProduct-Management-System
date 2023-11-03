@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -28,8 +30,7 @@ import javax.swing.border.EmptyBorder;
  * Tạo bởi: Huỳnh Kim Thành - 21086351
  * ngày: 25/10/2023
  */
-public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseListener {
-
+public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseListener, WindowListener {	
 	private JPanel contentPane;
 	private JMenu mnHome;
 	private JTextField txtDate;
@@ -222,6 +223,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
+		
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -241,7 +243,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			DoiMatKhau_GUI doiMK = new DoiMatKhau_GUI();
 			doiMK.setVisible(true);
 			doiMK.setAlwaysOnTop(true);
-			this.setEnabled(false);
+		
 		}
 		
 		if (o.equals(btnCaiDat)) {
@@ -301,6 +303,38 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void windowDeactivated(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
