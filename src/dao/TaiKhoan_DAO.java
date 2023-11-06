@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import connectDB.ConnectDB;
+import entity.BoPhan;
 import entity.NhanVien;
 import entity.TaiKhoan;
 
@@ -21,6 +22,36 @@ private ArrayList<TaiKhoan> listTK;
 	
 	public TaiKhoan_DAO() {
 		listTK = new ArrayList<TaiKhoan>();
+	}
+	
+	public ArrayList<TaiKhoan> getListTK() {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement stmt = null;
+		
+		String sql = "Select * from TaiKhoan";
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String maTK = rs.getString(1);
+				String taiKhoan = rs.getString(2);
+				String matKhau = rs.getString(3);
+				NhanVien nv = new NhanVien(rs.getString(4));
+				java.sql.Date ngay = rs.getDate(5);
+				
+				LocalDate ngayDNCuoi = ngay.toLocalDate();
+				
+				TaiKhoan tk = new TaiKhoan(maTK, taiKhoan, matKhau, nv, ngayDNCuoi);
+				
+				listTK.add(tk);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return listTK;
 	}
 	
 	public int getSize() {
@@ -107,5 +138,54 @@ private ArrayList<TaiKhoan> listTK;
 		}
 		
 		return temp;
+	}
+	
+	public String getBoPhanCuaNV(TaiKhoan tk) {
+		String maBP = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement stmt = null;
+		
+		String sql = "Select nv.maBP from TaiKhoan tk join NhanVien nv on tk.maNV = nv.maNV where maTK = ?";
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, tk.getMaTK());
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				maBP = rs.getString(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return maBP;
+	}
+	
+	public void updateNgayCNCuoi(LocalDate date, TaiKhoan tk) {
+		int n = 0;
+		java.sql.Date sqlDate = java.sql.Date.valueOf(date);
+		
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement stmt = null;
+		
+		String sql = "update TaiKhoan set ngayDNCuoi = ? where maTK = ?";
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setDate(1, sqlDate);
+			stmt.setString(2, tk.getMaTK());
+			n = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

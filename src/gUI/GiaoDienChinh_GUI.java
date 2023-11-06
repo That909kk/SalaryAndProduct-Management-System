@@ -1,30 +1,33 @@
 package gUI;
 
+import java.awt.Color;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Insets;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JMenuItem;
-import java.awt.Rectangle;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import dao.TaiKhoan_DAO;
+import entity.TaiKhoan;
 /**
  * Lớp này dùng để tạo giao diện chính
  * Tạo bởi: Huỳnh Kim Thành - 21086351
@@ -52,10 +55,13 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private JPanel pnlBackGround;
 	private JMenuBar menuBar;
 	
+	
+	private TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
+	private TaiKhoan tkMain = null;
 	/**
 	 * Create the frame.
 	 */
-	public GiaoDienChinh_GUI() {
+	public GiaoDienChinh_GUI(TaiKhoan tk) {		
 		super("Màn hình chính");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
@@ -65,7 +71,36 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+		tkMain = tk;
+		createGUI(tk);
 		
+		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
+		case "BPNS" -> {
+			String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
+			
+			txtDate.setText(dateFormatted);
+			
+			mnLuong.setEnabled(false);
+		}
+		
+		case "BPKT" -> {
+			
+		}
+		
+		case "QLXU" -> {
+			
+		}
+		
+		default ->
+		throw new IllegalArgumentException("Unexpected value: ");
+		}
+		
+		
+		
+	}
+	
+	public void createGUI(TaiKhoan tk) {
 		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(255, 255, 255));
 		menuBar.setBounds(0, 0, 1264, 50);
@@ -124,16 +159,15 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		pnlBackGround.setLayout(null);
 		
 		JLabel lblDNCuoi = new JLabel("Lần đăng nhập cuối:");
-		lblDNCuoi.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblDNCuoi.setVerticalAlignment(SwingConstants.BOTTOM);
-		lblDNCuoi.setBounds(10, 590, 167, 30);
+		lblDNCuoi.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblDNCuoi.setBounds(10, 590, 190, 30);
 		pnlBackGround.add(lblDNCuoi);
 		
 		txtDate = new JTextField();
 		txtDate.setBackground(new Color(224, 255, 255));
 		txtDate.setEditable(false);
-		txtDate.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtDate.setBounds(176, 590, 160, 30);
+		txtDate.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtDate.setBounds(200, 590, 160, 30);
 		pnlBackGround.add(txtDate);
 		txtDate.setColumns(30);
 		txtDate.setBorder(null);
@@ -223,8 +257,13 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
-		
 	}
+
+	private String chuyenKieuNgay(LocalDate date) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		return dtf.format(date);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -233,6 +272,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			int chon = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn đăng xuất", "Lưu Ý", JOptionPane.YES_NO_OPTION);
 			
 			if (chon == JOptionPane.YES_OPTION) {
+				taiKhoan_DAO.updateNgayCNCuoi(LocalDate.now(), tkMain);
 				DangNhap_GUI dangNhap = new DangNhap_GUI();
 				this.dispose();
 				dangNhap.setVisible(true);

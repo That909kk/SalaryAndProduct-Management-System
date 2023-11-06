@@ -125,6 +125,9 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		
 		txtTK.addKeyListener(this);
 		pwdMK.addKeyListener(this);
+		
+		txtTK.setText("230004");
+		pwdMK.setText("230004");
 	}
 
 	@Override
@@ -142,7 +145,7 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 			if (tonTai != null) {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
 				this.dispose();
-				GiaoDienChinh_GUI main = new GiaoDienChinh_GUI();
+				GiaoDienChinh_GUI main = new GiaoDienChinh_GUI(tonTai);
 				main.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Tài khoản hoặc mật khẩu sai");
