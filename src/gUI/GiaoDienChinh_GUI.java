@@ -63,7 +63,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	 */
 	public GiaoDienChinh_GUI(TaiKhoan tk) {		
 		super("Màn hình chính");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
 		setResizable(false);

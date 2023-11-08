@@ -168,7 +168,7 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		pnlPCCD.add(pnlCacCongDoan);
 		pnlCacCongDoan.setLayout(null);
 		
-		String[] header_CongDoan = {"Mã Công Nhân", "Họ", "Tên", "Chuyên môn", "Ca làm", "Xưởng", "Trạng thái giao việc", "ghi chú"};
+		String[] header_CongDoan = {"Mã Công Nhân", "Họ", "Tên", "Chuyên môn", "Ca làm", "Xưởng", "Trạng thái giao việc", "Số lượng", "ghi chú"};
 		modelCongDoan = new DefaultTableModel(header_CongDoan, 0);
 		tableCongDoan = new JTable(modelCongDoan);
 		tableCongDoan.setRowHeight(26);
