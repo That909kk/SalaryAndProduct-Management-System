@@ -78,7 +78,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
 		case "BPNS" -> {
 			String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
-			
 			txtDate.setText(dateFormatted);
 			
 			mnLuong.setEnabled(false);
@@ -89,7 +88,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		
 		case "QLXU" -> {
-			
+			mnNhanVien.setEnabled(false);
 		}
 		
 		default ->
