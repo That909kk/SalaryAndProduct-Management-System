@@ -28,6 +28,7 @@ import javax.swing.border.EmptyBorder;
 
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
+import java.awt.Insets;
 /**
  * Lớp này dùng để tạo giao diện chính
  * Tạo bởi: Huỳnh Kim Thành - 21086351
@@ -58,6 +59,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	
 	private TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
 	private TaiKhoan tkMain = null;
+	private JMenuItem mntmLuongCN;
+	private JMenuItem mntmLuongNV;
 	/**
 	 * Create the frame.
 	 */
@@ -75,19 +78,21 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		tkMain = tk;
 		createGUI(tk);
 		
+		String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
+
 		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
 		case "BPNS" -> {
-			String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
 			txtDate.setText(dateFormatted);
 			
 			mnLuong.setEnabled(false);
 		}
 		
 		case "BPKT" -> {
-			
+			txtDate.setText(dateFormatted);
 		}
 		
 		case "QLXU" -> {
+			txtDate.setText(dateFormatted);
 			mnNhanVien.setEnabled(false);
 		}
 		
@@ -138,6 +143,17 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnLuong = new JMenu("  LƯƠNG  ");
 		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnLuong);
+		
+		mntmLuongCN = new JMenuItem("Lương Công Nhân");
+		mntmLuongCN.setBorder(new EmptyBorder(10, 5, 10, 0));
+		mntmLuongCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnLuong.add(mntmLuongCN);
+		
+		mntmLuongNV = new JMenuItem("Lương Nhân Viên");
+		mntmLuongNV.setBorder(new EmptyBorder(10, 5, 10, 0));
+		mntmLuongNV.setMargin(new Insets(6, 2, 6, 2));
+		mntmLuongNV.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnLuong.add(mntmLuongNV);
 		
 		mnHopDong = new JMenu("  HỢP ĐỒNG  ");
 		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -258,6 +274,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnHome.addMouseListener(this);
 		mntmPCCD.addActionListener(this);
 		mntmPCCN.addActionListener(this);
+		mntmLuongCN.addActionListener(this);
+		mntmLuongNV.addActionListener(this);
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
@@ -312,6 +330,26 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			this.revalidate();
 			this.repaint();
 			this.setTitle("Phân chia công nhân");
+		}
+		
+		if (o.equals(mntmLuongCN)) {
+			LuongCongNhan lcn = new LuongCongNhan();
+			this.getContentPane().removeAll();
+			getContentPane().add(menuBar);
+			getContentPane().add(lcn.getLuongCNGUI());
+			this.revalidate();
+			this.repaint();
+			this.setTitle("Bảng Lương Công Nhân");
+		}
+		
+		if (o.equals(mntmLuongNV)) {
+			LuongNhanVien lnv = new LuongNhanVien();
+			this.getContentPane().removeAll();
+			getContentPane().add(menuBar);
+			getContentPane().add(lnv.getLuongNVGUI());
+			this.revalidate();
+			this.repaint();
+			this.setTitle("Bảng Lương Công Nhân");
 		}
 	}
 	
@@ -383,5 +421,4 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		// TODO Auto-generated method stub
 		
 	}
-
 }

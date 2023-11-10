@@ -126,8 +126,8 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		txtTK.addKeyListener(this);
 		pwdMK.addKeyListener(this);
 		
-		txtTK.setText("230004");
-		pwdMK.setText("230004");
+		txtTK.setText("230010");
+		pwdMK.setText("230010");
 	}
 
 	@Override

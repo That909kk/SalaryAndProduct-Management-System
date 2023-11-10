@@ -3,28 +3,24 @@ package gUI;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JTable;
-import java.awt.SystemColor;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class LuongNhanVien extends JFrame {
 
@@ -38,22 +34,24 @@ public class LuongNhanVien extends JFrame {
 	private JTextField txtTongSoNV;
 	private JTextField txtTongLuongCanTraNV;
 	private JTextField txtTimKiemTheoTenNV;
-
+	private DefaultTableModel modelTableThangLuongNV;
+	private DefaultTableModel modelTableDSLuongNV;
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LuongNhanVien frame = new LuongNhanVien();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					LuongNhanVien frame = new LuongNhanVien();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -68,184 +66,211 @@ public class LuongNhanVien extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 1264, 50);
-		menuBar.setBackground(new Color(255, 255, 255));
-		contentPane.add(menuBar);
+//		JMenuBar menuBar = new JMenuBar();
+//		menuBar.setBounds(0, 0, 1264, 50);
+//		menuBar.setBackground(new Color(255, 255, 255));
+//		contentPane.add(menuBar);
+//		
+//		mnHome = new JMenu("");
+//		mnHome.setHorizontalAlignment(SwingConstants.CENTER);
+//		mnHome.setIcon(new ImageIcon("D:\\PTUD_Project\\SalaryAndProduct-Management-System\\img\\icons\\icons8-home-40.gif"));
+//		mnHome.setIconTextGap(20);
+//		menuBar.add(mnHome);
+//		
+//		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
+//		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
+//		menuBar.add(mnCongNhan);
+//		
+//		JMenu mnNhanVien = new JMenu("  NHÂN VIÊN  ");
+//		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		menuBar.add(mnNhanVien);
+//		
+//		JMenu mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
+//		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
+//		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		menuBar.add(mnCongDoan);
+//		
+//		JMenu mnLuong = new JMenu("  LƯƠNG  ");
+//		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		menuBar.add(mnLuong);
+//		
+//		JMenu mnHopDong = new JMenu("  HỢP ĐỒNG  ");
+//		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		menuBar.add(mnHopDong);
+//		
+//		JMenu mnTroGiup = new JMenu("  TRỢ GIÚP  ");
+//		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		menuBar.add(mnTroGiup);
+//		
+//		JMenu mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
+//		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//		menuBar.add(mnGioiThieu);
 		
-		mnHome = new JMenu("");
-		mnHome.setHorizontalAlignment(SwingConstants.CENTER);
-		mnHome.setIcon(new ImageIcon("D:\\PTUD_Project\\SalaryAndProduct-Management-System\\img\\icons\\icons8-home-40.gif"));
-		mnHome.setIconTextGap(20);
-		menuBar.add(mnHome);
+		contentPane.add(this.getLuongNVGUI());
 		
-		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
-		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
-		menuBar.add(mnCongNhan);
+	}
+	
+	public JPanel getLuongNVGUI() {
+		JPanel pnlLuongNV = new JPanel();
+		pnlLuongNV.setBackground(new Color(240, 248, 255));
+		pnlLuongNV.setBounds(0, 50, 1264, 632);
+		pnlLuongNV.setLayout(null);
 		
-		JMenu mnNhanVien = new JMenu("  NHÂN VIÊN  ");
-		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnNhanVien);
+		String headerThangLuong[] = {"Tháng", "Năm", "Bộ Phận"};
+		modelTableThangLuongNV = new DefaultTableModel(headerThangLuong, 0);
 		
-		JMenu mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
-		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
-		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnCongDoan);
-		
-		JMenu mnLuong = new JMenu("  LƯƠNG  ");
-		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnLuong);
-		
-		JMenu mnHopDong = new JMenu("  HỢP ĐỒNG  ");
-		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnHopDong);
-		
-		JMenu mnTroGiup = new JMenu("  TRỢ GIÚP  ");
-		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnTroGiup);
-		
-		JMenu mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
-		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnGioiThieu);
-		
-		tblThangLuongNhanVien = new JTable();
+		tblThangLuongNhanVien = new JTable(modelTableThangLuongNV);
 		tblThangLuongNhanVien.setFont(UIManager.getFont("TableHeader.font"));
 		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblThangLuongNhanVien.setCellSelectionEnabled(true);
-		tblThangLuongNhanVien.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Th\u00E1ng", "N\u0103m", "B\u1ED9 Ph\u1EADn"},
-			},
-			new String[] {
-				"Th\u00E1ng", "N\u0103m", "B\u1ED9 Ph\u1EADn"
-			}
-		) {
-			boolean[] columnEditables = new boolean[] {
-				false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		tblThangLuongNhanVien.setBounds(0, 50, 604, 185);
-		contentPane.add(tblThangLuongNhanVien);
+		tblThangLuongNhanVien.setBackground(new Color(255, 255, 255));
 		
-		tblDSLuongNV = new JTable();
+		JScrollPane scrThangLuong = new JScrollPane(tblThangLuongNhanVien);
+		scrThangLuong.setBackground(new Color(255, 255, 255));
+		scrThangLuong.setBounds(0, 0, 604, 190);
+		pnlLuongNV.add(scrThangLuong);
+		
+		String headerDSLuong[] = {"Mã nhân viên", "Họ tên", "Lương cơ bản", "Bậc lương", "Hệ số lương", "Số ngày làm",
+				"Thưởng ", "Khấu trừ", "Bảo hiểm xã hội", "Tổng lương", "Đã tính lương", "Ghi chú"};
+		modelTableDSLuongNV = new DefaultTableModel(headerDSLuong, 0);
+		tblDSLuongNV = new JTable(modelTableDSLuongNV);
 		tblDSLuongNV.setFillsViewportHeight(true);
 		tblDSLuongNV.setCellSelectionEnabled(true);
-		tblDSLuongNV.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"M\u00E3 Nh\u00E2n Vi\u00EAn", "T\u00EAn Nh\u00E2n Vi\u00EAn", "L\u01B0\u01A1ng C\u01A1 b\u1EA3n", "B\u1EADc l\u01B0\u01A1ng", "H\u1EC7 s\u1ED1 l\u01B0\u01A1ng", "S\u1ED1 ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 t\u00EDnh L\u01B0\u01A1ng", "Ghi Ch\u00FA"},
-			},
-			new String[] {
-				"M\u00E3 Nh\u00E2n Vi\u00EAn", "T\u00EAn Nh\u00E2n Vi\u00EAn", "L\u01B0\u01A1ng C\u01A1 B\u1EA3n", "B\u1EADc l\u01B0\u01A1ng", "H\u1EC7 s\u1ED1 l\u01B0\u01A1ng", "S\u1ED1 ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng ", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 t\u00EDnh L\u01B0\u01A1ng", "Ghi Ch\u00FA"
-			}
-		) {
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false, false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
 		tblDSLuongNV.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		tblDSLuongNV.setBounds(0, 240, 1264, 362);
-		contentPane.add(tblDSLuongNV);
+		pnlLuongNV.add(tblDSLuongNV);
 		
 		txtGhiChuLuongNV = new JTextField();
-		txtGhiChuLuongNV.setBounds(830, 61, 341, 20);
-		contentPane.add(txtGhiChuLuongNV);
+		txtGhiChuLuongNV.setBounds(268, 29, 369, 30);
+		txtGhiChuLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongNV.add(txtGhiChuLuongNV);
 		txtGhiChuLuongNV.setColumns(10);
 		
 		JLabel lblGhiChuLuongNV = new JLabel("Ghi Chú:");
-		lblGhiChuLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblGhiChuLuongNV.setBounds(624, 59, 98, 20);
-		contentPane.add(lblGhiChuLuongNV);
+		lblGhiChuLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblGhiChuLuongNV.setBounds(21, 29, 98, 30);
+		pnlLuongNV.add(lblGhiChuLuongNV);
 		
 		JLabel lblSoNVChuaTinhLuong = new JLabel("Số Nhân Viên Chưa Tính Lương:");
-		lblSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSoNVChuaTinhLuong.setBounds(624, 97, 204, 20);
-		contentPane.add(lblSoNVChuaTinhLuong);
+		lblSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblSoNVChuaTinhLuong.setBounds(21, 69, 243, 30);
+		pnlLuongNV.add(lblSoNVChuaTinhLuong);
 		
 		txtSoNVChuaTinhLuong = new JTextField();
 		txtSoNVChuaTinhLuong.setColumns(10);
-		txtSoNVChuaTinhLuong.setBounds(830, 99, 341, 20);
-		contentPane.add(txtSoNVChuaTinhLuong);
+		txtSoNVChuaTinhLuong.setBounds(268, 69, 369, 30);
+		txtSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongNV.add(txtSoNVChuaTinhLuong);
 		
 		JLabel lblTongSoNV = new JLabel("Tổng Số Nhân Viên:");
-		lblTongSoNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTongSoNV.setBounds(624, 139, 196, 20);
-		contentPane.add(lblTongSoNV);
+		lblTongSoNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTongSoNV.setBounds(21, 109, 196, 30);
+		pnlLuongNV.add(lblTongSoNV);
 		
 		txtTongSoNV = new JTextField();
 		txtTongSoNV.setColumns(10);
-		txtTongSoNV.setBounds(830, 141, 341, 20);
-		contentPane.add(txtTongSoNV);
+		txtTongSoNV.setBounds(268, 109, 369, 30);
+		txtTongSoNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongNV.add(txtTongSoNV);
 		
 		JLabel lblTongLuongCanTraNV = new JLabel("Tổng Tiền Lương Cần Trả:");
-		lblTongLuongCanTraNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTongLuongCanTraNV.setBounds(624, 185, 197, 20);
-		contentPane.add(lblTongLuongCanTraNV);
+		lblTongLuongCanTraNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTongLuongCanTraNV.setBounds(21, 149, 197, 30);
+		pnlLuongNV.add(lblTongLuongCanTraNV);
 		
 		txtTongLuongCanTraNV = new JTextField();
 		txtTongLuongCanTraNV.setColumns(10);
-		txtTongLuongCanTraNV.setBounds(830, 187, 341, 20);
-		contentPane.add(txtTongLuongCanTraNV);
+		txtTongLuongCanTraNV.setBounds(268, 149, 369, 30);
+		txtTongLuongCanTraNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongNV.add(txtTongLuongCanTraNV);
 		
-		JScrollPane scrThangLuongNhanVien = new JScrollPane();
-		scrThangLuongNhanVien.setBounds(590, 65, 14, 170);
-		contentPane.add(scrThangLuongNhanVien);
+		JScrollPane scrThangLuongNhanVien = new JScrollPane(tblDSLuongNV);
+		scrThangLuongNhanVien.setBounds(0, 15, 14, 170);
+		pnlLuongNV.add(scrThangLuongNhanVien);
 		
 		JLabel lblTimKiemTheoTenNV = new JLabel("Tìm Kiếm Theo Tên:");
 		lblTimKiemTheoTenNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTimKiemTheoTenNV.setBounds(10, 629, 159, 20);
-		contentPane.add(lblTimKiemTheoTenNV);
+		lblTimKiemTheoTenNV.setBounds(10, 579, 159, 30);
+		pnlLuongNV.add(lblTimKiemTheoTenNV);
 		
 		txtTimKiemTheoTenNV = new JTextField();
 		txtTimKiemTheoTenNV.setColumns(10);
-		txtTimKiemTheoTenNV.setBounds(161, 631, 221, 20);
-		contentPane.add(txtTimKiemTheoTenNV);
+		txtTimKiemTheoTenNV.setBounds(161, 581, 221, 30);
+		txtTimKiemTheoTenNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongNV.add(txtTimKiemTheoTenNV);
 		
-		JButton btnTimKiemTheoTenNV = new JButton("New button");
-		btnTimKiemTheoTenNV.setBounds(392, 630, 39, 31);
-		contentPane.add(btnTimKiemTheoTenNV);
+		JButton btnTimKiemTheoTenNV = new JButton("");
+		btnTimKiemTheoTenNV.setBounds(392, 580, 39, 30);
+		btnTimKiemTheoTenNV.setBackground(new Color(255, 255, 255));
+		btnTimKiemTheoTenNV.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));	
+		pnlLuongNV.add(btnTimKiemTheoTenNV);
 		
 		JPanel pnlButtonLuongNV = new JPanel();
 		pnlButtonLuongNV.setBorder(UIManager.getBorder("Button.border"));
-		pnlButtonLuongNV.setBounds(453, 613, 787, 57);
-		contentPane.add(pnlButtonLuongNV);
+		pnlButtonLuongNV.setBounds(453, 563, 787, 57);
+		pnlLuongNV.add(pnlButtonLuongNV);
+		
 		GridLayout gl_pnlButtonLuongNV = new GridLayout(0, 5, 0, 0);
         gl_pnlButtonLuongNV.setHgap(10);
         gl_pnlButtonLuongNV.setVgap(10);
 		pnlButtonLuongNV.setLayout(gl_pnlButtonLuongNV);
 		
 		JButton btnXemChiTietLuongNV = new JButton("Xem Chi Tiết");
+		btnXemChiTietLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnXemChiTietLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnXemChiTietLuongNV);
 		
 		JButton btnTinhLuongNV = new JButton("Tính Lương");
+		btnTinhLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnTinhLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnTinhLuongNV);
 		
 		JButton btnXoaKhoiDanhSachLuongNV = new JButton("Xóa");
+		btnXoaKhoiDanhSachLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnXoaKhoiDanhSachLuongNV.setBackground(new Color(255, 255 ,255));
 		pnlButtonLuongNV.add(btnXoaKhoiDanhSachLuongNV);
 		
 		JButton btnHoanTatLuongNV = new JButton("Hoàn Tất");
+		btnHoanTatLuongNV.setBackground(new Color(255, 255, 255));
+		btnHoanTatLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		pnlButtonLuongNV.add(btnHoanTatLuongNV);
 		
 		JButton btnInBangLuongNV = new JButton("In");
+		btnInBangLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btnInBangLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnInBangLuongNV);
 		
-		JScrollPane scrDSLuongNV = new JScrollPane();
-		scrDSLuongNV.setBounds(1252, 255, 12, 347);
-		contentPane.add(scrDSLuongNV);
+		JScrollPane scrDSLuongNV = new JScrollPane(tblDSLuongNV);
+		scrDSLuongNV.setBounds(0, 205, 1268, 347);
+		pnlLuongNV.add(scrDSLuongNV);
+		
+		JPanel pnlThongKeTinhLuong = new JPanel();
+		pnlThongKeTinhLuong.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Th\u1ED1ng k\u00EA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlThongKeTinhLuong.setBackground(new Color(240, 248, 255));
+		pnlThongKeTinhLuong.setBounds(604, 0, 660, 190);
+		pnlLuongNV.add(pnlThongKeTinhLuong);
+		pnlThongKeTinhLuong.setLayout(null);
+		
+		pnlThongKeTinhLuong.add(lblGhiChuLuongNV);
+		pnlThongKeTinhLuong.add(lblSoNVChuaTinhLuong);
+		pnlThongKeTinhLuong.add(lblTongLuongCanTraNV);
+		pnlThongKeTinhLuong.add(lblTongSoNV);
+		
+		pnlThongKeTinhLuong.add(txtGhiChuLuongNV);
+		pnlThongKeTinhLuong.add(txtSoNVChuaTinhLuong);
+		pnlThongKeTinhLuong.add(txtTongLuongCanTraNV);
+		pnlThongKeTinhLuong.add(txtTongSoNV);
+		
 		btnInBangLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
 		btnTinhLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
+		return pnlLuongNV;
 	}
 }
