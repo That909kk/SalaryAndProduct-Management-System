@@ -341,6 +341,16 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			this.repaint();
 			this.setTitle("Bảng Lương Công Nhân");
 		}
+		
+		if (o.equals(mntmLuongNV)) {
+			LuongNhanVien lnv = new LuongNhanVien();
+			this.getContentPane().removeAll();
+			getContentPane().add(menuBar);
+			getContentPane().add(lnv.getLuongNVGUI());
+			this.revalidate();
+			this.repaint();
+			this.setTitle("Bảng Lương Công Nhân");
+		}
 	}
 	
 	@Override

@@ -44,6 +44,8 @@ public class LuongCongNhan extends JFrame {
 	private JTextField txtTongSoCN;
 	private JTextField txtTongLuongCanTraCN;
 	private JTextField txtTimKiemTheoTenCN;
+	private DefaultTableModel modelTableThangLuongCN;
+	private DefaultTableModel modelTableDSLuongCN;
 
 	/**
 	 * Xoá phương thức main
@@ -110,52 +112,28 @@ public class LuongCongNhan extends JFrame {
 		pnlLuongCN.setBounds(0, 50, 1264, 632);
 		pnlLuongCN.setLayout(null);
 		
-		tblThangLuongCN = new JTable();
+		String headerThangLuong[] = {"Tháng", "Năm", "Xưởng", "Tên Sản Phẩm", "Số lượng", "Công Đoạn", "Đơn giá"};
+		modelTableThangLuongCN = new DefaultTableModel(headerThangLuong, 0);
+		tblThangLuongCN = new JTable(modelTableThangLuongCN);
 		tblThangLuongCN.setFont(UIManager.getFont("TableHeader.font"));
 		tblThangLuongCN.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblThangLuongCN.setCellSelectionEnabled(true);
-		tblThangLuongCN.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Th\u00E1ng", "N\u0103m", "X\u01B0\u1EDFng", "T\u00EAn S\u1EA3n Ph\u1EA9m", "S\u1ED1 L\u01B0\u1EE3ng", "C\u00F4ng \u0110o\u1EA1n", "\u0110\u01A1n gi\u00E1"},
-			},
-			new String[] {
-				"Th\u00E1ng", "N\u0103m", "X\u01B0\u1EDFng", "T\u00EAn S\u1EA3n Ph\u1EA9m", "S\u1ED1 l\u01B0\u1EE3ng", "C\u00F4ng \u0110o\u1EA1n", "\u0110\u01A1n gi\u00E1"
-			}
-		) {
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
 		tblThangLuongCN.setBounds(0, 0, 604, 185);
 		pnlLuongCN.add(tblThangLuongCN);
 		
-		tbtDSLuongCN = new JTable();
+		String headerDSLuongCN[] = {"Mã Công Nhân", "Họ Tên", "Lương cơ bản", "Lương sản phẩm", "Số ngày làm", "Thưởng", "Khấu trừ",
+				"Bảo hiểm xã hội", "Tổng lương", "Đã Tính Lương", "Ghi chú"};
+		modelTableDSLuongCN = new DefaultTableModel(headerDSLuongCN, 0);
+		
+		tbtDSLuongCN = new JTable(modelTableDSLuongCN);
 		tbtDSLuongCN.setFillsViewportHeight(true);
 		tbtDSLuongCN.setCellSelectionEnabled(true);
-		tbtDSLuongCN.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"M\u00E3 C\u00F4ng Nh\u00E2n", "T\u00EAn C\u00F4ng Nh\u00E2n", "L\u01B0\u01A1ng C\u01A1 b\u1EA3n", "L\u01B0\u01A1ng S\u1EA3n Ph\u1EA9m", "S\u1ED1 Ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 T\u00EDnh L\u01B0\u01A1ng", "Ghi Ch\u00FA"},
-			},
-			new String[] {
-				"M\u00E3 C\u00F4ng Nh\u00E2n", "T\u00EAn C\u00F4ng Nh\u00E2n", "L\u01B0\u01A1ng C\u01A1 b\u1EA3n", "L\u01B0\u01A1ng S\u1EA3n Ph\u1EA9m", "S\u1ED1 Ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng ", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 T\u00EDnh L\u01B0\u01A1ng", "Ghi Ch\u00FA"
-			}
-		) {
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false, false, false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
 		tbtDSLuongCN.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		tbtDSLuongCN.setBounds(0, 190, 1264, 362);
 		pnlLuongCN.add(tbtDSLuongCN);
 		
-		JScrollPane scrThangLuongCN = new JScrollPane();
-		scrThangLuongCN.setBounds(590, 15, 14, 170);
+		JScrollPane scrThangLuongCN = new JScrollPane(tblThangLuongCN);
+		scrThangLuongCN.setBounds(0, 0, 604, 190);
 		pnlLuongCN.add(scrThangLuongCN);
 		
 		JLabel lblTmKimTheoCN = new JLabel("Tìm Kiếm Theo Tên:");
@@ -178,8 +156,9 @@ public class LuongCongNhan extends JFrame {
 		JPanel pnlButtonLuongCN = new JPanel();
 		pnlButtonLuongCN.setBackground(new Color(240, 248, 255));
 		pnlButtonLuongCN.setBorder(UIManager.getBorder("Button.border"));
-		pnlButtonLuongCN.setBounds(453, 563, 811, 57);
+		pnlButtonLuongCN.setBounds(453, 563, 787, 57);
 		pnlLuongCN.add(pnlButtonLuongCN);
+		
 		GridLayout gl_pnlButtonLuongCN = new GridLayout(0, 5, 0, 0);
         gl_pnlButtonLuongCN.setHgap(10);
         gl_pnlButtonLuongCN.setVgap(10);
@@ -212,8 +191,8 @@ public class LuongCongNhan extends JFrame {
 		btnInBangLuongCN.setFont(new Font("Tahoma", Font.BOLD, 14));
 		pnlButtonLuongCN.add(btnInBangLuongCN);
 		
-		JScrollPane scrDSLuongCN = new JScrollPane();
-		scrDSLuongCN.setBounds(1252, 205, 12, 347);
+		JScrollPane scrDSLuongCN = new JScrollPane(tbtDSLuongCN);
+		scrDSLuongCN.setBounds(0, 200, 1268, 347);
 		pnlLuongCN.add(scrDSLuongCN);
 		
 		JPanel pnlThongKeTinhLuong = new JPanel();
