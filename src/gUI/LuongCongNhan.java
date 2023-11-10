@@ -31,13 +31,13 @@ public class LuongCongNhan extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JMenu mnHome;
-	private JTable table;
-	private JTable table_1;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTable tblThangLuongCN;
+	private JTable tbtDSLuongCN;
+	private JTextField txtGhiChuLuongCN;
+	private JTextField txtSoCNChuaTinhLuong;
+	private JTextField txtTongSoCN;
+	private JTextField txtTongLuongCanTraCN;
+	private JTextField txtTimKiemTheoTenCN;
 
 	/**
 	 * Launch the application.
@@ -109,11 +109,11 @@ public class LuongCongNhan extends JFrame {
 		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnGioiThieu);
 		
-		table = new JTable();
-		table.setFont(UIManager.getFont("TableHeader.font"));
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setCellSelectionEnabled(true);
-		table.setModel(new DefaultTableModel(
+		tblThangLuongCN = new JTable();
+		tblThangLuongCN.setFont(UIManager.getFont("TableHeader.font"));
+		tblThangLuongCN.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblThangLuongCN.setCellSelectionEnabled(true);
+		tblThangLuongCN.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"Th\u00E1ng", "N\u0103m", "X\u01B0\u1EDFng", "T\u00EAn S\u1EA3n Ph\u1EA9m", "S\u1ED1 L\u01B0\u1EE3ng", "C\u00F4ng \u0110o\u1EA1n", "\u0110\u01A1n gi\u00E1"},
 			},
@@ -128,15 +128,15 @@ public class LuongCongNhan extends JFrame {
 				return columnEditables[column];
 			}
 		});
-		table.setBounds(0, 50, 604, 185);
-		contentPane.add(table);
+		tblThangLuongCN.setBounds(0, 50, 604, 185);
+		contentPane.add(tblThangLuongCN);
 		
-		table_1 = new JTable();
-		table_1.setFillsViewportHeight(true);
-		table_1.setCellSelectionEnabled(true);
-		table_1.setModel(new DefaultTableModel(
+		tbtDSLuongCN = new JTable();
+		tbtDSLuongCN.setFillsViewportHeight(true);
+		tbtDSLuongCN.setCellSelectionEnabled(true);
+		tbtDSLuongCN.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"M\u00E3 C\u00F4ng Nh\u00E2n", "T\u00EAn C\u00F4ng Nh\u00E2n", "L\u01B0\u01A1ng C\u01A1 b\u1EA3n", "L\u01B0\u01A1ng S\u1EA3n Ph\u1EA9m", "S\u1ED1 Ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 T\u00EDnh L\u01B0\u01A1ng", ""},
+				{"M\u00E3 C\u00F4ng Nh\u00E2n", "T\u00EAn C\u00F4ng Nh\u00E2n", "L\u01B0\u01A1ng C\u01A1 b\u1EA3n", "L\u01B0\u01A1ng S\u1EA3n Ph\u1EA9m", "S\u1ED1 Ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 T\u00EDnh L\u01B0\u01A1ng", "Ghi Ch\u00FA"},
 			},
 			new String[] {
 				"M\u00E3 C\u00F4ng Nh\u00E2n", "T\u00EAn C\u00F4ng Nh\u00E2n", "L\u01B0\u01A1ng C\u01A1 b\u1EA3n", "L\u01B0\u01A1ng S\u1EA3n Ph\u1EA9m", "S\u1ED1 Ng\u00E0y l\u00E0m", "Th\u01B0\u1EDFng ", "Kh\u1EA5u tr\u1EEB", "B\u1EA3o hi\u1EC3m x\u00E3 h\u1ED9i", "T\u1ED5ng L\u01B0\u01A1ng", "\u0110\u00E3 T\u00EDnh L\u01B0\u01A1ng", "Ghi Ch\u00FA"
@@ -149,100 +149,100 @@ public class LuongCongNhan extends JFrame {
 				return columnEditables[column];
 			}
 		});
-		table_1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		table_1.setBounds(0, 240, 1264, 362);
-		contentPane.add(table_1);
+		tbtDSLuongCN.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tbtDSLuongCN.setBounds(0, 240, 1264, 362);
+		contentPane.add(tbtDSLuongCN);
 		
-		textField = new JTextField();
-		textField.setBounds(840, 61, 341, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		txtGhiChuLuongCN = new JTextField();
+		txtGhiChuLuongCN.setBounds(840, 61, 341, 20);
+		contentPane.add(txtGhiChuLuongCN);
+		txtGhiChuLuongCN.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("Ghi Chú:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(624, 59, 98, 20);
-		contentPane.add(lblNewLabel);
+		JLabel lblGhiChuLuongCN = new JLabel("Ghi Chú:");
+		lblGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblGhiChuLuongCN.setBounds(624, 59, 98, 20);
+		contentPane.add(lblGhiChuLuongCN);
 		
-		JLabel lblSCngNhn = new JLabel("Số Công Nhân Chưa Tính Lương:");
-		lblSCngNhn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblSCngNhn.setBounds(624, 97, 221, 20);
-		contentPane.add(lblSCngNhn);
+		JLabel lblSoCNChuaTinhLuong = new JLabel("Số Công Nhân Chưa Tính Lương:");
+		lblSoCNChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblSoCNChuaTinhLuong.setBounds(624, 97, 221, 20);
+		contentPane.add(lblSoCNChuaTinhLuong);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(840, 99, 341, 20);
-		contentPane.add(textField_1);
+		txtSoCNChuaTinhLuong = new JTextField();
+		txtSoCNChuaTinhLuong.setColumns(10);
+		txtSoCNChuaTinhLuong.setBounds(840, 99, 341, 20);
+		contentPane.add(txtSoCNChuaTinhLuong);
 		
-		JLabel lblTngSCng = new JLabel("Tổng Số Công Nhân:");
-		lblTngSCng.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTngSCng.setBounds(624, 139, 196, 20);
-		contentPane.add(lblTngSCng);
+		JLabel lblTongSoCN = new JLabel("Tổng Số Công Nhân:");
+		lblTongSoCN.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTongSoCN.setBounds(624, 139, 196, 20);
+		contentPane.add(lblTongSoCN);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(840, 141, 341, 20);
-		contentPane.add(textField_2);
+		txtTongSoCN = new JTextField();
+		txtTongSoCN.setColumns(10);
+		txtTongSoCN.setBounds(840, 141, 341, 20);
+		contentPane.add(txtTongSoCN);
 		
-		JLabel lblTngSCng_1 = new JLabel("Tổng Cộng:");
-		lblTngSCng_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTngSCng_1.setBounds(624, 185, 197, 20);
-		contentPane.add(lblTngSCng_1);
+		JLabel lblTongLuongCanTraCN = new JLabel("Tổng Tiền Lương Cần Trả:");
+		lblTongLuongCanTraCN.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTongLuongCanTraCN.setBounds(624, 185, 197, 20);
+		contentPane.add(lblTongLuongCanTraCN);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(840, 187, 341, 20);
-		contentPane.add(textField_3);
+		txtTongLuongCanTraCN = new JTextField();
+		txtTongLuongCanTraCN.setColumns(10);
+		txtTongLuongCanTraCN.setBounds(840, 187, 341, 20);
+		contentPane.add(txtTongLuongCanTraCN);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(590, 65, 14, 170);
-		contentPane.add(scrollPane);
+		JScrollPane scrThangLuongCN = new JScrollPane();
+		scrThangLuongCN.setBounds(590, 65, 14, 170);
+		contentPane.add(scrThangLuongCN);
 		
-		JLabel lblTmKimTheo = new JLabel("Tìm Kiếm Theo Tên:");
-		lblTmKimTheo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTmKimTheo.setBounds(10, 629, 159, 20);
-		contentPane.add(lblTmKimTheo);
+		JLabel lblTmKimTheoCN = new JLabel("Tìm Kiếm Theo Tên:");
+		lblTmKimTheoCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTmKimTheoCN.setBounds(10, 629, 159, 20);
+		contentPane.add(lblTmKimTheoCN);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(161, 631, 221, 20);
-		contentPane.add(textField_4);
+		txtTimKiemTheoTenCN = new JTextField();
+		txtTimKiemTheoTenCN.setColumns(10);
+		txtTimKiemTheoTenCN.setBounds(161, 631, 221, 20);
+		contentPane.add(txtTimKiemTheoTenCN);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(392, 630, 39, 31);
-		contentPane.add(btnNewButton);
+		JButton btnTimKiemTenCN = new JButton("New button");
+		btnTimKiemTenCN.setBounds(392, 630, 39, 31);
+		contentPane.add(btnTimKiemTenCN);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(UIManager.getBorder("Button.border"));
-		panel.setBounds(453, 613, 787, 57);
-		contentPane.add(panel);
-		GridLayout layout = new GridLayout(0, 5, 0, 0);
-        layout.setHgap(10);
-        layout.setVgap(10);
-		panel.setLayout(layout);
+		JPanel pnlButtonLuongCN = new JPanel();
+		pnlButtonLuongCN.setBorder(UIManager.getBorder("Button.border"));
+		pnlButtonLuongCN.setBounds(453, 613, 787, 57);
+		contentPane.add(pnlButtonLuongCN);
+		GridLayout gl_pnlButtonLuongCN = new GridLayout(0, 5, 0, 0);
+        gl_pnlButtonLuongCN.setHgap(10);
+        gl_pnlButtonLuongCN.setVgap(10);
+		pnlButtonLuongCN.setLayout(gl_pnlButtonLuongCN);
 		
-		JButton btnNewButton_1 = new JButton("Xem Chi Tiết");
-		panel.add(btnNewButton_1);
+		JButton btnXemChiTietLuongCN = new JButton("Xem Chi Tiết");
+		pnlButtonLuongCN.add(btnXemChiTietLuongCN);
 		
-		JButton btnNewButton_1_1 = new JButton("Tính Lương");
-		panel.add(btnNewButton_1_1);
+		JButton btnTinhLuongCN = new JButton("Tính Lương");
+		pnlButtonLuongCN.add(btnTinhLuongCN);
 		
-		JButton btnNewButton_1_2 = new JButton("Xóa");
-		panel.add(btnNewButton_1_2);
+		JButton btnXoaKhoiDanhSachLuongCN = new JButton("Xóa");
+		pnlButtonLuongCN.add(btnXoaKhoiDanhSachLuongCN);
 		
-		JButton btnNewButton_1_2_1 = new JButton("Hoàn Tất");
-		panel.add(btnNewButton_1_2_1);
+		JButton btnHoanTatLuongCN = new JButton("Hoàn Tất");
+		pnlButtonLuongCN.add(btnHoanTatLuongCN);
 		
-		JButton btnNewButton_1_2_2 = new JButton("In");
-		panel.add(btnNewButton_1_2_2);
+		JButton btnInBangLuongCN = new JButton("In");
+		pnlButtonLuongCN.add(btnInBangLuongCN);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(1252, 255, 12, 347);
-		contentPane.add(scrollPane_1);
-		btnNewButton_1_2_2.addActionListener(new ActionListener() {
+		JScrollPane scrDSLuongCN = new JScrollPane();
+		scrDSLuongCN.setBounds(1252, 255, 12, 347);
+		contentPane.add(scrDSLuongCN);
+		btnInBangLuongCN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_1_1.addActionListener(new ActionListener() {
+		btnTinhLuongCN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
