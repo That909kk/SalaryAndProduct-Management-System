@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
@@ -31,7 +33,7 @@ import javax.swing.ImageIcon;
  * Tạo bởi: Huỳnh Kim Thành - 21086351
  * ngày: 25/10/2023
  */
-public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener {
+public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener, KeyListener {
 
 	private JPanel contentPane;
 	private JTextField txtTK;
@@ -120,6 +122,12 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLinkQMK.addMouseListener(this);
 		btnDN.addActionListener(this);
+		
+		txtTK.addKeyListener(this);
+		pwdMK.addKeyListener(this);
+		
+		txtTK.setText("230004");
+		pwdMK.setText("230004");
 	}
 
 	@Override
@@ -137,7 +145,7 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 			if (tonTai != null) {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
 				this.dispose();
-				GiaoDienChinh_GUI main = new GiaoDienChinh_GUI();
+				GiaoDienChinh_GUI main = new GiaoDienChinh_GUI(tonTai);
 				main.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Tài khoản hoặc mật khẩu sai");
@@ -146,7 +154,6 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 				pwdMK.setText("");
 			}
 		}
-		
 	}
 
 	@Override
@@ -180,5 +187,24 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 	@Override
 	public void mouseExited(MouseEvent e) {
 		lblLinkQMK.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			btnDN.doClick();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

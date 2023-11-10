@@ -232,7 +232,11 @@ VALUES
     (N'NV230010', N'Hoàng Thị', N'Diệu', 0, N'013114111111', '2002-08-05', N'20 Nguyễn Văn Bảo, Quận Gò Vấp', 'BPKT', N'0947605021', '2023-02-01', 4, 1, 3550000, 1.8, 430000, null)
 go
 
-insert into TaiKhoan (maTK, taiKhoan, matKhau, maNV)
+insert into TaiKhoan (maTK, taiKhoan, matKhau, maNV, ngayDNCuoi)
 values
-	(N'TK230004', '230004', HASHBYTES('MD5', '230004'), N'NV230004')
+	(N'TK230004', '230004', CONVERT(varchar(16), HASHBYTES('MD5', '230004'), 2), N'NV230004', '03/11/2023'),
+	(N'TK230010', '230010', CONVERT(varchar(16), HASHBYTES('MD5', '230010'), 2), N'NV230010', '03/11/2023'),
+	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV230001', '03/11/2023')
 go
+
+select * from TaiKhoan
