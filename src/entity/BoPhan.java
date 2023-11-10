@@ -37,6 +37,10 @@ public class BoPhan {
 	public void setsDTBoPhan(String sDTBoPhan) {
 		this.sDTBoPhan = sDTBoPhan.trim().length() > 0 ? sDTBoPhan : "";
 	}
+	
+	public void setMaBoPhan(String maBoPhan) {
+		this.maBoPhan = maBoPhan;
+	}
 
 	public String getMaBoPhan() {
 		return maBoPhan;
