@@ -1,9 +1,6 @@
 package entity;
 
-<<<<<<< HEAD
 import java.sql.Date;
-=======
->>>>>>> main
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -113,19 +110,6 @@ public class NhanVien {
 		this.cCCD = cCCD;
 	}
 
-<<<<<<< HEAD
-	public Date getNgaySinh() {
-		return ngaySinh;
-	}
-
-	public void setNgaySinh(Date date) {
-		this.ngaySinh = date;
-	}
-
-	public Date getNgayBatDauLamViec() {
-		return ngayBatDauLamViec;
-	}
-
 	public LocalDate getNgaySinh() {
 		return ngaySinh;
 	}
@@ -192,6 +176,10 @@ public class NhanVien {
 
 	public String getMaNV() {
 		return maNV;
+	}
+
+	public void setMaNV(String maNV) {
+		this.maNV = maNV;
 	}
 
 	@Override
