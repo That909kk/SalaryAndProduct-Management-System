@@ -339,7 +339,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private void chuyenGUI(JPanel pnlGUI) {
 		this.getContentPane().removeAll();
 		getContentPane().add(menuBar);
-		getContentPane().add(panelGUI);
+		getContentPane().add(pnlGUI);
 		this.revalidate();
 		this.repaint();
 	}
