@@ -1,26 +1,39 @@
 package entity;
 
+<<<<<<< HEAD
+=======
 import java.time.LocalDate;
 
+>>>>>>> main
 public class TaiKhoan {
 	private String maTK;
 	private String taiKhoan;
 	private String matKhau;
 	private NhanVien nv;
+<<<<<<< HEAD
+=======
 	private LocalDate ngayDNCuoi;
+>>>>>>> main
 
 	public TaiKhoan() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+<<<<<<< HEAD
+	public TaiKhoan(String maTK, String taiKhoan, String matKhau, NhanVien nv) {
+=======
 	public TaiKhoan(String maTK, String taiKhoan, String matKhau, NhanVien nv, LocalDate ngayDNCuoi) {
+>>>>>>> main
 		super();
 		this.maTK = maTK;
 		this.taiKhoan = taiKhoan;
 		this.matKhau = matKhau;
 		this.nv = nv;
+<<<<<<< HEAD
+=======
 		this.ngayDNCuoi = ngayDNCuoi;
+>>>>>>> main
 	}
 
 	public TaiKhoan(String maTK) {
@@ -56,6 +69,11 @@ public class TaiKhoan {
 		return maTK;
 	}
 
+<<<<<<< HEAD
+	@Override
+	public String toString() {
+		return "TaiKhoan [maTK=" + maTK + ", taiKhoan=" + taiKhoan + ", matKhau=" + matKhau + ", nv=" + nv + "]";
+=======
 	public LocalDate getNgayDNCuoi() {
 		return ngayDNCuoi;
 	}
@@ -67,6 +85,7 @@ public class TaiKhoan {
 	@Override
 	public String toString() {
 		return "";
+>>>>>>> main
 	}
 
 	@Override

@@ -42,10 +42,8 @@ public class CongNhan {
 		this.caLamViec = caLamViec;
 		this.phuCap = phuCap;
 		this.luongCoBan = luongCoBan;
-		this.ngayBatDauLamViec = ngayBatDauLamViec;
 		this.xuong = xuong;
 	}
-
 
 	public CongNhan(String maCN) {
 		super();

@@ -1,12 +1,31 @@
 package gUI;
 
+import java.awt.Font;
+import java.awt.Frame;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import java.awt.Insets;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.time.LocalDate;
@@ -34,6 +53,7 @@ import entity.TaiKhoan;
  */
 public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseListener, WindowListener {	
 	private JPanel contentPane;
+
 	private JTextField txtDate;
 	private JTextField txtNumberNV;
 	private JTextField txtNumHD;
@@ -42,6 +62,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private JButton btnDangXuat;
 	private JButton btnDoiMK;
 	private JButton btnCaiDat;
+
 	private JPanel pnlBackGround;
 	private JMenuBar menuBar;
 	private JMenu mnHome;
@@ -71,6 +92,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		JMenuBar menuBar = new JMenuBar();
 
 		tkMain = tk;
 		createGUI(tk);
@@ -123,7 +146,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
 		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnCongDoan);
-		
+
 		mntmPCCD = new JMenuItem("Phân Chia Công Đoạn");
 		mntmPCCD.setBorder(new EmptyBorder(10, 5, 10, 0));
 		mntmPCCD.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -177,6 +200,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		txtDate.setEditable(false);
 		txtDate.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtDate.setBounds(200, 590, 160, 30);
+
 		pnlBackGround.add(txtDate);
 		txtDate.setColumns(30);
 		txtDate.setBorder(null);
@@ -249,7 +273,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-
 		//Lê Minh Thật chỉnh lại đường dẫn 
 //		lblNewLabel.setIcon(new ImageIcon("T:\\SalaryProductManagementSystem\\SalaryProductsManagementSystem\\img\\icons\\icons8-user-30.png"));
 		//Lê Minh Thật chỉnh lại đường dẫn tương đối
@@ -305,6 +328,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(btnCaiDat)) {
 			
 		}
+
 		
 		if (o.equals(mntmPCCD)) {
 			PhanChiaCongDoan_GUI pccd = new PhanChiaCongDoan_GUI();
