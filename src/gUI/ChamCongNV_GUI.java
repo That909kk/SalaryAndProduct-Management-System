@@ -23,7 +23,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -150,6 +149,7 @@ public class ChamCongNV_GUI implements ListSelectionListener {
                 JComboBox<String> combo = (JComboBox<String>) e.getSource();
                 String selectedValue = (String) combo.getSelectedItem();
                 dsNVBP.clear();
+                
                 for(BoPhan bp: dsBP) {
                 	if(bp.getTenBoPhan().equals(selectedValue)) {
                 		selectedValue = bp.getMaBoPhan();
@@ -165,6 +165,12 @@ public class ChamCongNV_GUI implements ListSelectionListener {
                 for(NhanVien nv: dsNVBP) {
                 	Object[] rowData = {nv.getMaNV(), nv.getHo(),nv.getTen(), nv.getCaLamViec(), new JRadioButton(), new JRadioButton(), new JRadioButton(),"0",""};
                 	modelDsNV.addRow(rowData);
+                }
+                for(int i=0; i< dsNVBP.size();i++) {	
+                	ButtonGroup bg = new ButtonGroup();
+                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
+                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
+                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
                 }
       
             }
@@ -212,14 +218,11 @@ public class ChamCongNV_GUI implements ListSelectionListener {
         	modelDsNV.addRow(rowData);
         }
         
-        int n=0;
-        for(NhanVien nv: dsNVBP) {	
+        for(int i=0; i< dsNVBP.size();i++) {	
         	ButtonGroup bg = new ButtonGroup();
-        	bg.add((JRadioButton) modelDsNV.getValueAt(n, 4));
-        	bg.add((JRadioButton) modelDsNV.getValueAt(n, 5));
-        	bg.add((JRadioButton) modelDsNV.getValueAt(n, 6));
-        	n++;
-        	
+        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
+        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
+        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
         }
         
         
