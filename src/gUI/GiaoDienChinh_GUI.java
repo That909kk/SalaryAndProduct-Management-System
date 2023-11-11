@@ -336,7 +336,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	 * chuyenGUI cho phép truyền vào môt Jpanel để thực hiện việc chuyển đổi giữa các giao diện
 	 * @param panelGUI
 	 */
-	private void chuyenGUI(JPanel panelGUI) {
+	private void chuyenGUI(JPanel pnlGUI) {
 		this.getContentPane().removeAll();
 		getContentPane().add(menuBar);
 		getContentPane().add(panelGUI);
