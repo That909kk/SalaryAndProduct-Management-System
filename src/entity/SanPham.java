@@ -12,12 +12,21 @@ public class SanPham {
 		// TODO Auto-generated constructor stub
 	}
 
+<<<<<<< HEAD
 	public SanPham(String maSP, String tenSP, int soLuong, int soLuongCongDoan, HopDong hopDong) {
 		super();
 		this.maSP = maSP;
 		this.tenSP = tenSP;
 		this.soLuong = soLuong;
 		this.soLuongCongDoan = soLuongCongDoan;
+=======
+	public SanPham(String maSP, String tenSP, int soLuong, HopDong hopDong) throws Exception {
+		super();
+		this.maSP = maSP;
+		setTenSP(tenSP);
+		setSoLuong(soLuong);
+		this.soLuongCongDoan = 0;
+>>>>>>> main
 		this.hopDong = hopDong;
 	}
 
@@ -30,16 +39,31 @@ public class SanPham {
 		return tenSP;
 	}
 
+<<<<<<< HEAD
 	public void setTenSP(String tenSP) {
 		this.tenSP = tenSP;
+=======
+	public void setTenSP(String tenSP) throws Exception {
+		if (tenSP.trim().length() > 0) 
+			this.tenSP = tenSP;
+		else
+			throw new Exception("tenSP khong duoc rong");
+>>>>>>> main
 	}
 
 	public int getSoLuong() {
 		return soLuong;
 	}
 
+<<<<<<< HEAD
 	public void setSoLuong(int soLuong) {
 		this.soLuong = soLuong;
+=======
+	public void setSoLuong(int soLuong) throws Exception {
+		if (soLuong >= 0)
+			this.soLuong = soLuong;
+		throw new Exception("soLuong khong duoc < 0");
+>>>>>>> main
 	}
 
 	public int getSoLuongCongDoan() {
@@ -47,7 +71,11 @@ public class SanPham {
 	}
 
 	public void setSoLuongCongDoan(int soLuongCongDoan) {
+<<<<<<< HEAD
 		this.soLuongCongDoan = soLuongCongDoan;
+=======
+		this.soLuongCongDoan = soLuongCongDoan >= 0 ? soLuongCongDoan : 0;
+>>>>>>> main
 	}
 
 	public HopDong getHopDong() {

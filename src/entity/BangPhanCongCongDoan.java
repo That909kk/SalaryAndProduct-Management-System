@@ -21,7 +21,7 @@ public class BangPhanCongCongDoan {
 		this.maPC = maPC;
 		this.trangThai = trangThai;
 		this.ngayPhanCong = ngayPhanCong;
-		this.soLuongSanPham = soLuongSanPham;
+		this.soLuongSanPham = 0;
 		this.congNhan = congNhan;
 		this.congDoan = congDoan;
 	}

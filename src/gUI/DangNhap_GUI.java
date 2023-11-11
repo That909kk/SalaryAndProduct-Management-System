@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
@@ -27,7 +30,12 @@ import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 import javax.swing.ImageIcon;
 
-public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener {
+/**
+ * Lớp này dùng để tạo giao diện đăng nhập
+ * Tạo bởi: Huỳnh Kim Thành - 21086351
+ * ngày: 25/10/2023
+ */
+public class DangNhap_GUI extends JFrame implements ActionListener, MouseListener, KeyListener {
 
 	private JPanel contentPane;
 	private JTextField txtTK;
@@ -108,14 +116,20 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		btnDN.setBackground(new Color(255, 255, 255));
 		btnDN.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
-		lblLinkQMK = new JLabel("Quên mật khẩu?");
+		lblLinkQMK = new JLabel("<html><u>Quên mật khẩu?</u></html>");
 		lblLinkQMK.setForeground(new Color(30, 144, 255));
-		lblLinkQMK.setBounds(130, 410, 180, 40);
+		lblLinkQMK.setBounds(130, 401, 180, 40);
 		pnlForm.add(lblLinkQMK);
 		lblLinkQMK.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLinkQMK.addMouseListener(this);
 		btnDN.addActionListener(this);
+		
+		txtTK.addKeyListener(this);
+		pwdMK.addKeyListener(this);
+		
+		txtTK.setText("230010");
+		pwdMK.setText("230010");
 	}
 
 	@Override
@@ -130,12 +144,11 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 			
 			TaiKhoan tonTai = taiKhoan_DAO.soSanhPWD(tk, mk);
 			
-			GiaoDienChinh_GUI main = new GiaoDienChinh_GUI();
-			main.setVisible(true);
-			
 			if (tonTai != null) {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
 				this.dispose();
+				GiaoDienChinh_GUI main = new GiaoDienChinh_GUI(tonTai);
+				main.setVisible(true);
 			} else {
 				JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Tài khoản hoặc mật khẩu sai");
 				txtTK.requestFocus();
@@ -143,7 +156,6 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 				pwdMK.setText("");
 			}
 		}
-		
 	}
 
 	@Override
@@ -177,5 +189,24 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 	@Override
 	public void mouseExited(MouseEvent e) {
 		lblLinkQMK.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			btnDN.doClick();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

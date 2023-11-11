@@ -44,5 +44,3 @@ public class BoPhan_DAO {
 		}
 		return dsBP;
 	}
-
-}

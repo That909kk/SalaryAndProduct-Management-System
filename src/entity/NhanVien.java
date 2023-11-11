@@ -1,6 +1,9 @@
 package entity;
 
+<<<<<<< HEAD
 import java.sql.Date;
+=======
+>>>>>>> main
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -13,8 +16,8 @@ public class NhanVien {
 	private String soDienThoai;
 	private String diaChi;
 	private String cCCD;
-	private Date ngaySinh;
-	private Date ngayBatDauLamViec;
+	private LocalDate ngaySinh;
+	private LocalDate ngayBatDauLamViec;
 	private int caLamViec;
 	private double luongCoBan;
 	private int thangBacLuong;
@@ -28,7 +31,7 @@ public class NhanVien {
 	}
 
 	public NhanVien(String maNV, byte[] anhDaiDien, String ho, String ten, boolean gioiTinh, String soDienThoai,
-			String diaChi, String cCCD, Date ngaySinh, Date ngayBatDauLamViec, int caLamViec,
+			String diaChi, String cCCD, LocalDate ngaySinh, LocalDate ngayBatDauLamViec, int caLamViec,
 			double luongCoBan, int thangBacLuong, double heSoLuong, double phuCap, BoPhan boPhan) {
 		super();
 		this.maNV = maNV;
@@ -110,6 +113,7 @@ public class NhanVien {
 		this.cCCD = cCCD;
 	}
 
+<<<<<<< HEAD
 	public Date getNgaySinh() {
 		return ngaySinh;
 	}
@@ -122,7 +126,19 @@ public class NhanVien {
 		return ngayBatDauLamViec;
 	}
 
-	public void setNgayBatDauLamViec(Date ngayBatDauLamViec) {
+	public LocalDate getNgaySinh() {
+		return ngaySinh;
+	}
+
+	public void setNgaySinh(LocalDate ngaySinh) {
+		this.ngaySinh = ngaySinh;
+	}
+
+	public LocalDate getNgayBatDauLamViec() {
+		return ngayBatDauLamViec;
+	}
+
+	public void setNgayBatDauLamViec(LocalDate ngayBatDauLamViec) {
 		this.ngayBatDauLamViec = ngayBatDauLamViec;
 	}
 
@@ -176,10 +192,6 @@ public class NhanVien {
 
 	public String getMaNV() {
 		return maNV;
-	}
-
-	public void setMaNV(String maNV) {
-		this.maNV = maNV;
 	}
 
 	@Override

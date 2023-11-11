@@ -9,12 +9,14 @@ public class CongNhan {
 	private String ho;
 	private String ten;
 	private boolean gioiTinh;
+	private LocalDate ngaySinh;
 	private String cCCD;
 	private String diaChi;
 	private String soDienThoai;
 	private String chuyenMon;
 	private int caLamViec;
 	private double phuCap;
+	private double luongCoBan;
 	private LocalDate ngayBatDauLamViec;
 	private Xuong xuong;
 
@@ -23,21 +25,23 @@ public class CongNhan {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CongNhan(String maCN, byte[] anhDaiDien, String ho, String ten, boolean gioiTinh, String cCCD, String diaChi,
-			String soDienThoai, String chuyenMon, int caLamViec, double phuCap, LocalDate ngayBatDauLamViec, Xuong xuong) {
+	public CongNhan(String maCN, byte[] anhDaiDien, String ho, String ten, boolean gioiTinh, LocalDate ngaySinh,
+			String cCCD, String diaChi, String soDienThoai, String chuyenMon, int caLamViec, double phuCap,
+			double luongCoBan, LocalDate ngayBatDauLamViec, Xuong xuong) {
 		super();
 		this.maCN = maCN;
 		this.anhDaiDien = anhDaiDien;
 		this.ho = ho;
 		this.ten = ten;
 		this.gioiTinh = gioiTinh;
+		this.ngaySinh = ngaySinh;
 		this.cCCD = cCCD;
 		this.diaChi = diaChi;
 		this.soDienThoai = soDienThoai;
 		this.chuyenMon = chuyenMon;
 		this.caLamViec = caLamViec;
 		this.phuCap = phuCap;
-		this.ngayBatDauLamViec = ngayBatDauLamViec;
+		this.luongCoBan = luongCoBan;
 		this.xuong = xuong;
 	}
 
@@ -132,6 +136,22 @@ public class CongNhan {
 
 	public void setNgayBatDauLamViec(LocalDate ngayBatDauLamViec) {
 		this.ngayBatDauLamViec = ngayBatDauLamViec;
+	}
+
+	public LocalDate getNgaySinh() {
+		return ngaySinh;
+	}
+
+	public void setNgaySinh(LocalDate ngaySinh) {
+		this.ngaySinh = ngaySinh;
+	}
+
+	public double getLuongCoBan() {
+		return luongCoBan;
+	}
+
+	public void setLuongCoBan(double luongCoBan) {
+		this.luongCoBan = luongCoBan;
 	}
 
 	public String getMaCN() {
