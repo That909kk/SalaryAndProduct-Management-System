@@ -3,23 +3,17 @@ package gUI;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-<<<<<<< HEAD
-=======
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
->>>>>>> main
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-<<<<<<< HEAD
-=======
 import javax.swing.JOptionPane;
->>>>>>> main
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
