@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ImageIcon;
 
-public class ChamCongCongNhan extends JFrame {
+public class ChamCongCongNhan_GUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -35,7 +35,7 @@ public class ChamCongCongNhan extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChamCongCongNhan frame = new ChamCongCongNhan();
+					ChamCongCongNhan_GUI frame = new ChamCongCongNhan_GUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -47,7 +47,7 @@ public class ChamCongCongNhan extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ChamCongCongNhan() {
+	public ChamCongCongNhan_GUI() {
 		setTitle("Chấm công công nhân");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1280, 720);
