@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -18,8 +19,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -120,7 +119,7 @@ public class NhanVien_GUI implements ListSelectionListener {
 	    b33 = Box.createHorizontalBox();
 	    
 	    b.add(b1);
-	    b.add(Box.createHorizontalStrut(50));
+	    b.add(Box.createHorizontalStrut(30));
 	    
 	    
 	    b.add(b2);
@@ -159,37 +158,47 @@ public class NhanVien_GUI implements ListSelectionListener {
 	    b2.setPreferredSize(new Dimension(216,180));
 	    
 	    lblNgaySinh = new JLabel("Ngày Sinh");
+	    lblNgaySinh.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblCaLam = new JLabel("Ca làm cố định");
+	    lblCaLam.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblHoDem = new JLabel("Họ đệm");
+	    lblHoDem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblHoDem.setPreferredSize(lblNgaySinh.getPreferredSize());
 	    b11.add(lblHoDem);
 	    b11.add(Box.createHorizontalStrut(15));
 	    
 	    txtHoDem = new JTextField();
+	    txtHoDem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b11.add(txtHoDem);
 	    b11.add(Box.createHorizontalStrut(20));
 	    
 	    lblSDT = new JLabel("Số điện thoại");
+	    lblSDT.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblSDT.setPreferredSize(lblCaLam.getPreferredSize());
 	    b11.add(lblSDT);
 	    
 	    txtSDT = new JTextField();
+	    txtSDT.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b11.add(txtSDT);
 	    
 	    lblTen = new JLabel("Tên");
+	    lblTen.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblTen.setPreferredSize(lblNgaySinh.getPreferredSize());
 	    b12.add(lblTen);
 	    b12.add(Box.createHorizontalStrut(15));
 	    
 	    txtTen = new JTextField();
+	    txtTen.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b12.add(txtTen);
 	    b12.add(Box.createHorizontalStrut(20));
 	    
 	    lblDiaChi = new JLabel("Địa chỉ");
+	    lblDiaChi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblDiaChi.setPreferredSize(lblCaLam.getPreferredSize());
 	    b12.add(lblDiaChi);
 	    
 	    txtDiaChi = new JTextField();
+	    txtDiaChi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b12.add(txtDiaChi);
 	    
 	    
@@ -202,6 +211,7 @@ public class NhanVien_GUI implements ListSelectionListener {
 	    
 	    b13.add(Box.createHorizontalStrut(20));
 	    lblBatDauLam = new JLabel("Bắt đầu làm");
+	    lblBatDauLam.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblBatDauLam.setPreferredSize(lblCaLam.getPreferredSize());
 	    b13.add(lblBatDauLam);
 	    
@@ -210,11 +220,13 @@ public class NhanVien_GUI implements ListSelectionListener {
 	    b13.add(dpBatDauLam);
 	    
 	    lblCCCD = new JLabel("CCCD");
+	    lblCCCD.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblCCCD.setPreferredSize(lblNgaySinh.getPreferredSize());
 	    b14.add(lblCCCD);
 	    b14.add(Box.createHorizontalStrut(15));
 	    
 	    txtCCCD = new JTextField();
+	    txtCCCD.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b14.add(txtCCCD);
 	    
 	    b14.add(Box.createHorizontalStrut(20));
@@ -223,47 +235,57 @@ public class NhanVien_GUI implements ListSelectionListener {
 
 	    
 	    chkSang = new JCheckBox("Sáng");
+	    chkSang.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b14.add(chkSang);
 	    b14.add(Box.createHorizontalStrut(45));
 	    
 	    chkToi = new JCheckBox("Tối");
+	    chkToi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b14.add(chkToi);
 	    
 	    lblGioiTinh = new JLabel("Giới tính");
+	    lblGioiTinh.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblGioiTinh.setPreferredSize(lblNgaySinh.getPreferredSize());
 	    b15.add(lblGioiTinh);
 	    b15.add(Box.createHorizontalStrut(40));
 	    
 	    rdoNam = new JRadioButton("Nam");
+	    rdoNam.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    rdoNu = new JRadioButton("Nữ");
+	    rdoNu.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    ButtonGroup buttonGroup = new ButtonGroup();
 	    buttonGroup.add(rdoNam);
 	    buttonGroup.add(rdoNu);
 	    b15.add(rdoNam);
-	    b15.add(Box.createHorizontalStrut(80));
+	    b15.add(Box.createHorizontalStrut(60));
 	    b15.add(rdoNu);
 	    b15.add(Box.createHorizontalStrut(20));
 	    
 	    lblLuongCB = new JLabel("Lương cơ bản");
+	    lblLuongCB.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblLuongCB.setPreferredSize(lblCaLam.getPreferredSize());
 	    b15.add(lblLuongCB);
 	    
 	    txtLuongCB = new JTextField();
+	    txtLuongCB.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    b15.add(txtLuongCB);
 	    
 	    lblHeSoLuong = new JLabel("Hệ số lương");
+	    lblHeSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblAvt = new JLabel("\\Hình ảnh\\");
 	    lblAvt.setPreferredSize(new Dimension(50, 110));
 	    b2.add(lblAvt);
 	    b2.add(Box.createVerticalStrut(5));
 	    
 	    lblBacLuong = new JLabel("Bậc lương");
+	    lblBacLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblBacLuong.setPreferredSize(lblHeSoLuong.getPreferredSize());
 	    b21.add(lblBacLuong);
 	    b21.add(Box.createHorizontalStrut(15));
 	    
 	    modelBacLuong = new DefaultComboBoxModel<String>();
 	    cboBacLuong = new JComboBox<String>(modelBacLuong);
+	    cboBacLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    cboBacLuong.setPreferredSize(new Dimension(120,35));
 	    b21.add(cboBacLuong);
 	    b2.add(b21);
@@ -275,6 +297,7 @@ public class NhanVien_GUI implements ListSelectionListener {
 	    
 	    modelHeSoLuong = new DefaultComboBoxModel<String>();
 	    cboHeSoLuong = new JComboBox<String>(modelHeSoLuong);
+	    cboHeSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    cboHeSoLuong.setPreferredSize(new Dimension(120, 35));
 	    b22.add(cboHeSoLuong);
 	    b2.add(b21);
@@ -305,6 +328,7 @@ public class NhanVien_GUI implements ListSelectionListener {
 				
 		btnTimKiem = new JButton("");
 		btnTimKiem.setPreferredSize(new Dimension(35,50));
+		txtTimKiem.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnTimKiem.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
 		btnTimKiem.setBackground(new Color(255, 255, 255));
 		b31.add(btnTimKiem);
@@ -312,6 +336,7 @@ public class NhanVien_GUI implements ListSelectionListener {
 		
 		modelNam = new DefaultComboBoxModel<String>();
 		cboNam = new JComboBox<String>(modelNam);
+		cboNam.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cboNam.setPreferredSize(new Dimension(120, 35));
 		b31.add(cboNam);
 		b31.add(Box.createHorizontalStrut(20));
