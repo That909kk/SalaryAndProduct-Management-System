@@ -1,6 +1,7 @@
 package gUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.FocusEvent;
@@ -11,6 +12,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -31,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
 public class NhanVien_GUI implements ListSelectionListener {
 
 	private JFrame frame;
+	private JPanel contentPane;
 	private JPanel pnTop, pnCenter;
 	private JLabel lblHoDem, lblTen, lblNgaySinh, lblCCCD, lblGioiTinh, lblSDT, lblDiaChi, lblBatDauLam, lblCaLam, lblLuongCB, lblAvt, lblBacLuong, lblHeSoLuong;
 	private JTextField txtHoDem, txtTen, txtCCCD, txtSDT, txtDiaChi, txtLuongCB,txtTimKiem;
@@ -64,43 +67,23 @@ public class NhanVien_GUI implements ListSelectionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		createMenuGUI();
-		createGUI();
-	}
-
-	public void createMenuGUI(){
-		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("New menu");
-		menuBar.add(mnNewMenu);
+		contentPane = new JPanel();
+		contentPane.setLayout(null);
 		
-		JMenu menuCN = new JMenu("Công nhân");
-		menuBar.add(menuCN);
+		frame.setContentPane(contentPane);
 		
-		JMenu menuNV = new JMenu("Nhân viên");
-		menuBar.add(menuNV);
-		
-		JMenu menuCongDoan = new JMenu("Công đoạn");
-		menuBar.add(menuCongDoan);
-		
-		JMenu menuLuong = new JMenu("Lương");
-		menuBar.add(menuLuong);
-		
-		JMenu menuHopDong = new JMenu("Hợp đồng");
-		menuBar.add(menuHopDong);
-		
-		JMenu menuTroGiup = new JMenu("Trợ giúp");
-		menuBar.add(menuTroGiup);
-		
-		JMenu menuGioiThieu = new JMenu("Giới thiệu");
-		menuBar.add(menuGioiThieu);	
+		contentPane.add(this.createGUI());
 	}
 	
-	public void createGUI() {
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+	public JPanel createGUI() {
+		JPanel pnlNV = new JPanel();
+		pnlNV.setBounds(0, 50, 1268, 632);;
+		pnlNV.setLayout(new BorderLayout(0, 0));
+		
+		pnlNV.setLayout(new BorderLayout(0, 0));
 		pnTop = new JPanel();
-	    frame.getContentPane().add(pnTop, BorderLayout.NORTH);
+	    pnlNV.add(pnTop, BorderLayout.NORTH);
 	    pnTop.setBorder(new EmptyBorder(20, 20, 0, 20));
 	    pnTop.setLayout(new BoxLayout(pnTop, BoxLayout.X_AXIS));
 	    
@@ -320,8 +303,10 @@ public class NhanVien_GUI implements ListSelectionListener {
         });
 		b31.add(txtTimKiem);
 				
-		btnTimKiem = new JButton("Tìm");
+		btnTimKiem = new JButton("");
 		btnTimKiem.setPreferredSize(new Dimension(35,50));
+		btnTimKiem.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
+		btnTimKiem.setBackground(new Color(255, 255, 255));
 		b31.add(btnTimKiem);
 		b31.add(Box.createHorizontalStrut(50));
 		
@@ -335,26 +320,34 @@ public class NhanVien_GUI implements ListSelectionListener {
 		btnXemChiTiet = new JButton("Xem chi tiết");
 		b32.add(btnXemChiTiet);
 		btnXemChiTiet.setMaximumSize(new Dimension(140, 45));
+		btnXemChiTiet.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
+		btnXemChiTiet.setBackground(new Color(255, 255, 255));
 		b32.add(Box.createHorizontalStrut(50));
 		
 		btnThem = new JButton("Thêm");
 		b32.add(btnThem);
 		btnThem.setMaximumSize(new Dimension(163, 45));
+		btnThem.setIcon(new ImageIcon("img\\icons\\icons8-add-user-20.png"));
+		btnThem.setBackground(new Color(255, 255, 255));
 		b32.add(Box.createHorizontalStrut(20));
 		
 		b33.add(Box.createHorizontalStrut(20));
 		btnSua = new JButton("Sửa");
 		b33.add(btnSua);
 		btnSua.setMaximumSize(new Dimension(160, 45));
+		btnSua.setIcon(new ImageIcon("img\\icons\\icons8-pencil-20.png"));
+		btnSua.setBackground(new Color(255, 255, 255));
 		b33.add(Box.createHorizontalStrut(50));
 		
 		btnXoa = new JButton("Xóa");
 		btnXoa.setMaximumSize(new Dimension(160, 45));
 		b33.add(btnXoa);
+		btnXoa.setIcon(new ImageIcon("img\\icons\\icons8-delete-20.png"));
+		btnXoa.setBackground(new Color(255, 255, 255));
 		b33.add(Box.createHorizontalStrut(20));
 		
 		pnCenter = new JPanel();
-		frame.getContentPane().add(pnCenter, BorderLayout.CENTER);
+		pnlNV.add(pnCenter, BorderLayout.CENTER);
 		String[] cols_datphong = {"Mã nhân viên", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Bậc lương", "Lương cơ bản","Hệ số lương"};
         modelDsNV = new DefaultTableModel(cols_datphong, 0);
         tblDsNV = new JTable(modelDsNV);
@@ -362,6 +355,8 @@ public class NhanVien_GUI implements ListSelectionListener {
         pnCenter.add(scrollPane);
         scrollPane.setPreferredSize(new Dimension(1220,420));
         tblDsNV.getSelectionModel().addListSelectionListener(this);
+        
+        return pnlNV;
 	}
 
 	@Override
