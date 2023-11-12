@@ -1,31 +1,12 @@
 package gUI;
 
-import java.awt.Font;
-import java.awt.Frame;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Insets;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Insets;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.time.LocalDate;
@@ -82,6 +63,10 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private TaiKhoan tkMain = null;
 	
 	private NhanVien_GUI nv_GUI;
+	private JMenuItem mniQuanLyCN;
+	private JMenuItem mniCCCN;
+	private JMenuItem mniQuanLyNV;
+	private JMenuItem mniCCNV;
 	/**
 	 * Create the frame.
 	 */
@@ -141,9 +126,33 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
 		menuBar.add(mnCongNhan);
 		
+		mniQuanLyCN = new JMenuItem("Quản Lý Công Nhân");
+		mniQuanLyCN.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniQuanLyCN.setBackground(new Color(255, 255, 255));
+		mniQuanLyCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnCongNhan.add(mniQuanLyCN);
+		
+		mniCCCN = new JMenuItem("Chấm Công Công Nhân");
+		mniCCCN.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniCCCN.setBackground(new Color(255, 255, 255));
+		mniCCCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnCongNhan.add(mniCCCN);
+		
 		mnNhanVien = new JMenu("  NHÂN VIÊN  ");
 		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnNhanVien);
+		
+		mniQuanLyNV = new JMenuItem("Quản Lý Nhân Viên");
+		mniQuanLyNV.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mniQuanLyNV.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniQuanLyNV.setBackground(new Color(255, 255, 255));
+		mnNhanVien.add(mniQuanLyNV);
+		
+		mniCCNV = new JMenuItem("Chấm Công Nhân Viên");
+		mniCCNV.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mniCCNV.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniCCNV.setBackground(new Color(255, 255, 255));
+		mnNhanVien.add(mniCCNV);
 		
 		mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
 		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
@@ -294,6 +303,10 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnHome.addMouseListener(this);
 		mnCongNhan.addMouseListener(this);
 		mnNhanVien.addMouseListener(this);
+		mniQuanLyCN.addActionListener(this);
+		mniQuanLyNV.addActionListener(this);
+		mniCCCN.addActionListener(this);
+		mniCCNV.addActionListener(this);
 		mnHopDong.addMouseListener(this);
 		mntmPCCD.addActionListener(this);
 		mntmPCCN.addActionListener(this);
@@ -332,6 +345,28 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		
 		if (o.equals(btnCaiDat)) {
+			
+		}
+		
+		if (o.equals(mniQuanLyCN)) {
+			CongNhan_GUI cn_GUI = new CongNhan_GUI();
+			chuyenGUI(cn_GUI.getPNLCongNhan());
+			this.setTitle("Quản Lý Công Nhân");
+		}
+		
+		if (o.equals(mniQuanLyNV)) {
+			nv_GUI = new NhanVien_GUI();
+			chuyenGUI(nv_GUI.createGUI());
+			this.setTitle("Quản Lý Nhân Viên");
+		}
+		
+		if (o.equals(mniCCCN)) {
+			ChamCongCN_GUI cccn_GUI = new ChamCongCN_GUI();
+			chuyenGUI(cccn_GUI.getPNLCCCongNhan());
+			this.setTitle("Chấm Công Công Nhân");
+		}
+		
+		if (o.equals(mniCCNV)) {
 			
 		}
 		
@@ -380,18 +415,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(mnHome)) {
 			chuyenGUI(pnlBackGround);
 			this.setTitle("Màn Hình Chính");
-		}
-		
-		if (o.equals(mnCongNhan)) {
-			CongNhan_GUI cn_GUI = new CongNhan_GUI();
-			chuyenGUI(cn_GUI.getPNLCongNhan());
-			this.setTitle("Công Nhân");
-		}
-		
-		if (o.equals(mnNhanVien)) {
-			nv_GUI = new NhanVien_GUI();
-			chuyenGUI(nv_GUI.createGUI());
-			this.setTitle("Nhân Viên");
 		}
 		
 		if (o.equals(mnHopDong)) {
