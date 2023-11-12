@@ -22,7 +22,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class LuongNhanVien extends JFrame {
+public class LuongNhanVien_GUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -56,7 +56,7 @@ public class LuongNhanVien extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LuongNhanVien() {
+	public LuongNhanVien_GUI() {
 		super("Lương Nhân Viên");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);

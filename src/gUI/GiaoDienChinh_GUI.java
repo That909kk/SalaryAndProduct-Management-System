@@ -66,6 +66,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private JPanel pnlBackGround;
 	private JMenuBar menuBar;
 	private JMenu mnHome;
+	private JMenu mnCongNhan;
 	private JMenu mnNhanVien;
 	private JMenu mnCongDoan;
 	private JMenu mnLuong;
@@ -135,7 +136,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnHome.setIconTextGap(20);
 		menuBar.add(mnHome);
 		
-		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
+		mnCongNhan = new JMenu("  CÔNG NHÂN  ");
 		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
 		menuBar.add(mnCongNhan);
@@ -291,6 +292,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		pnlBackGround.add(lblBackGround);
 		
 		mnHome.addMouseListener(this);
+		mnCongNhan.addMouseListener(this);
 		mnNhanVien.addMouseListener(this);
 		mnHopDong.addMouseListener(this);
 		mntmPCCD.addActionListener(this);
@@ -346,13 +348,13 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		
 		if (o.equals(mntmLuongCN)) {
-			LuongCongNhan lcn = new LuongCongNhan();
+			LuongCongNhan_GUI lcn = new LuongCongNhan_GUI();
 			chuyenGUI(lcn.getLuongCNGUI());
 			this.setTitle("Bảng Lương Công Nhân");
 		}
 		
 		if (o.equals(mntmLuongNV)) {
-			LuongNhanVien lnv = new LuongNhanVien();
+			LuongNhanVien_GUI lnv = new LuongNhanVien_GUI();
 			chuyenGUI(lnv.getLuongNVGUI());
 			this.setTitle("Bảng Lương Nhân Viên");
 		}
@@ -378,6 +380,12 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(mnHome)) {
 			chuyenGUI(pnlBackGround);
 			this.setTitle("Màn Hình Chính");
+		}
+		
+		if (o.equals(mnCongNhan)) {
+			CongNhan_GUI cn_GUI = new CongNhan_GUI();
+			chuyenGUI(cn_GUI.getPNLCongNhan());
+			this.setTitle("Công Nhân");
 		}
 		
 		if (o.equals(mnNhanVien)) {

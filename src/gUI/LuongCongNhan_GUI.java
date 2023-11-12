@@ -32,7 +32,7 @@ import javax.swing.Icon;
 import java.awt.GridLayout;
 import javax.swing.UIManager;
 
-public class LuongCongNhan extends JFrame {
+public class LuongCongNhan_GUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -52,7 +52,7 @@ public class LuongCongNhan extends JFrame {
 	 * Huỳnh Kim Thành. Ngày 10/11/2023
 	 */
 	
-	public LuongCongNhan() {
+	public LuongCongNhan_GUI() {
 		super("Lương Cong Nhan");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
