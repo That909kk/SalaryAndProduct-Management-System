@@ -79,6 +79,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	
 	private TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
 	private TaiKhoan tkMain = null;
+	
+	private NhanVien_GUI nv_GUI;
 	/**
 	 * Create the frame.
 	 */
@@ -289,6 +291,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		pnlBackGround.add(lblBackGround);
 		
 		mnHome.addMouseListener(this);
+		mnNhanVien.addMouseListener(this);
+		mnHopDong.addMouseListener(this);
 		mntmPCCD.addActionListener(this);
 		mntmPCCN.addActionListener(this);
 		mntmLuongCN.addActionListener(this);
@@ -328,7 +332,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(btnCaiDat)) {
 			
 		}
-
 		
 		if (o.equals(mntmPCCD)) {
 			PhanChiaCongDoan_GUI pccd = new PhanChiaCongDoan_GUI();
@@ -375,6 +378,18 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		if (o.equals(mnHome)) {
 			chuyenGUI(pnlBackGround);
 			this.setTitle("Màn Hình Chính");
+		}
+		
+		if (o.equals(mnNhanVien)) {
+			nv_GUI = new NhanVien_GUI();
+			chuyenGUI(nv_GUI.createGUI());
+			this.setTitle("Nhân Viên");
+		}
+		
+		if (o.equals(mnHopDong)) {
+			HopDong_GUI hd_GUI = new HopDong_GUI();
+			chuyenGUI(hd_GUI.createGUI());
+			this.setTitle("Hợp đồng");
 		}
 	}
 	@Override

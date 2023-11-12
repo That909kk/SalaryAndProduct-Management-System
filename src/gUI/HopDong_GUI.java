@@ -1,6 +1,7 @@
 package gUI;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,6 +39,7 @@ import com.jgoodies.forms.layout.RowSpec;
 public class HopDong_GUI implements ListSelectionListener {
 
 	private JFrame frame;
+	private JPanel contentPane;
 	private JTextField txtTenDoiTac, txtSanPham, txtSoLuong,txtTimKiem;
 	private kDatePicker dpNgayKi,dpNgayThanhLi;
 	private JButton btnTimKiem, btnXemChiTiet, btnThem, btnXoa, btnSua; 
@@ -67,53 +69,56 @@ public class HopDong_GUI implements ListSelectionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		createMenuGUI();
-		createGUI();
+		
+		
+		contentPane = new JPanel();
+		contentPane.setLayout(null);
+		
+		contentPane.add(this.createGUI());
+		
+		frame.setContentPane(contentPane);
+//		createMenuGUI();
 	}
 
 
-	public void createMenuGUI(){
-		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
-		
-		JMenu mnNewMenu = new JMenu("New menu");
-		menuBar.add(mnNewMenu);
-		
-		JMenu menuCN = new JMenu("Công nhân");
-		menuBar.add(menuCN);
-		
-		JMenu menuNV = new JMenu("Nhân viên");
-		menuBar.add(menuNV);
-		
-		JMenu menuCongDoan = new JMenu("Công đoạn");
-		menuBar.add(menuCongDoan);
-		
-		JMenu menuLuong = new JMenu("Lương");
-		menuBar.add(menuLuong);
-		
-		JMenu menuHopDong = new JMenu("Hợp đồng");
-		menuBar.add(menuHopDong);
-		
-		JMenu menuTroGiup = new JMenu("Trợ giúp");
-		menuBar.add(menuTroGiup);
-		
-		JMenu menuGioiThieu = new JMenu("Giới thiệu");
-		menuBar.add(menuGioiThieu);
-		
-		
-		
-	}
+//	public void createMenuGUI(){
+//		JMenuBar menuBar = new JMenuBar();
+//		frame.setJMenuBar(menuBar);
+//		
+//		JMenu mnNewMenu = new JMenu("New menu");
+//		menuBar.add(mnNewMenu);
+//		
+//		JMenu menuCN = new JMenu("Công nhân");
+//		menuBar.add(menuCN);
+//		
+//		JMenu menuNV = new JMenu("Nhân viên");
+//		menuBar.add(menuNV);
+//		
+//		JMenu menuCongDoan = new JMenu("Công đoạn");
+//		menuBar.add(menuCongDoan);
+//		
+//		JMenu menuLuong = new JMenu("Lương");
+//		menuBar.add(menuLuong);
+//		
+//		JMenu menuHopDong = new JMenu("Hợp đồng");
+//		menuBar.add(menuHopDong);
+//		
+//		JMenu menuTroGiup = new JMenu("Trợ giúp");
+//		menuBar.add(menuTroGiup);
+//		
+//		JMenu menuGioiThieu = new JMenu("Giới thiệu");
+//		menuBar.add(menuGioiThieu);
+//	}
 	
-	public void createGUI() {
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+	public JPanel createGUI() {
+		JPanel pnlHD = new JPanel();
+		pnlHD.setBounds(0, 50, 1268, 632);
+		
+		pnlHD.setLayout(new BorderLayout(0, 0));
 	    pnTop = new JPanel();
-	    frame.getContentPane().add(pnTop, BorderLayout.NORTH);
+	    pnlHD.add(pnTop, BorderLayout.NORTH);
 	    pnTop.setBorder(new EmptyBorder(20, 20, 0, 20));
-	    pnTop.setLayout(new BoxLayout(pnTop, BoxLayout.X_AXIS));
-	 
-	 
-
-	    
+	    pnTop.setLayout(new BoxLayout(pnTop, BoxLayout.X_AXIS));   
 	    
 	    Box b,b1,b2,b11,b12,b13,b21,b22,b23;
 	    
@@ -128,7 +133,6 @@ public class HopDong_GUI implements ListSelectionListener {
 	    b21 = Box.createHorizontalBox();
 	    b22 = Box.createHorizontalBox();
 	    b23 = Box.createHorizontalBox();
-	    
 	    
 	    pnTop.add(b);
 	    b.add(b1);
@@ -160,18 +164,21 @@ public class HopDong_GUI implements ListSelectionListener {
 	    
 	    b11.add(Box.createHorizontalStrut(20));
 	    JLabel lblTenDoiTac = new JLabel("Tên đối tác");
+	    lblTenDoiTac.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    b11.add(lblTenDoiTac);
 	    b11.add(Box.createHorizontalStrut(50));
 	    
 	    
 	    txtTenDoiTac = new JTextField(3);
 	    txtTenDoiTac.setPreferredSize(new Dimension(50,33));
+	    txtTenDoiTac.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    b11.add(txtTenDoiTac);
 	    b11.add(Box.createHorizontalStrut(50));
 	    
 	    JLabel lblNgayKi = new JLabel("Ngày kí");
 	    b11.add(lblNgayKi);
 	    b11.add(Box.createHorizontalStrut(50));
+	    lblNgayKi.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    
 	    dpNgayKi = new kDatePicker(100);
 		dpNgayKi.setPreferredSize(new Dimension(100, 10));
@@ -181,24 +188,29 @@ public class HopDong_GUI implements ListSelectionListener {
 		b12.add(Box.createHorizontalStrut(20));
 	    JLabel lblSanPham = new JLabel("Sản phẩm");
 	    b12.add(lblSanPham);
+	    lblSanPham.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    b12.add(Box.createHorizontalStrut(58));
 
 	    txtSanPham = new JTextField(3);
 	    b12.add(txtSanPham);
+	    txtSanPham.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    b12.add(Box.createHorizontalStrut(50));
 	    
 		JLabel lblNgayThanhLi = new JLabel("Ngày thanh lí hợp đồng:");
+		lblNgayThanhLi.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		b12.add(lblNgayThanhLi);
 		b12.add(Box.createHorizontalStrut(58));
 		b12.add(Box.createHorizontalStrut(20));
 
 		b13.add(Box.createHorizontalStrut(20));
 	    JLabel lblSoLuong = new JLabel("Số lượng");
+	    lblSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    b13.add(lblSoLuong);
 	    b13.add(Box.createHorizontalStrut(59));
 	    
 	    txtSoLuong = new JTextField(3);
 	    b13.add(txtSoLuong);
+	    txtSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	    b13.add(Box.createHorizontalStrut(50));
 	    
 		dpNgayThanhLi = new kDatePicker(190);
@@ -209,7 +221,8 @@ public class HopDong_GUI implements ListSelectionListener {
 
 		
 		b21.add(Box.createHorizontalStrut(20));
-		txtTimKiem = new JTextField("Nhập tên");	
+		txtTimKiem = new JTextField("Nhập tên");
+		txtTimKiem.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtTimKiem.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -264,7 +277,7 @@ public class HopDong_GUI implements ListSelectionListener {
 
 		
 		pnCenter = new JPanel();
-		frame.getContentPane().add(pnCenter, BorderLayout.CENTER);
+		pnlHD.add(pnCenter, BorderLayout.CENTER);
 		String[] cols_datphong = {"Mã hợp đồng", "Tên đối tác", "Tên sản phẩm", "Ngày kí", "Ngày thanh lí"};
         modelDsHD = new DefaultTableModel(cols_datphong, 0);
         tblDsHD = new JTable(modelDsHD);
@@ -273,8 +286,7 @@ public class HopDong_GUI implements ListSelectionListener {
         scrollPane.setPreferredSize(new Dimension(1220,470));
         tblDsHD.getSelectionModel().addListSelectionListener(this);
 
-		
-  
+        return pnlHD;
 	}
 
 
