@@ -367,7 +367,9 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		
 		if (o.equals(mniCCNV)) {
-			
+			ChamCongNV_GUI ccnv_GUI = new ChamCongNV_GUI();
+			chuyenGUI(ccnv_GUI.createGUI());
+			this.setTitle("Chấm Công Nhân Viên");
 		}
 		
 		if (o.equals(mntmPCCD)) {

@@ -1,6 +1,7 @@
 package gUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -42,7 +43,7 @@ import entity.BoPhan;
 import entity.NhanVien;
 
 public class ChamCongNV_GUI implements ListSelectionListener {
-
+	private JPanel contentPane;
 	private JFrame frame;
 	private kDatePicker dpNgayChamCong;
 	private JLabel lblNgayCC,lblBoPhan,lblCaLam,lblGhiChu;
@@ -80,35 +81,45 @@ public class ChamCongNV_GUI implements ListSelectionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		createMenuGUI();
-		createGUI();
+		
+		contentPane = new JPanel();
+		contentPane.setLayout(null);
+		contentPane.add(this.createGUI());
+
+		frame.setContentPane(contentPane);
+		
+//		createMenuGUI();
 	}
 
 
 
-	private void createGUI() {
+	protected JPanel createGUI() {
+		 JPanel pnlCCNV = new JPanel();
+		 pnlCCNV.setBackground(new Color(240, 248, 255));
+		 pnlCCNV.setBounds(0, 50, 1268, 632);
+		
 		 try {
 	            ConnectDB.getInstance().connect();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
 		 
-		BoPhan_DAO boPhanDao = new BoPhan_DAO();
-		dsBP = new ArrayList<BoPhan>();
+//		BoPhan_DAO boPhanDao = new BoPhan_DAO();
+//		dsBP = new ArrayList<BoPhan>();
 		
-		dsBP = boPhanDao.getdsBoPhan();
+//		dsBP = boPhanDao.getdsBoPhan();
 		
-		nhanVienDao = new NhanVien_DAO();
-		dsNV = new ArrayList<NhanVien>();
-		dsNV = nhanVienDao.getListNV();
+//		nhanVienDao = new NhanVien_DAO();
+//		dsNV = new ArrayList<NhanVien>();
+//		dsNV = nhanVienDao.getListNV();
 		
-		dsNVBP = new ArrayList<NhanVien>();
+//		dsNVBP = new ArrayList<NhanVien>();
 		
 		 
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		pnlCCNV.setLayout(new BorderLayout(0, 0));
 		JPanel topPanel = new JPanel();
 		topPanel.setPreferredSize(new Dimension(1000,40));;
-		frame.getContentPane().add(topPanel, BorderLayout.NORTH);
+		pnlCCNV.add(topPanel, BorderLayout.NORTH);
 	
 		
 		Box b;
@@ -123,58 +134,58 @@ public class ChamCongNV_GUI implements ListSelectionListener {
 		dpNgayChamCong.setPreferredSize(new Dimension(120, 40));
 		lblBoPhan = new JLabel("Bộ Phận");
 		modelBoPhan = new DefaultComboBoxModel<String>();
-		for(BoPhan bp: dsBP) {
-			modelBoPhan.addElement(bp.getTenBoPhan());
-			
-		}
+//		for(BoPhan bp: dsBP) {
+//			modelBoPhan.addElement(bp.getTenBoPhan());
+//			
+//		}
 		
 	    cboBoPhan = new JComboBox<String>(modelBoPhan);
 	    cboBoPhan.setPreferredSize(new Dimension(100,40));
 	    String selectedValue = (String) cboBoPhan.getSelectedItem();
-        for(BoPhan bp: dsBP) {
-        	if(bp.getTenBoPhan().equals(selectedValue)) {
-        		selectedValue = bp.getMaBoPhan();
-        	}
-        	
-        }
-        for(NhanVien nv: dsNV) {
-        	if(nv.getBoPhan().getMaBoPhan().equals(selectedValue)) {
-        		dsNVBP.add(nv);
-        	}
-        }
+//        for(BoPhan bp: dsBP) {
+//        	if(bp.getTenBoPhan().equals(selectedValue)) {
+//        		selectedValue = bp.getMaBoPhan();
+//        	}
+//        	
+//        }
+//        for(NhanVien nv: dsNV) {
+//        	if(nv.getBoPhan().getMaBoPhan().equals(selectedValue)) {
+//        		dsNVBP.add(nv);
+//        	}
+//        }
         
-        cboBoPhan.addActionListener((ActionListener) new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox<String> combo = (JComboBox<String>) e.getSource();
-                String selectedValue = (String) combo.getSelectedItem();
-                dsNVBP.clear();
-                
-                for(BoPhan bp: dsBP) {
-                	if(bp.getTenBoPhan().equals(selectedValue)) {
-                		selectedValue = bp.getMaBoPhan();
-                	}
-                	
-                }
-                for(NhanVien nv: dsNV) {
-                	if(nv.getBoPhan().getMaBoPhan().equals(selectedValue)) {
-                		dsNVBP.add(nv);
-                	}
-                }
-                clearTable();
-                for(NhanVien nv: dsNVBP) {
-                	Object[] rowData = {nv.getMaNV(), nv.getHo(),nv.getTen(), nv.getCaLamViec(), new JRadioButton(), new JRadioButton(), new JRadioButton(),"0",""};
-                	modelDsNV.addRow(rowData);
-                }
-                for(int i=0; i< dsNVBP.size();i++) {	
-                	ButtonGroup bg = new ButtonGroup();
-                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
-                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
-                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
-                }
-      
-            }
-        });
+//        cboBoPhan.addActionListener((ActionListener) new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JComboBox<String> combo = (JComboBox<String>) e.getSource();
+//                String selectedValue = (String) combo.getSelectedItem();
+//                dsNVBP.clear();
+//                
+//                for(BoPhan bp: dsBP) {
+//                	if(bp.getTenBoPhan().equals(selectedValue)) {
+//                		selectedValue = bp.getMaBoPhan();
+//                	}
+//                	
+//                }
+//                for(NhanVien nv: dsNV) {
+//                	if(nv.getBoPhan().getMaBoPhan().equals(selectedValue)) {
+//                		dsNVBP.add(nv);
+//                	}
+//                }
+//                clearTable();
+//                for(NhanVien nv: dsNVBP) {
+//                	Object[] rowData = {nv.getMaNV(), nv.getHo(),nv.getTen(), nv.getCaLamViec(), new JRadioButton(), new JRadioButton(), new JRadioButton(),"0",""};
+//                	modelDsNV.addRow(rowData);
+//                }
+//                for(int i=0; i< dsNVBP.size();i++) {	
+//                	ButtonGroup bg = new ButtonGroup();
+//                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
+//                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
+//                	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
+//                }
+//      
+//            }
+//        });
 	    
 	    lblCaLam = new JLabel("Ca Làm:");
         chkCaSang = new JCheckBox("Ca sáng"); 
@@ -200,9 +211,8 @@ public class ChamCongNV_GUI implements ListSelectionListener {
         b.add(chkThem);
         b.add(Box.createHorizontalStrut(30));
         
-        
         JPanel pnTable = new JPanel();
-        frame.getContentPane().add(pnTable, BorderLayout.CENTER);
+        pnlCCNV.add(pnTable, BorderLayout.CENTER);
         String[] cols_nhanVien = {"Mã nhân viên", "Họ đệm", "Tên nhân viên", "Ca làm", "Đi làm", "Vắng phép", "Vắng không phép", "Số giờ tăng ca","Ghi chú"};
         modelDsNV = new DefaultTableModel(cols_nhanVien, 0);
         tblDsNV = new JTable(modelDsNV) {
@@ -213,17 +223,17 @@ public class ChamCongNV_GUI implements ListSelectionListener {
         	}
         };
         
-        for(NhanVien nv: dsNVBP) {
-        	Object[] rowData = {nv.getMaNV(), nv.getHo(),nv.getTen(), nv.getCaLamViec(), new JRadioButton(), new JRadioButton(), new JRadioButton(),"0",""};
-        	modelDsNV.addRow(rowData);
-        }
-        
-        for(int i=0; i< dsNVBP.size();i++) {	
-        	ButtonGroup bg = new ButtonGroup();
-        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
-        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
-        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
-        }
+//        for(NhanVien nv: dsNVBP) {
+//        	Object[] rowData = {nv.getMaNV(), nv.getHo(),nv.getTen(), nv.getCaLamViec(), new JRadioButton(), new JRadioButton(), new JRadioButton(),"0",""};
+//        	modelDsNV.addRow(rowData);
+//        }
+//        
+//        for(int i=0; i< dsNVBP.size();i++) {	
+//        	ButtonGroup bg = new ButtonGroup();
+//        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
+//        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
+//        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
+//        }
         
         
         tblDsNV.getColumn("Đi làm").setCellRenderer(new Radiorenderer());
@@ -245,7 +255,7 @@ public class ChamCongNV_GUI implements ListSelectionListener {
         
         
         JPanel pnBottom = new JPanel();
-        frame.getContentPane().add(pnBottom, BorderLayout.SOUTH);
+        pnlCCNV.add(pnBottom, BorderLayout.SOUTH);
         pnBottom.setLayout(new BoxLayout(pnBottom, BoxLayout.X_AXIS));
         Box b2 = Box.createHorizontalBox();
         pnBottom.add(b2);
@@ -269,10 +279,7 @@ public class ChamCongNV_GUI implements ListSelectionListener {
         b2.add(Box.createHorizontalStrut(10));
         pnBottom.setBorder(new EmptyBorder(0, 0, 20,0));
         
-        
-        
-        
-        
+		return pnlCCNV;
 	}
 	
 	public void clearTable() {
@@ -359,8 +366,6 @@ public class ChamCongNV_GUI implements ListSelectionListener {
 		
 	}
 	
-
-
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
