@@ -282,7 +282,7 @@ public class HopDong_GUI implements ListSelectionListener {
 		
 		pnCenter = new JPanel();
 		pnlHD.add(pnCenter, BorderLayout.CENTER);
-		String[] cols_datphong = {"Mã hợp đồng", "Tên đối tác", "Tên sản phẩm", "Ngày kí", "Ngày thanh lí"};
+		String[] cols_datphong = {"Mã hợp đồng", "Tên đối tác", "Tên sản phẩm", "Số Lượng", "Ngày kí", "Ngày thanh lí"};
         modelDsHD = new DefaultTableModel(cols_datphong, 0);
         tblDsHD = new JTable(modelDsHD);
         JScrollPane scrollPane = new JScrollPane(tblDsHD);
