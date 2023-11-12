@@ -12,7 +12,7 @@ public class SanPham {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SanPham(String maSP, String tenSP, int soLuong, HopDong hopDong) throws Exception {
+	public SanPham(String maSP, String tenSP, int soLuong, int soLuongCongDoan, HopDong hopDong) throws Exception {
 		super();
 		this.maSP = maSP;
 		setTenSP(tenSP);
