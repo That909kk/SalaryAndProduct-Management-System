@@ -6,16 +6,16 @@ go
 
 CREATE DATABASE QLLSP ON
 (NAME = QQLSP_dat,
-    FILENAME = 'D:\HK5\PTUD\QLLLSP\QLLSP.mdf',
+    FILENAME = 'T:\QLLSP\QLLSP.mdf',
     SIZE = 10 MB,
     MAXSIZE = 512 MB,
     FILEGROWTH = 5 MB)
 LOG ON
 (NAME = QQLSP_log,
-    FILENAME = 'D:\HK5\PTUD\QLLLSP\QLLSP.ldf',
+    FILENAME = 'T:\QLLSP\QLLSP.ldf',
     SIZE = 5 MB,
     MAXSIZE = 25 MB,
-    FILEGROWTH = 5 MB);
+    FILEGROWTH = 5 MB)
 GO
 
 use QLLSP
@@ -55,6 +55,7 @@ create table BangLuongCongNhan (
 	sanLuongTong int,
 	soNgayNghiKhongPhep int,
 	tienPhat float,
+	bhxh float,
 	luongTong float,
 	constraint FK_BLCN foreign key (maCN)
 	references CongNhan(maCN)
@@ -73,11 +74,12 @@ create table BangChamCongCongNhan (
 	references CongNhan(maCN)
 )
 
-create table hopDong (
+create table HopDong (
 	maHopDong nvarchar(6) not null primary key,
-	tenDoiTac nvarchar(30),
+	tenDoiTac nvarchar(100),
+	ngayKi date,
 	ngayThanhLyHopDong date,
-	ngayKi date
+	trangThai bit
 )
 
 create table SanPham (
@@ -152,6 +154,7 @@ create table BangLuongNhanVien (
 	soNgayDiLam date,
 	soNgayNghiKhongPhep int,
 	tienPhat float,
+	bhxh float,
 	luongTong float,
 	constraint FK_BLNV foreign key (maNV)
 	references NhanVien(maNV)
@@ -239,4 +242,8 @@ values
 	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV230001', '03/11/2023')
 go
 
-select * from TaiKhoan
+insert into HopDong values (N'141023', N'Công ty Sản xuất áo sơ mi SMI', '10-14-2023', '11-13-2023', 1)
+go
+
+select year(ngayKi) from hopDong
+order by ngayKi ASC

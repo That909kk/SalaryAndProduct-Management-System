@@ -7,18 +7,20 @@ public class HopDong {
 	private String tenDoiTac;
 	private LocalDate ngayKy;
 	private LocalDate ngayThanhLyHopDong;
+	private boolean trangThai;
 
 	public HopDong() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public HopDong(String maHopDong, String tenDoiTac, LocalDate ngayKy, LocalDate ngayThanhLyHopDong) {
+	public HopDong(String maHopDong, String tenDoiTac, LocalDate ngayKy, LocalDate ngayThanhLyHopDong, boolean trangThai) {
 		super();
 		this.maHopDong = maHopDong;
 		this.tenDoiTac = tenDoiTac;
 		this.ngayKy = ngayKy;
 		this.ngayThanhLyHopDong = ngayThanhLyHopDong;
+		this.trangThai = trangThai;
 	}
 
 	public HopDong(String maHopDong) {
@@ -50,14 +52,21 @@ public class HopDong {
 		this.ngayThanhLyHopDong = ngayThanhLyHopDong;
 	}
 
+	public boolean isTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
+	}
+
 	public String getMaHopDong() {
 		return maHopDong;
 	}
 
 	@Override
 	public String toString() {
-		return "HopDong [maHopDong=" + maHopDong + ", tenDoiTac=" + tenDoiTac + ", ngayKy=" + ngayKy
-				+ ", ngayThanhLyHopDong=" + ngayThanhLyHopDong + "]";
+		return "";
 	}
 
 	@Override
