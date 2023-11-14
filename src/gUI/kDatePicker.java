@@ -2,6 +2,8 @@ package gUI;
 import javax.swing.*;
 import java.awt.event.*;
 import java.text.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 
 public class kDatePicker extends JPanel implements ActionListener {
@@ -116,5 +118,19 @@ public class kDatePicker extends JPanel implements ActionListener {
         SimpleDateFormat sdf = new SimpleDateFormat("yy");
         String date = sdf.format(txt.getText());
         return Integer.parseInt(date);
+    }
+    
+    public int getDayByLocalDate() {
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    	return LocalDate.parse(txt.getText(), dtf).getDayOfMonth();
+    }
+    
+    public int getMonthByLocalDate() {
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    	return LocalDate.parse(txt.getText(), dtf).getMonthValue();
+    }
+    public int getYearByLocalDate() {
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    	return LocalDate.parse(txt.getText(), dtf).getYear();
     }
 }
