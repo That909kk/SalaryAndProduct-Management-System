@@ -277,7 +277,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 	    
 		return pnlHD;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức cập nhật combobox hiển thị năm kí hợp đồng
+	 */
 	private void capNhatCBONam() {
 		hd_DAO.getDSHopDong();
 		modelCBONam.removeAllElements();
@@ -285,7 +288,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 			modelCBONam.addElement(year.toString());
 		}
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức cập nhật danh sách hợp đồng từ database vào table
+	 */
 	private void layDSHopDongTuDB() {
 		hd_DAO = new HopDong_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -296,7 +302,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 					, hd.getNgayThanhLyHopDong().format(dtf), hd.isTrangThai() ? "Đã thanh lí" : "Chưa thanh lí"});
 		}
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức cập nhật danh sách hợp đồng theo trạng thái từ database vào table
+	 */
 	private void layDSHopDongTheoTrangThaiTuDB(boolean trangThai) {
 		hd_DAO = new HopDong_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -307,7 +316,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 					, hd.getNgayThanhLyHopDong().format(dtf), hd.isTrangThai() ? "Đã thanh lí" : "Chưa thanh lí"});
 		}
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức cập nhật danh sách hợp đồng theo năm từ database vào table
+	 */
 	private void layDSHopDongTheoNamTuDB(int nam) {
 		hd_DAO = new HopDong_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -318,7 +330,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 					, hd.getNgayThanhLyHopDong().format(dtf), hd.isTrangThai() ? "Đã thanh lí" : "Chưa thanh lí"});
 		}
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức cập nhật danh sách hợp đồng theo năm và trạng thái từ database vào table
+	 */
 	private void layDSHopDongTheoNamVaTTTuDB(int nam, boolean tinhTrang) {
 		hd_DAO = new HopDong_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -358,18 +373,50 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		
 		if (o.equals(btnXacNhanThanhLi)) {
 			int row = tblDSHopDong.getSelectedRow();
-			String maHD = tblDSHopDong.getValueAt(row, 0).toString();
-			HopDong hd = hd_DAO.getMotHopDong(maHD);
 			
-			if (hd != null) {
-				hd.setTrangThai(true);
-				hd_DAO.updateHopDong(hd);
-				tblDSHopDong.setValueAt("Đã thanh lí", row, 4);
+			if (tblDSHopDong.getValueAt(row, 4).toString().equals("Đã thanh lí")) {
+				JOptionPane.showMessageDialog(null, "Hợp đồng này đã thanh lí");
+			} else {
+				String maHD = tblDSHopDong.getValueAt(row, 0).toString();
+				HopDong hd = hd_DAO.getMotHopDong(maHD);
+				
+				if (hd != null) {
+					hd.setTrangThai(true);
+					hd_DAO.updateHopDong(hd);
+					tblDSHopDong.setValueAt("Đã thanh lí", row, 4);
+				}
 			}
 		}
 		
 		if (o.equals(btnSua)) {
+			int row = tblDSHopDong.getSelectedRow();
+			int luaChon = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn sửa hợp đồng này không?", "Lưu Ý", JOptionPane.YES_NO_OPTION);
 			
+			if (luaChon == JOptionPane.YES_OPTION) {
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				
+				String tenDoiTac = txtTenDoiTac.getText().trim();
+				LocalDate ngayKi = dcNgayKi.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate ngayThanhLi = dcNgayThanhLi.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				
+				String maHD = tblDSHopDong.getValueAt(row, 0).toString();
+				HopDong hd = hd_DAO.getMotHopDong(maHD);
+				
+				if (validation()) {
+					if (ngayThanhLi.isAfter(hd.getNgayThanhLyHopDong()))
+						hd.setTrangThai(false);
+					else
+						hd.setTrangThai(true);
+					hd.setTenDoiTac(tenDoiTac);
+					hd.setNgayKy(ngayKi);
+					hd.setNgayThanhLyHopDong(ngayThanhLi);
+					
+					if (hd_DAO.updateHopDong(hd)) {
+						JOptionPane.showMessageDialog(null, "Đã sửa thành công");
+						modelDSHopDong.setRowCount(0);
+					}
+				}
+			}
 		}
 		
 		if (o.equals(btnXoa)) {
@@ -419,12 +466,22 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 			}
 		}
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Hàm kiểm tra dữ liệu nhập vào có hợp lệ hay không
+	 * @return true nếu tất cả đều hợp lệ
+	 */
 	private boolean validation() {
 		String tenDoiTac = txtTenDoiTac.getText().trim();
 
 		if (tenDoiTac.length() == 0 || !tenDoiTac.matches("^[\\p{L}0-9&,-]+(\\s?[\\p{L}0-9&,-]*)*")) {
 			thongBaoLoiNhapDuLieu(txtTenDoiTac, "Tên đối tác không được để trống");
+			return false;
+		}
+		
+		if (dcNgayKi.getDate().after(dcNgayThanhLi.getDate())) {
+			JOptionPane.showMessageDialog(null, "Ngày thanh lí hợp đồng phải sau ngày kí!!");
+			dcNgayThanhLi.requestFocus();
 			return false;
 		}
 		
