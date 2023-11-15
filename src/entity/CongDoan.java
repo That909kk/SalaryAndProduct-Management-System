@@ -6,9 +6,11 @@ public class CongDoan {
 	private String maCongDoan;
 	private String tenCongDoan;
 	private int soLuongSanPham;
+	private int soLuongCongNhanDuKien;
 	private double giaTien;
 	private LocalDate ngayBatDau;
-	private String trangThai;
+	private LocalDate ngayKetThucDuKien;
+	private boolean trangThai;
 	private String congDoanTienQuyet;
 	private SanPham sanPham;
 
@@ -17,18 +19,22 @@ public class CongDoan {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CongDoan(String maCongDoan, String tenCongDoan, int soLuongSanPham, double giaTien, LocalDate ngayBatDau,
-			String trangThai, String congDoanTienQuyet, SanPham sanPham) {
+	public CongDoan(String maCongDoan, String tenCongDoan, int soLuongSanPham, int soLuongCongNhanDuKien,
+			double giaTien, LocalDate ngayBatDau, LocalDate ngayKetThucDuKien, boolean trangThai,
+			String congDoanTienQuyet, SanPham sanPham) {
 		super();
 		this.maCongDoan = maCongDoan;
 		this.tenCongDoan = tenCongDoan;
 		this.soLuongSanPham = soLuongSanPham;
+		this.soLuongCongNhanDuKien = soLuongCongNhanDuKien;
 		this.giaTien = giaTien;
 		this.ngayBatDau = ngayBatDau;
+		this.ngayKetThucDuKien = ngayKetThucDuKien;
 		this.trangThai = trangThai;
 		this.congDoanTienQuyet = congDoanTienQuyet;
 		this.sanPham = sanPham;
 	}
+
 
 	public CongDoan(String maCongDoan) {
 		super();
@@ -51,6 +57,14 @@ public class CongDoan {
 		this.soLuongSanPham = soLuongSanPham;
 	}
 
+	public int getSoLuongCongNhanDuKien() {
+		return soLuongCongNhanDuKien;
+	}
+
+	public void setSoLuongCongNhanDuKien(int soLuongCongNhanDuKien) {
+		this.soLuongCongNhanDuKien = soLuongCongNhanDuKien;
+	}
+
 	public double getGiaTien() {
 		return giaTien;
 	}
@@ -66,12 +80,20 @@ public class CongDoan {
 	public void setNgayBatDau(LocalDate ngayBatDau) {
 		this.ngayBatDau = ngayBatDau;
 	}
+	
+	public LocalDate getNgayKetThucDuKien() {
+		return ngayKetThucDuKien;
+	}
 
-	public String getTrangThai() {
+	public void setNgayKetThucDuKien(LocalDate ngayKetThucDuKien) {
+		this.ngayKetThucDuKien = ngayKetThucDuKien;
+	}
+
+	public boolean isTrangThai() {
 		return trangThai;
 	}
 
-	public void setTrangThai(String trangThai) {
+	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
 

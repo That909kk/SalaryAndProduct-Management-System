@@ -75,7 +75,7 @@ create table BangChamCongCongNhan (
 )
 
 create table HopDong (
-	maHopDong nvarchar(6) not null primary key,
+	maHopDong nvarchar(8) not null primary key,
 	tenDoiTac nvarchar(100),
 	ngayKi date,
 	ngayThanhLyHopDong date,
@@ -83,39 +83,40 @@ create table HopDong (
 )
 
 create table SanPham (
-	maSP nvarchar(8) not null primary key,
+	maSP nvarchar(10) not null primary key,
 	tenSP nvarchar (50) not null,
 	soLuong int,
 	soLuongCongDoan int,
 	trangThai bit,
-	maHopDong nvarchar(6) not null,
+	maHopDong nvarchar(8) not null,
 	constraint FK_HD foreign key (maHopDong)
 	references HopDong(maHopDong)
 )
 
 create table CongDoan (
-	maCongDoan nvarchar(10) not null primary key,
+	maCongDoan nvarchar(11) not null primary key,
 	tenCongDoan nvarchar(20),
+	soLuongCongNhanDuKien int,
 	soLuongSanPham int not null,
-	trangThai nvarchar(12),
+	trangThai bit,
 	giaTien float,
 	ngayBatDau date,
 	ngayKetThucDuKien date,
 	congDoanTienQuyet nvarchar(12),
-	maSP nvarchar(11) not null,
+	maSP nvarchar(10) not null,
 	constraint FK_SP foreign key (maSP)
 	references SanPham(maSP)
 )
 
 create table BangPhanCongCN (
-	maPCCN nvarchar(11) not null primary key,
+	maPCCN nvarchar(17) not null primary key,
 	trangThai bit,
 	ngayPhanCong date,
 	soLuongSP int,
 	maCN nvarchar(8),
 	constraint FK_PCCN foreign key (maCN)
 	references CongNhan(maCN),
-	maCD nvarchar(10),
+	maCD nvarchar(11),
 	constraint FK_PCCD foreign key (maCD)
 	references CongDoan(maCongDoan)
 )
@@ -245,19 +246,34 @@ go
 
 insert into HopDong 
 values 
-	(N'141023', N'Công ty Sản xuất áo sơ mi SMI', '10-14-2023', '11-13-2023', 1),
-	(N'071023', N'Cửa hàng bán áo thun Z-shirt', '10-07-2023', '11-06-2023', 1),
-	(N'140823', N'Shop bán quần jeans Jeanist', '08-14-2023', '09-13-2023', 1),
-	(N'300923', N'Shop bán quần short Short-T', '09-30-2023', '10-29-2023', 1),
-	(N'151023', N'Công ty sản xuất áo thun S-Z', '10-15-2023', '11-30-2023', 0)
+	(N'14102301', N'Công ty Sản xuất áo sơ mi SMI', '10-14-2023', '11-13-2023', 1),
+	(N'07102301', N'Cửa hàng bán áo thun Z-shirt', '10-07-2023', '11-06-2023', 1),
+	(N'14082301', N'Shop bán quần jeans Jeanist', '08-14-2023', '09-13-2023', 1),
+	(N'30092301', N'Shop bán quần short Short-T', '09-30-2023', '10-29-2023', 1),
+	(N'15102301', N'Công ty sản xuất áo thun S-Z', '10-15-2023', '11-30-2023', 0)
 go
 
 insert into SanPham
 values
-	(N'14102301', N'Áo sơ mi trắng', 10000, 2, 1, N'141023'),
-	(N'07102301', N'Áo thun đen thời thượng', 20000, 3, 1, N'071023'),
-	(N'14082301', N'Quần jeans màu xanh dương', 12000, 3, 1, N'140823'),
-	(N'30092301', N'Quần short thể thao màu xanh lam', 30000, 4, 1, N'300923')
+	(N'1410230101', N'Áo sơ mi trắng', 10000, 2, 1, N'14102301'),
+	(N'0710230101', N'Áo thun đen thời thượng', 20000, 3, 1, N'07102301'),
+	(N'1408230101', N'Quần jeans màu xanh dương', 12000, 3, 1, N'14082301'),
+	(N'3009230101', N'Quần short thể thao màu xanh lam', 30000, 3, 1, N'30092301')
 go
 
-select * from SanPham
+insert into CongDoan (maSP, maCongDoan, tenCongDoan, soLuongSanPham, soLuongCongNhanDuKien, giaTien, trangThai, ngayBatDau, ngayKetThucDuKien, congDoanTienQuyet)
+values
+	('1410230101', '14102301011', N'May vá', 10000, 200, 5000, 1, '10-14-2023', '10-30-2023', ''),
+	('1410230101', '14102301012', N'Đóng gói', 10000, 100, 3000, 1, '10-31-2023', '11-10-2023', '14102301011'),
+	('0710230101', '07102301011', N'May vá', 20000, 200, 5000, 1, '10-07-2023', '11-04-2023', ''),
+	('0710230101', '07102301012', N'Nhuộm', 20000, 100, 6000, 1, '10-07-2023', '11-04-2023', '07102301011'),
+	('0710230101', '07102301013', N'Đóng gói', 20000, 200, 3000, 1, '10-07-2023', '11-04-2023', '07102301012'),
+	('1408230101', '14082301011', N'May vá', 12000, 100, 4000, 1, '08-14-2023', '09-13-2023', ''),
+	('1408230101', '14082301012', N'Nhuộm', 12000, 100, 6000, 1, '08-14-2023', '09-13-2023', '14082301011'),
+	('1408230101', '14082301013', N'Đóng gói', 12000, 100, 4000, 1, '08-14-2023', '09-13-2023', '14082301011'),
+	('3009230101', '30092301011', N'May vá', 30000, 300, 4000, 1, '09-30-2023', '10-29-2023', ''),
+	('3009230101', '30092301012', N'Nhuộm', 30000, 180, 6000, 1, '09-30-2023', '10-29-2023', '30092301011'),
+	('3009230101', '30092301013', N'Đóng gói', 30000, 100, 5000, 1, '09-30-2023', '10-29-2023', '30092301011')
+go
+
+select * from CongDoan
