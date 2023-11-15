@@ -277,14 +277,24 @@ public class HopDong_DAO {
 	 */
 	public ArrayList<Integer> getDSNamKiHopDong() {
 		HashSet<Integer> setNam = new HashSet<Integer>();
-		ArrayList<Integer> dsNam = new ArrayList<Integer>();
 		
-		for (HopDong hopDong : listHD) {
-			dsNam.add(hopDong.getNgayKy().getYear());
-		}
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
 		
-		for (Integer namKi : dsNam) {
-			setNam.add(namKi);
+		String sql = "select Year(ngayKi) from HopDong";
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				int nam = rs.getInt(1);
+				
+				setNam.add(nam);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		ArrayList<Integer> listNamKi = new ArrayList<Integer>(setNam);

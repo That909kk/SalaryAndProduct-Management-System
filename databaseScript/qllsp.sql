@@ -83,10 +83,11 @@ create table HopDong (
 )
 
 create table SanPham (
-	maSP nvarchar(11) not null primary key,
+	maSP nvarchar(8) not null primary key,
 	tenSP nvarchar (50) not null,
 	soLuong int,
 	soLuongCongDoan int,
+	trangThai bit,
 	maHopDong nvarchar(6) not null,
 	constraint FK_HD foreign key (maHopDong)
 	references HopDong(maHopDong)
@@ -242,8 +243,21 @@ values
 	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV230001', '03/11/2023')
 go
 
-insert into HopDong values (N'141023', N'Công ty Sản xuất áo sơ mi SMI', '10-14-2023', '11-13-2023', 1)
+insert into HopDong 
+values 
+	(N'141023', N'Công ty Sản xuất áo sơ mi SMI', '10-14-2023', '11-13-2023', 1),
+	(N'071023', N'Cửa hàng bán áo thun Z-shirt', '10-07-2023', '11-06-2023', 1),
+	(N'140823', N'Shop bán quần jeans Jeanist', '08-14-2023', '09-13-2023', 1),
+	(N'300923', N'Shop bán quần short Short-T', '09-30-2023', '10-29-2023', 1),
+	(N'151023', N'Công ty sản xuất áo thun S-Z', '10-15-2023', '11-30-2023', 0)
 go
 
-select year(ngayKi) from hopDong
-order by ngayKi ASC
+insert into SanPham
+values
+	(N'14102301', N'Áo sơ mi trắng', 10000, 2, 1, N'141023'),
+	(N'07102301', N'Áo thun đen thời thượng', 20000, 3, 1, N'071023'),
+	(N'14082301', N'Quần jeans màu xanh dương', 12000, 3, 1, N'140823'),
+	(N'30092301', N'Quần short thể thao màu xanh lam', 30000, 4, 1, N'300923')
+go
+
+select * from SanPham

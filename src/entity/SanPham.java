@@ -5,6 +5,7 @@ public class SanPham {
 	private String tenSP;
 	private int soLuong;
 	private int soLuongCongDoan;
+	private boolean trangThai;
 	private HopDong hopDong;
 
 	public SanPham() {
@@ -12,12 +13,13 @@ public class SanPham {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SanPham(String maSP, String tenSP, int soLuong, int soLuongCongDoan, HopDong hopDong) throws Exception {
+	public SanPham(String maSP, String tenSP, int soLuong, int soLuongCongDoan, boolean trangThai, HopDong hopDong) throws Exception {
 		super();
 		this.maSP = maSP;
 		setTenSP(tenSP);
 		setSoLuong(soLuong);
-		this.soLuongCongDoan = 0;
+		this.soLuongCongDoan = soLuongCongDoan;
+		this.trangThai = trangThai;
 		this.hopDong = hopDong;
 	}
 
@@ -44,7 +46,8 @@ public class SanPham {
 	public void setSoLuong(int soLuong) throws Exception {
 		if (soLuong >= 0)
 			this.soLuong = soLuong;
-		throw new Exception("soLuong khong duoc < 0");
+		else
+			throw new Exception("soLuong khong duoc < 0");
 	}
 
 	public int getSoLuongCongDoan() {
@@ -53,6 +56,14 @@ public class SanPham {
 
 	public void setSoLuongCongDoan(int soLuongCongDoan) {
 		this.soLuongCongDoan = soLuongCongDoan >= 0 ? soLuongCongDoan : 0;
+	}
+	
+	public boolean isTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
 	}
 
 	public HopDong getHopDong() {
