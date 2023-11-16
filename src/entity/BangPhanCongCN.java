@@ -2,20 +2,20 @@ package entity;
 
 import java.time.LocalDate;
 
-public class BangPhanCongCongDoan {
+public class BangPhanCongCN {
 	private String maPC;
-	private String trangThai;
+	private boolean trangThai;
 	private LocalDate ngayPhanCong;
 	private int soLuongSanPham;
 	private CongNhan congNhan;
 	private CongDoan congDoan;
 
-	public BangPhanCongCongDoan() {
+	public BangPhanCongCN() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public BangPhanCongCongDoan(String maPC, String trangThai, LocalDate ngayPhanCong, int soLuongSanPham,
+	public BangPhanCongCN(String maPC, boolean trangThai, LocalDate ngayPhanCong, int soLuongSanPham,
 			CongNhan congNhan, CongDoan congDoan) {
 		super();
 		this.maPC = maPC;
@@ -26,16 +26,16 @@ public class BangPhanCongCongDoan {
 		this.congDoan = congDoan;
 	}
 
-	public BangPhanCongCongDoan(String maPC) {
+	public BangPhanCongCN(String maPC) {
 		super();
 		this.maPC = maPC;
 	}
 
-	public String getTrangThai() {
+	public boolean isTrangThai() {
 		return trangThai;
 	}
 
-	public void setTrangThai(String trangThai) {
+	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
 
@@ -97,7 +97,7 @@ public class BangPhanCongCongDoan {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BangPhanCongCongDoan other = (BangPhanCongCongDoan) obj;
+		BangPhanCongCN other = (BangPhanCongCN) obj;
 		if (maPC == null) {
 			if (other.maPC != null)
 				return false;
