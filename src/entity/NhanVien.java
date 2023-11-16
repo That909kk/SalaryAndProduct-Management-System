@@ -177,11 +177,7 @@ public class NhanVien {
 	public String getMaNV() {
 		return maNV;
 	}
-
-	public void setMaNV(String maNV) {
-		this.maNV = maNV;
-	}
-
+	
 	@Override
 	public String toString() {
 		return "NhanVien [maNV=" + maNV + ", anhDaiDien=" + Arrays.toString(anhDaiDien) + ", ho=" + ho + ", ten=" + ten

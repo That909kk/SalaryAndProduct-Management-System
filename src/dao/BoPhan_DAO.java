@@ -18,7 +18,7 @@ public class BoPhan_DAO {
 		return instance;
 	}
 	
-	public ArrayList<BoPhan> getdsBoPhan(){
+	public ArrayList<BoPhan> getdsBoPhan() {
 		ArrayList<BoPhan> dsBP = new ArrayList<BoPhan>();
 		ConnectDB.getInstance();
 		Statement state = null;
@@ -28,19 +28,15 @@ public class BoPhan_DAO {
 			state = con.createStatement();
 			ResultSet rs = state.executeQuery(Sql);
 			while(rs.next()) {
-				BoPhan bp = new BoPhan();
-				bp.setMaBoPhan(rs.getString(1));
-				bp.setTenBoPhan(rs.getString(2));
-				bp.setsDTBoPhan(rs.getString(3));
-				
+				String maBP = rs.getString(1);
+				String tenBP = rs.getString(2);
+				String sdt = rs.getString(3);
+				BoPhan bp = new BoPhan(maBP, tenBP, sdt);
 				dsBP.add(bp);
-				
-				
-				
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return dsBP;
 	}
+}

@@ -44,7 +44,7 @@ public class BangChamCongNV {
 	public void setNv(NhanVien nv) {
 		this.nv = nv;
 	}
-
+	
 	public LocalDate getNgayCham() {
 		return ngayCham;
 	}

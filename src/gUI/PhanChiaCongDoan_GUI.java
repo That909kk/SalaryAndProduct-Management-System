@@ -238,6 +238,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		btnXoa.setBounds(464, 177, 140, 50);
 		btnXoa.setIcon(new ImageIcon("img\\icons\\icons8-delete-20.png"));
 		btnXoa.setIconTextGap(6);
+		btnXoa.setEnabled(false);
 		pnlThongTinCongDoan.add(btnXoa);
 		
 		dcNgayBatDau = new JDateChooser();
@@ -375,6 +376,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			dcNgayBatDau.setEnabled(true);
 			dcNgayKetThuc.setEnabled(true);
 			btnSua.setEnabled(false);
+			btnXoa.setEnabled(true);
 		}
 		
 		if (object.equals(tableCongDoan)) {
