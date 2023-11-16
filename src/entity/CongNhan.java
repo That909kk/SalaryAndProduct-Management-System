@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class CongNhan {
 	private String maCN;
+	private static int idCounter = 0;
 	private byte[] anhDaiDien;
 	private String ho;
 	private String ten;
@@ -47,7 +48,8 @@ public class CongNhan {
 
 	public CongNhan(String maCN) {
 		super();
-		this.maCN = maCN;
+		idCounter += 1;
+        this.maCN = "CN" + String.format("%06d", idCounter);
 	}
 
 	public byte[] getAnhDaiDien() {
@@ -63,23 +65,41 @@ public class CongNhan {
 	}
 
 	public void setHo(String ho) {
-		this.ho = ho;
+		this.ho = capitalizeFirstLetterOfEachWord(ho);
 	}
+
+	private String capitalizeFirstLetterOfEachWord(String input) {
+        String[] words = input.split("\\s");
+        StringBuilder output = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                output.append(Character.toUpperCase(word.charAt(0)));
+                output.append(word.substring(1));
+                output.append(" ");
+            }
+        }
+        return output.toString().trim();
+    }
 
 	public String getTen() {
 		return ten;
 	}
 
 	public void setTen(String ten) {
-		this.ten = ten;
+		this.ten = capitalizeFirstLetterOfEachWord(ten);
 	}
 
 	public boolean isGioiTinh() {
 		return gioiTinh;
 	}
-
+	boolean Nam = true;
+	boolean Nữ = false;
 	public void setGioiTinh(boolean gioiTinh) {
-		this.gioiTinh = gioiTinh;
+		if(gioiTinh)
+			this.gioiTinh = true;
+		else
+			this.gioiTinh = false;
 	}
 
 	public String getcCCD() {
@@ -87,7 +107,11 @@ public class CongNhan {
 	}
 
 	public void setcCCD(String cCCD) {
-		this.cCCD = cCCD;
+		if (cCCD.matches("\\d{12}")) {
+            this.cCCD = cCCD;
+        } else {
+            throw new IllegalArgumentException("CCCD phải là một chuỗi gồm 12 ký tự số");
+        }
 	}
 
 	public String getDiaChi() {
@@ -95,7 +119,11 @@ public class CongNhan {
 	}
 
 	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
+		if (diaChi.matches("[a-zA-Z0-9,\\/ ]+")) {
+            this.diaChi = diaChi;
+        } else {
+            throw new IllegalArgumentException("Địa chỉ chỉ được phép chứa ký số, ký tự và ký tự đặc biệt “,”, “/”");
+        }
 	}
 
 	public String getSoDienThoai() {
@@ -103,7 +131,11 @@ public class CongNhan {
 	}
 
 	public void setSoDienThoai(String soDienThoai) {
-		this.soDienThoai = soDienThoai;
+		 if (soDienThoai.matches("0\\d{9}")) {
+	            this.soDienThoai = soDienThoai;
+	        } else {
+	            throw new IllegalArgumentException("Số điện thoại phải là một chuỗi gồm 10 ký số bắt đầu bằng số 0");
+	        }
 	}
 
 	public String getChuyenMon() {
@@ -119,7 +151,11 @@ public class CongNhan {
 	}
 
 	public void setCaLamViec(int caLamViec) {
-		this.caLamViec = caLamViec;
+		if (caLamViec == 1 || caLamViec == 2) {
+            this.caLamViec = caLamViec;
+        } else {
+            throw new IllegalArgumentException("Ca làm việc phải là 1 (Sáng) hoặc 2 (Tối)");
+        }
 	}
 
 	public double getPhuCap() {
@@ -127,7 +163,11 @@ public class CongNhan {
 	}
 
 	public void setPhuCap(double phuCap) {
-		this.phuCap = phuCap;
+		if (phuCap >= 0) {
+            this.phuCap = phuCap;
+        } else {
+            throw new IllegalArgumentException("Phụ cấp phải lớn hơn hoặc bằng 0");
+        }
 	}
 
 	public LocalDate getNgayBatDauLamViec() {
@@ -135,7 +175,11 @@ public class CongNhan {
 	}
 
 	public void setNgayBatDauLamViec(LocalDate ngayBatDauLamViec) {
-		this.ngayBatDauLamViec = ngayBatDauLamViec;
+		if (ngayBatDauLamViec != null) {
+            this.ngayBatDauLamViec = ngayBatDauLamViec;
+        } else {
+            throw new IllegalArgumentException("Ngày bắt đầu làm việc không được để trống");
+        }
 	}
 
 	public LocalDate getNgaySinh() {
@@ -151,11 +195,19 @@ public class CongNhan {
 	}
 
 	public void setLuongCoBan(double luongCoBan) {
-		this.luongCoBan = luongCoBan;
+		if (luongCoBan > 0) {
+            this.luongCoBan = luongCoBan;
+        } else {
+            throw new IllegalArgumentException("Lương cơ bản phải lớn hơn 0");
+        }
 	}
 
 	public String getMaCN() {
 		return maCN;
+	}
+	
+	public void setMaCN(String maCN) {
+		this.maCN = maCN;
 	}
 
 	public Xuong getXuong() {
@@ -198,4 +250,5 @@ public class CongNhan {
 			return false;
 		return true;
 	}
+
 }
