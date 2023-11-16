@@ -6,6 +6,12 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,7 +28,14 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class LuongNhanVien_GUI extends JFrame {
+import connectDB.ConnectDB;
+import dao.BangChamCongNV_DAO;
+import dao.BangLuongNV_DAO;
+import dao.NhanVien_DAO;
+import entity.BangLuongNV;
+import entity.NhanVien;
+
+public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -36,6 +49,10 @@ public class LuongNhanVien_GUI extends JFrame {
 	private JTextField txtTimKiemTheoTenNV;
 	private DefaultTableModel modelTableThangLuongNV;
 	private DefaultTableModel modelTableDSLuongNV;
+	private BangLuongNV_DAO bl_DAO;
+	private BangChamCongNV_DAO bcc_DAO;
+	private NhanVien_DAO nv_DAO;
+	private BangChamCongNV_DAO bc_DAO;
 	
 	/**
 	 * Launch the application.
@@ -56,8 +73,16 @@ public class LuongNhanVien_GUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LuongNhanVien_GUI() {
+	public LuongNhanVien_GUI()  {
 		super("Lương Nhân Viên");
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		bl_DAO = new BangLuongNV_DAO();
+		bc_DAO = new BangChamCongNV_DAO();
+		nv_DAO = new NhanVien_DAO();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
@@ -120,12 +145,13 @@ public class LuongNhanVien_GUI extends JFrame {
 		String headerThangLuong[] = {"Tháng", "Năm", "Bộ Phận"};
 		modelTableThangLuongNV = new DefaultTableModel(headerThangLuong, 0);
 		
+		
 		tblThangLuongNhanVien = new JTable(modelTableThangLuongNV);
 		tblThangLuongNhanVien.setFont(UIManager.getFont("TableHeader.font"));
 		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblThangLuongNhanVien.setCellSelectionEnabled(true);
 		tblThangLuongNhanVien.setBackground(new Color(255, 255, 255));
-		
+		layDSBangLuongtuDB();
 		JScrollPane scrThangLuong = new JScrollPane(tblThangLuongNhanVien);
 		scrThangLuong.setBackground(new Color(255, 255, 255));
 		scrThangLuong.setBounds(0, 0, 604, 190);
@@ -272,5 +298,70 @@ public class LuongNhanVien_GUI extends JFrame {
 		});
 		
 		return pnlLuongNV;
+	}
+	private void layDSBangLuongtuDB(){
+		bl_DAO = new BangLuongNV_DAO();
+		modelTableThangLuongNV.setRowCount(0);
+		for(BangLuongNV bl :bl_DAO.getDSBangLuongNV()){
+			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
+			modelTableThangLuongNV.addRow(new Object[]{
+					bl.getThang(), bl.getNam(), nv.getBoPhan().getTenBoPhan()
+			});
+		}
+	}
+	private void layDSBangLuongtuDBtheomaNV(String maNV){
+
+		modelTableDSLuongNV.setRowCount(0);
+		
+		for(BangLuongNV bl : bl_DAO.getDSBangLuongtheomaNV(maNV)){
+			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getMaLuongNV());
+			modelTableDSLuongNV.addRow(new Object[]{
+					nv.getMaNV(), nv.getHo()+nv.getTen(), nv.getLuongCoBan(), nv.getThangBacLuong(), nv.getHeSoLuong(), bl.getSoNgayDiLam(),
+					nv.getPhuCap(), bl.getTienPhat(), "",0 , "", ""
+			});
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object object = e.getSource();
+		if(object.equals(tblThangLuongNhanVien)){
+			int row = tblThangLuongNhanVien.getSelectedRow();
+			String maNV = modelTableThangLuongNV.getValueAt(row, 0).toString();
+			layDSBangLuongtuDBtheomaNV(maNV);
+
+		}
+		if (object.equals(tblDSLuongNV)) {
+						
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
 	}
 }
