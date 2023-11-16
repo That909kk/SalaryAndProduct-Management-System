@@ -359,6 +359,26 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
             }
         });
 	    
+	    ItemListener itemListener = new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JCheckBox source = (JCheckBox) e.getSource();
+
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    if (source == chkSang) {
+                    	chkToi.setSelected(false);
+                        
+                    } else if (source == chkToi) {
+                    	chkSang.setSelected(false);
+                    } 
+                    
+                }
+            }
+        };
+        
+        chkSang.addItemListener(itemListener);
+        chkToi.addItemListener(itemListener);
+	    
 	    b21.add(cboBacLuong);
 	    b2.add(b21);
 	    b2.add(Box.createVerticalStrut(10));
@@ -695,7 +715,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
     }
 	
 	public String laGioiTinh(NhanVien nv) {
-		if(nv.isGioiTinh()==false) {
+		if(nv.isGioiTinh()==true) {
 			return "Nam";
 		}
 		return "Nữ";
@@ -736,7 +756,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	}
 	
 	public String layCaLamViec(NhanVien nv) {
-		if(nv.getCaLamViec()==0) {
+		if(nv.getCaLamViec()==1) {
 			return "Sáng";
 		}
 		return "Tối";
@@ -805,7 +825,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							txtLuongCB.setText(String.valueOf(nv.getLuongCoBan()));
 							cboBacLuong.setSelectedItem(String.valueOf(nv.getThangBacLuong()));
 							cboHeSoLuong.setSelectedItem(String.valueOf(nv.getHeSoLuong()));	
-							if(nv.isGioiTinh()==false) {
+							if(nv.isGioiTinh()==true) {
 								rdoNam.setSelected(true);
 							}
 							else
@@ -840,7 +860,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 				txtLuongCB.setText(String.valueOf(nv.getLuongCoBan()));
 				cboBacLuong.setSelectedItem(String.valueOf(nv.getThangBacLuong()));
 				cboHeSoLuong.setSelectedItem(String.valueOf(nv.getHeSoLuong()));	
-				if(nv.isGioiTinh()==false) {
+				if(nv.isGioiTinh()==true) {
 					rdoNam.setSelected(true);
 				}
 				else
@@ -992,19 +1012,19 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			String maNV= phatSinhMaNV(ngayBatDauLam);
 			Boolean gioiTinh=null;
 			if(rdoNam.isSelected() == true) {
-				gioiTinh = false;
-			}else if(rdoNu.isSelected()==true)
 				gioiTinh = true;
+			}else if(rdoNu.isSelected()==true)
+				gioiTinh = false;
 			
-			int caLam=0;
+			int caLam=1;
 			if((chkSang.isSelected() == false)&&(chkToi.isSelected()==false)) {
 				JOptionPane.showMessageDialog( frame, "Bạn chưa chọn ca làm");
 				return;	
 			}
 			if(chkSang.isSelected()==true) {
-				caLam = 0;	
+				caLam = 1;	
 			}else if(chkToi.isSelected()==true) {
-				caLam = 1;
+				caLam = 2;
 			}
 			double phuCap = 500000;
 			int bacLuong = Integer.valueOf((String) cboBacLuong.getSelectedItem());
@@ -1192,19 +1212,19 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			
 			Boolean gioiTinh=null;
 			if(rdoNam.isSelected() == true) {
-				gioiTinh = false;
-			}else if(rdoNu.isSelected()==true)
 				gioiTinh = true;
+			}else if(rdoNu.isSelected()==true)
+				gioiTinh = false;
 			
-			int caLam=0;
+			int caLam=1;
 			if((chkSang.isSelected() == false)&&(chkToi.isSelected()==false)) {
 				JOptionPane.showMessageDialog( frame, "Bạn chưa chọn ca làm");
 				return;	
 			}
 			if(chkSang.isSelected()==true) {
-				caLam = 0;	
+				caLam = 1;	
 			}else if(chkToi.isSelected()==true) {
-				caLam = 1;
+				caLam = 2;
 			}
 			
 			int bacLuong = Integer.valueOf((String) cboBacLuong.getSelectedItem());

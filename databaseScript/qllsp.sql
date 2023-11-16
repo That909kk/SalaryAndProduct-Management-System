@@ -6,13 +6,13 @@ go
 
 CREATE DATABASE QLLSP ON
 (NAME = QQLSP_dat,
-    FILENAME = 'T:\QLLSP\QLLSP.mdf',
+    FILENAME = 'D:\HK5\PTUD\QLLLSP\QLLSP.mdf',
     SIZE = 10 MB,
     MAXSIZE = 512 MB,
     FILEGROWTH = 5 MB)
 LOG ON
 (NAME = QQLSP_log,
-    FILENAME = 'T:\QLLSP\QLLSP.ldf',
+    FILENAME = 'D:\HK5\PTUD\QLLLSP\QLLSP.ldf',
     SIZE = 5 MB,
     MAXSIZE = 25 MB,
     FILEGROWTH = 5 MB)
@@ -163,7 +163,7 @@ create table BangLuongNhanVien (
 )
 
 create table BangChamCongNhanVien (
-	maChamCong nvarchar(12) not null primary key,
+	maChamCong nvarchar(14) not null primary key,
 	maNV nvarchar(8) not null,
 	ngayCham date not null,
 	soGioTangCa int,
@@ -406,3 +406,4 @@ VALUES
 go
 
 select * from CongNhan
+
