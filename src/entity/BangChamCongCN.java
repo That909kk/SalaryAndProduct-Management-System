@@ -3,6 +3,7 @@ package entity;
 import java.time.LocalDate;
 
 public class BangChamCongCN {
+	private static int idCounter = 0;
 	private String maCCCN;
 	private CongNhan cn;
 	private LocalDate ngayCham;
@@ -34,6 +35,15 @@ public class BangChamCongCN {
 
 	public BangChamCongCN(String maCCCN) {
 		super();
+		idCounter += 1;
+        this.maCCCN = "CN" + String.format("%09d", idCounter);
+	}
+
+	public String getMaCCCN() {
+		return maCCCN;
+	}
+
+	public void setMaCCCN(String maCCCN) {
 		this.maCCCN = maCCCN;
 	}
 
@@ -50,7 +60,11 @@ public class BangChamCongCN {
 	}
 
 	public void setNgayCham(LocalDate ngayCham) {
-		this.ngayCham = ngayCham;
+		if (ngayCham != null) {
+            this.ngayCham = ngayCham;
+        } else {
+            throw new IllegalArgumentException("Ngày chấm công không được để trống");
+        }
 	}
 
 	public int getSoGioTangCa() {
@@ -58,7 +72,11 @@ public class BangChamCongCN {
 	}
 
 	public void setSoGioTangCa(int soGioTangCa) {
-		this.soGioTangCa = soGioTangCa;
+		if (soGioTangCa >= 0) {
+            this.soGioTangCa = soGioTangCa;
+        } else {
+            throw new IllegalArgumentException("Số giờ tăng ca phải lớn hơn hoặc bằng 0");
+        }
 	}
 
 	public int getCaLam() {
@@ -74,9 +92,13 @@ public class BangChamCongCN {
 	}
 
 	public void setSanLuong(int sanLuong) {
-		this.sanLuong = sanLuong;
+		if (sanLuong >= 0) {
+            this.sanLuong = sanLuong;
+        } else {
+            throw new IllegalArgumentException("Sản lượng phải lớn hơn hoặc bằng 0");
+        }
 	}
-
+	private boolean isVangMat;
 	public boolean isVangMat() {
 		return vangMat;
 	}
@@ -90,7 +112,11 @@ public class BangChamCongCN {
 	}
 
 	public void setCoPhep(boolean coPhep) {
-		this.coPhep = coPhep;
+		if (isVangMat) {
+            this.coPhep = coPhep;
+        } else {
+            throw new IllegalArgumentException("Không thể đặt trạng thái không phép nếu công nhân không vắng mặt");
+        }
 	}
 
 	public String getGhiChu() {
