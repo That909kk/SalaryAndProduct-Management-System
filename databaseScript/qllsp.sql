@@ -406,4 +406,7 @@ VALUES
 go
 
 
-select * from BangPhanCongCN
+select bpccn.* from CongNhan cn join Xuong x
+on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
+on cn.maCN = bpccn.maCN
+where maPCCN is not null and maCD = '07102301013'
