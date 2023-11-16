@@ -2,14 +2,14 @@ package gUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -26,6 +26,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import connectDB.ConnectDB;
+import dao.HopDong_DAO;
+import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 /**
@@ -35,7 +38,7 @@ import entity.TaiKhoan;
  */
 public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseListener, WindowListener {	
 	private JPanel contentPane;
-	private JMenu mnHome;
+
 	private JTextField txtDate;
 	private JTextField txtNumberNV;
 	private JTextField txtNumHD;
@@ -44,6 +47,11 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private JButton btnDangXuat;
 	private JButton btnDoiMK;
 	private JButton btnCaiDat;
+
+	private JPanel pnlBackGround;
+	private JMenuBar menuBar;
+	private JMenu mnHome;
+	private JMenu mnCongNhan;
 	private JMenu mnNhanVien;
 	private JMenu mnCongDoan;
 	private JMenu mnLuong;
@@ -52,17 +60,37 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	private JMenu mnGioiThieu;
 	private JMenuItem mntmPCCD;
 	private JMenuItem mntmPCCN;
-	private JPanel pnlBackGround;
-	private JMenuBar menuBar;
-	
+	private JMenuItem mntmLuongCN;
+	private JMenuItem mntmLuongNV;
 	
 	private TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
 	private TaiKhoan tkMain = null;
+	private HopDong_DAO hd_DAO;
+	private NhanVien_DAO nv_DAO;
+	
+	private NhanVien_GUI nv_GUI;
+	private JMenuItem mniQuanLyCN;
+	private JMenuItem mniCCCN;
+	private JMenuItem mniQuanLyNV;
+	private JMenuItem mniCCNV;
+	private JMenuItem mniHopDong;
+	private JMenuItem mniSanPham;
 	/**
 	 * Create the frame.
 	 */
 	public GiaoDienChinh_GUI(TaiKhoan tk) {		
 		super("Màn hình chính");
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		hd_DAO = new HopDong_DAO();
+		hd_DAO.getDSHopDong();
+		nv_DAO = new NhanVien_DAO();
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
@@ -71,31 +99,11 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		JMenuBar menuBar = new JMenuBar();
 
 		tkMain = tk;
 		createGUI(tk);
-		
-		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
-		case "BPNS" -> {
-			String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
-			txtDate.setText(dateFormatted);
-			
-			mnLuong.setEnabled(false);
-		}
-		
-		case "BPKT" -> {
-			
-		}
-		
-		case "QLXU" -> {
-			mnNhanVien.setEnabled(false);
-		}
-		
-		default ->
-		throw new IllegalArgumentException("Unexpected value: ");
-		}
-		
-		
 		
 	}
 	
@@ -111,20 +119,44 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnHome.setIconTextGap(20);
 		menuBar.add(mnHome);
 		
-		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
+		mnCongNhan = new JMenu("  CÔNG NHÂN  ");
 		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
 		menuBar.add(mnCongNhan);
+		
+		mniQuanLyCN = new JMenuItem("Quản Lý Công Nhân");
+		mniQuanLyCN.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniQuanLyCN.setBackground(new Color(255, 255, 255));
+		mniQuanLyCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnCongNhan.add(mniQuanLyCN);
+		
+		mniCCCN = new JMenuItem("Chấm Công Công Nhân");
+		mniCCCN.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniCCCN.setBackground(new Color(255, 255, 255));
+		mniCCCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnCongNhan.add(mniCCCN);
 		
 		mnNhanVien = new JMenu("  NHÂN VIÊN  ");
 		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnNhanVien);
 		
+		mniQuanLyNV = new JMenuItem("Quản Lý Nhân Viên");
+		mniQuanLyNV.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mniQuanLyNV.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniQuanLyNV.setBackground(new Color(255, 255, 255));
+		mnNhanVien.add(mniQuanLyNV);
+		
+		mniCCNV = new JMenuItem("Chấm Công Nhân Viên");
+		mniCCNV.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mniCCNV.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniCCNV.setBackground(new Color(255, 255, 255));
+		mnNhanVien.add(mniCCNV);
+		
 		mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
 		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
 		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnCongDoan);
-		
+
 		mntmPCCD = new JMenuItem("Phân Chia Công Đoạn");
 		mntmPCCD.setBorder(new EmptyBorder(10, 5, 10, 0));
 		mntmPCCD.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -139,9 +171,32 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnLuong);
 		
+		mntmLuongCN = new JMenuItem("Lương Công Nhân");
+		mntmLuongCN.setBorder(new EmptyBorder(10, 5, 10, 0));
+		mntmLuongCN.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnLuong.add(mntmLuongCN);
+		
+		mntmLuongNV = new JMenuItem("Lương Nhân Viên");
+		mntmLuongNV.setBorder(new EmptyBorder(10, 5, 10, 0));
+		mntmLuongNV.setMargin(new Insets(6, 2, 6, 2));
+		mntmLuongNV.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mnLuong.add(mntmLuongNV);
+		
 		mnHopDong = new JMenu("  HỢP ĐỒNG  ");
 		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnHopDong);
+		
+		mniHopDong = new JMenuItem("Quản Lý Hợp Đồng");
+		mniHopDong.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mniHopDong.setBackground(new Color(255, 255, 255));
+		mnHopDong.add(mniHopDong);
+		
+		mniSanPham = new JMenuItem("Quản Lý Sản Phẩm");
+		mniSanPham.setBorder(new EmptyBorder(10, 6, 10, 0));
+		mniSanPham.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		mniSanPham.setBackground(new Color(255, 255, 255));
+		mnHopDong.add(mniSanPham);
 		
 		mnTroGiup = new JMenu("  TRỢ GIÚP  ");
 		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -167,38 +222,37 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		txtDate.setEditable(false);
 		txtDate.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtDate.setBounds(200, 590, 160, 30);
+
 		pnlBackGround.add(txtDate);
 		txtDate.setColumns(30);
 		txtDate.setBorder(null);
 		
 		JLabel lblTongNhanVien = new JLabel("Tổng số nhân viên hiện có:");
-		lblTongNhanVien.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblTongNhanVien.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTongNhanVien.setBounds(10, 116, 241, 30);
+		lblTongNhanVien.setBounds(10, 50, 241, 30);
 		pnlBackGround.add(lblTongNhanVien);
 		
 		txtNumberNV = new JTextField();
-		txtNumberNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtNumberNV.setFont(new Font("Tahoma", Font.BOLD, 20));
 		txtNumberNV.setEditable(false);
 		txtNumberNV.setColumns(30);
 		txtNumberNV.setBorder(null);
 		txtNumberNV.setBackground(new Color(224, 255, 255));
-		txtNumberNV.setBounds(261, 116, 160, 30);
+		txtNumberNV.setBounds(261, 50, 100, 30);
 		pnlBackGround.add(txtNumberNV);
 		
 		txtNumHD = new JTextField();
-		txtNumHD.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtNumHD.setFont(new Font("Tahoma", Font.BOLD, 20));
 		txtNumHD.setEditable(false);
 		txtNumHD.setColumns(30);
 		txtNumHD.setBorder(null);
 		txtNumHD.setBackground(new Color(224, 255, 255));
-		txtNumHD.setBounds(220, 157, 160, 30);
+		txtNumHD.setBounds(210, 90, 70, 30);
 		pnlBackGround.add(txtNumHD);
 		
 		JLabel lblHopDong = new JLabel("Số hợp đồng hiện có:");
-		lblHopDong.setVerticalAlignment(SwingConstants.BOTTOM);
 		lblHopDong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblHopDong.setBounds(10, 158, 200, 30);
+		lblHopDong.setBounds(10, 90, 200, 30);
 		pnlBackGround.add(lblHopDong);
 		
 		btnDangXuat = new JButton("Đăng Xuất");
@@ -230,7 +284,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		txtName = new JTextField();
 		txtName.setBackground(new Color(224, 255, 255));
 		txtName.setEditable(false);
-		txtName.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtName.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtName.setBounds(1000, 11, 200, 30);
 		pnlBackGround.add(txtName);
 		txtName.setColumns(10);
@@ -239,7 +293,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-
 		//Lê Minh Thật chỉnh lại đường dẫn 
 //		lblNewLabel.setIcon(new ImageIcon("T:\\SalaryProductManagementSystem\\SalaryProductsManagementSystem\\img\\icons\\icons8-user-30.png"));
 		//Lê Minh Thật chỉnh lại đường dẫn tương đối
@@ -255,9 +308,50 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		lblBackGround.setBounds(0, 0, 1264, 631);
 		pnlBackGround.add(lblBackGround);
 		
+
+		String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
+		String hoTen = nv_DAO.getMotNVTuMaNV(tk.getNv().getMaNV()).getHo() + " " 
+						+ nv_DAO.getMotNVTuMaNV(tk.getNv().getMaNV()).getTen();
+		
+		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
+		case "BPNS" -> {
+			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+			txtDate.setText(dateFormatted);
+			txtName.setText(hoTen);
+			mnLuong.setEnabled(false);
+			mniCCCN.setEnabled(false);
+		}
+		
+		case "BPKT" -> {
+			mnHopDong.setEnabled(false);
+			txtNumHD.setText(hd_DAO.getSize() + "");
+			txtName.setText(hoTen);
+			txtDate.setText(dateFormatted);
+			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+		}
+		
+		case "QLXU" -> {
+			txtDate.setText(dateFormatted);
+			txtName.setText(hoTen);
+			mnNhanVien.setEnabled(false);
+			mniHopDong.setEnabled(false);
+		}
+		
+		default ->
+		throw new IllegalArgumentException("Unexpected value: ");
+		}
+		
 		mnHome.addMouseListener(this);
+		mniQuanLyCN.addActionListener(this);
+		mniQuanLyNV.addActionListener(this);
+		mniCCCN.addActionListener(this);
+		mniCCNV.addActionListener(this);
 		mntmPCCD.addActionListener(this);
 		mntmPCCN.addActionListener(this);
+		mniHopDong.addActionListener(this);
+		mniSanPham.addActionListener(this);
+		mntmLuongCN.addActionListener(this);
+		mntmLuongNV.addActionListener(this);
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
@@ -294,25 +388,78 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			
 		}
 		
+		if (o.equals(mniQuanLyCN)) {
+			CongNhan_GUI cn_GUI = new CongNhan_GUI();
+			chuyenGUI(cn_GUI.getPNLCongNhan());
+			this.setTitle("Quản Lý Công Nhân");
+		}
+		
+		if (o.equals(mniQuanLyNV)) {
+			nv_GUI = new NhanVien_GUI();
+			chuyenGUI(nv_GUI.createGUI());
+			this.setTitle("Quản Lý Nhân Viên");
+		}
+		
+		if (o.equals(mniCCCN)) {
+			ChamCongCN_GUI cccn_GUI = new ChamCongCN_GUI();
+			chuyenGUI(cccn_GUI.getPNLCCCongNhan());
+			this.setTitle("Chấm Công Công Nhân");
+		}
+		
+		if (o.equals(mniCCNV)) {
+			ChamCongNV_GUI ccnv_GUI = new ChamCongNV_GUI();
+			chuyenGUI(ccnv_GUI.createGUI());
+			this.setTitle("Chấm Công Nhân Viên");
+		}
+		
 		if (o.equals(mntmPCCD)) {
 			PhanChiaCongDoan_GUI pccd = new PhanChiaCongDoan_GUI();
-			this.getContentPane().removeAll();
-			getContentPane().add(menuBar);
-			getContentPane().add(pccd.getPCCDUI());
-			this.revalidate();
-			this.repaint();
+			chuyenGUI(pccd.getPCCDUI());
 			this.setTitle("Phân chia công đoạn");
 		}
 		
 		if (o.equals(mntmPCCN)) {
 			PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
-			this.getContentPane().removeAll();
-			this.getContentPane().add(menuBar);
-			this.getContentPane().add(pccn.getPCCNGUI());
-			this.revalidate();
-			this.repaint();
-			this.setTitle("Phân chia công nhân");
+			chuyenGUI(pccn.getPCCNGUI());
+			this.setTitle("Phân công công nhân");
 		}
+		
+		if (o.equals(mntmLuongCN)) {
+			LuongCongNhan_GUI lcn = new LuongCongNhan_GUI();
+			chuyenGUI(lcn.getLuongCNGUI());
+			this.setTitle("Bảng Lương Công Nhân");
+		}
+		
+		if (o.equals(mntmLuongNV)) {
+			LuongNhanVien_GUI lnv = new LuongNhanVien_GUI();
+			chuyenGUI(lnv.getLuongNVGUI());
+			this.setTitle("Bảng Lương Nhân Viên");
+		}
+		
+		if (o.equals(mniHopDong)) {
+			HopDong_GUI hd_GUI = new HopDong_GUI();
+			chuyenGUI(hd_GUI.createGUI());
+			this.setTitle("Quản Lý Hợp Đồng");
+		}
+		
+		if (o.equals(mniSanPham)) {
+			SanPham_GUI sp_GUI = new SanPham_GUI();
+			chuyenGUI(sp_GUI.createGUI());
+			this.setTitle("Quản Lý Sản Phẩm");
+		}
+	}
+	
+	/**
+	 * Huỳnh Kim Thành - 11/11/2023
+	 * chuyenGUI cho phép truyền vào môt Jpanel để thực hiện việc chuyển đổi giữa các giao diện
+	 * @param panelGUI
+	 */
+	private void chuyenGUI(JPanel pnlGUI) {
+		this.getContentPane().removeAll();
+		getContentPane().add(menuBar);
+		getContentPane().add(pnlGUI);
+		this.revalidate();
+		this.repaint();
 	}
 	
 	@Override
@@ -320,15 +467,9 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		Object o = e.getSource();
 		
 		if (o.equals(mnHome)) {
-			this.getContentPane().removeAll();
-			getContentPane().add(menuBar);
-			getContentPane().add(pnlBackGround);
-			this.revalidate();
-			this.repaint();
+			chuyenGUI(pnlBackGround);
+			this.setTitle("Màn Hình Chính");
 		}
-		
-		
-		
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -383,5 +524,4 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		// TODO Auto-generated method stub
 		
 	}
-
 }

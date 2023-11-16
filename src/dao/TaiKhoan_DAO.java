@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -70,7 +71,7 @@ private ArrayList<TaiKhoan> listTK;
 			stmt.setString(1, tk.getMaTK());
 			stmt.setString(2, tk.getTaiKhoan());
 			stmt.setString(3, tk.getMatKhau());
-			stmt.setString(4, "null");
+			stmt.setString(4, tk.getNv().getMaNV());
 			
 			n = stmt.executeUpdate();
 		} catch (SQLException e) {

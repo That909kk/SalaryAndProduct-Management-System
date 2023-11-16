@@ -7,14 +7,24 @@ package gUI;
  */
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,26 +34,64 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
-public class PhanChiaCongDoan_GUI extends JFrame {
+import connectDB.ConnectDB;
+import dao.CongDoan_DAO;
+import dao.HopDong_DAO;
+import dao.SanPham_DAO;
+import entity.CongDoan;
+import entity.HopDong;
+import entity.SanPham;
+
+public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
 	private JPanel Menu;
-	private JTable table;
-	private DefaultTableModel model;
+	private JTable tableSanPham;
+	private DefaultTableModel modelSanPham;
 	private JTextField txtMaCD;
 	private JLabel lblTenCD;
 	private JTextField txtTenCD;
 	private JTextField txtGiaTien;
-	private JTextField txtGiaCongNan;
+	private JTextField txtSoCNDuKien;
 	private JTextField txtNDTim;
 	
 	private JTable tableCongDoan;
 	private DefaultTableModel modelCongDoan;
+	
+	private SanPham_DAO sp_DAO;
+	private HopDong_DAO hd_DAO;
+	private CongDoan_DAO cd_DAO;
+	private DefaultComboBoxModel<String> modelCBOTienQuyet;
+	private JComboBox<String> cboMaCDTienQuyet;
+	private JButton btnXem;
+	private JButton btnThem;
+	private JButton btnSua;
+	private JButton btnXoa;
+	private JTextField txtSoLuongSP;
+	private JDateChooser dcNgayBatDau;
+	private JDateChooser dcNgayKetThuc;
+	private JButton btnHoanTat;
 	/**
 	 * Create the frame.
 	 */
+	public static void main(String[] args) {
+		PhanChiaCongDoan_GUI pccd_GUI = new PhanChiaCongDoan_GUI();
+		pccd_GUI.setVisible(true);
+	}
+	
 	public PhanChiaCongDoan_GUI() {
 		super("Phân chia công đoạn");
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		sp_DAO = new SanPham_DAO();
+		hd_DAO = new HopDong_DAO();
+		cd_DAO = new CongDoan_DAO();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
@@ -65,22 +113,22 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		
 		
 		
-		String[] header = {"Mã hợp đồng", "Tên sản phẩm", "Số lượng", "Số lượng công đoạn hiện có", "Ngày kết thúc hợp đồng"};
-		model = new DefaultTableModel(header, 0);
-		table = new JTable(model);
+		String[] header = {"Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Số lượng công đoạn hiện có", "Ngày kết thúc hợp đồng"};
+		modelSanPham = new DefaultTableModel(header, 0);
+		tableSanPham = new JTable(modelSanPham);
 		
-		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		table.setRowHeight(26);
+		tableSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		tableSanPham.setRowHeight(26);
 		
-		table.getColumnModel().getColumn(0).setPreferredWidth(100);
-		table.getColumnModel().getColumn(1).setPreferredWidth(140);
-		table.getColumnModel().getColumn(2).setPreferredWidth(60);
-		table.getColumnModel().getColumn(3).setPreferredWidth(180);
-		table.getColumnModel().getColumn(4).setPreferredWidth(150);
+		tableSanPham.getColumnModel().getColumn(0).setPreferredWidth(100);
+		tableSanPham.getColumnModel().getColumn(1).setPreferredWidth(140);
+		tableSanPham.getColumnModel().getColumn(2).setPreferredWidth(60);
+		tableSanPham.getColumnModel().getColumn(3).setPreferredWidth(180);
+		tableSanPham.getColumnModel().getColumn(4).setPreferredWidth(150);
 		
-		model.addRow(new Object[] {"Mã hợp đồng", "Tên sản phẩm", 1000, 0, "13/11/2023"});
+		layDSSanPhamTuDB();
 		
-		JScrollPane scrollPane = new JScrollPane(table);
+		JScrollPane scrollPane = new JScrollPane(tableSanPham);
 		scrollPane.setBackground(new Color(255, 255, 255));
 		scrollPane.setBounds(0, 0, 640, 240);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -119,12 +167,12 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		
 		JLabel lblNgayBatDau = new JLabel("Ngày bắt đầu:");
 		lblNgayBatDau.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNgayBatDau.setBounds(15, 100, 110, 26);
+		lblNgayBatDau.setBounds(15, 137, 110, 26);
 		pnlThongTinCongDoan.add(lblNgayBatDau);
 		
 		JLabel lblNgayKetThuc = new JLabel("Ngày kết thúc:");
 		lblNgayKetThuc.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNgayKetThuc.setBounds(15, 140, 110, 26);
+		lblNgayKetThuc.setBounds(300, 137, 110, 26);
 		pnlThongTinCongDoan.add(lblNgayKetThuc);
 		
 		JLabel lblTienQuyet = new JLabel("Công đoạn tiên quyết:");
@@ -132,9 +180,11 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		lblTienQuyet.setBounds(300, 20, 160, 26);
 		pnlThongTinCongDoan.add(lblTienQuyet);
 		
-		JComboBox cboMaCDTienQuyet = new JComboBox();
+		modelCBOTienQuyet = new DefaultComboBoxModel<String>();
+		cboMaCDTienQuyet = new JComboBox<String>(modelCBOTienQuyet);
 		cboMaCDTienQuyet.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		cboMaCDTienQuyet.setBounds(455, 20, 149, 26);
+		
 		pnlThongTinCongDoan.add(cboMaCDTienQuyet);
 		
 		JLabel lblGiaTien = new JLabel("Giá tiền: ");
@@ -153,62 +203,76 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		lblSoCongNhan.setBounds(300, 100, 160, 26);
 		pnlThongTinCongDoan.add(lblSoCongNhan);
 		
-		txtGiaCongNan = new JTextField();
-		txtGiaCongNan.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		txtGiaCongNan.setColumns(10);
-		txtGiaCongNan.setBounds(455, 100, 149, 26);
-		pnlThongTinCongDoan.add(txtGiaCongNan);
+		txtSoCNDuKien = new JTextField();
+		txtSoCNDuKien.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtSoCNDuKien.setColumns(10);
+		txtSoCNDuKien.setBounds(455, 100, 149, 26);
+		pnlThongTinCongDoan.add(txtSoCNDuKien);
 		
-		JButton btnXem = new JButton("Xem chi tiết");
+		btnXem = new JButton("Xem chi tiết");
+		btnXem.setEnabled(false);
 		btnXem.setBackground(new Color(255, 255, 255));
 		btnXem.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnXem.setBounds(10, 177, 150, 50);
 		btnXem.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
 		pnlThongTinCongDoan.add(btnXem);
 		
-		JButton btnThem = new JButton("Thêm");
+		btnThem = new JButton("Thêm");
 		btnThem.setBackground(new Color(255, 255, 255));
 		btnThem.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnThem.setBounds(166, 177, 140, 50);
-		btnThem.setIcon(new ImageIcon("img\\icons\\icons8-add-user-20.png"));
+		btnThem.setIcon(new ImageIcon("img\\icons\\icons8-add-20.png"));
 		pnlThongTinCongDoan.add(btnThem);
 		
-		JButton btnSua = new JButton("Sửa");
+		btnSua = new JButton("Sửa");
+		btnSua.setEnabled(false);
 		btnSua.setBackground(new Color(255, 255, 255));
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnSua.setBounds(314, 177, 140, 50);
 		btnSua.setIcon(new ImageIcon("img\\icons\\icons8-pencil-20.png"));
 		pnlThongTinCongDoan.add(btnSua);
 		
-		JButton btnXoa = new JButton("Xóa");
+		btnXoa = new JButton("Xóa");
 		btnXoa.setBackground(new Color(255, 255, 255));
 		btnXoa.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnXoa.setBounds(464, 177, 140, 50);
 		btnXoa.setIcon(new ImageIcon("img\\icons\\icons8-delete-20.png"));
 		btnXoa.setIconTextGap(6);
+		btnXoa.setEnabled(false);
 		pnlThongTinCongDoan.add(btnXoa);
 		
-		JDateChooser dcNgayBatDau = new JDateChooser();
+		dcNgayBatDau = new JDateChooser();
 		dcNgayBatDau.getCalendarButton().setBackground(new Color(255, 255, 255));
 		dcNgayBatDau.setDateFormatString("dd/MM/yyyy");
 		dcNgayBatDau.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		dcNgayBatDau.setBackground(new Color(255, 255, 255));
-		dcNgayBatDau.setBounds(125, 100, 164, 26);
+		dcNgayBatDau.setBounds(125, 137, 164, 26);
 		dcNgayBatDau.setDate(new Date());
 		pnlThongTinCongDoan.add(dcNgayBatDau);
 		
-		JDateChooser dcNgayKetThuc = new JDateChooser();
+		dcNgayKetThuc = new JDateChooser();
 		dcNgayKetThuc.getCalendarButton().setBackground(new Color(255, 255, 255));
 		dcNgayKetThuc.setDateFormatString("dd/MM/yyyy");
 		dcNgayKetThuc.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		dcNgayKetThuc.setBackground(new Color(255, 255, 255));
-		dcNgayKetThuc.setBounds(125, 140, 164, 26);
+		dcNgayKetThuc.setBounds(455, 137, 149, 26);
 		
 		Calendar currentDate = Calendar.getInstance();
 		currentDate.add(Calendar.DAY_OF_MONTH, 1);
 		
 		dcNgayKetThuc.setDate(currentDate.getTime());
 		pnlThongTinCongDoan.add(dcNgayKetThuc);
+		
+		JLabel lblSoLuongCD = new JLabel("Số lượng:");
+		lblSoLuongCD.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblSoLuongCD.setBounds(15, 100, 100, 26);
+		pnlThongTinCongDoan.add(lblSoLuongCD);
+		
+		txtSoLuongSP = new JTextField();
+		txtSoLuongSP.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtSoLuongSP.setColumns(10);
+		txtSoLuongSP.setBounds(125, 100, 164, 26);
+		pnlThongTinCongDoan.add(txtSoLuongSP);
 		
 		JPanel pnlCacCongDoan = new JPanel();
 		pnlCacCongDoan.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -218,8 +282,8 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		pnlPCCD.add(pnlCacCongDoan);
 		pnlCacCongDoan.setLayout(null);
 		
-		String[] header_CongDoan = {"Tên sản phẩm", "Mã công đoạn", "Tên công đoạn", "Số lượng công nhân dự kiến", "Giá tiền (VND)"
-				, "Ngày bắt đầu", "Ngày kết thúc", "Ghi chú", "Công đoạn tiên quyết"};
+		String[] header_CongDoan = {"Tên sản phẩm", "Mã công đoạn", "Tên công đoạn", "Số lượng sản phẩm", "Số lượng công nhân dự kiến"
+				, "Giá tiền (VND)", "Trạng thái", "Ngày bắt đầu", "Ngày kết thúc", "Công đoạn tiên quyết"};
 		modelCongDoan = new DefaultTableModel(header_CongDoan, 0);
 		tableCongDoan = new JTable(modelCongDoan);
 		tableCongDoan.setRowHeight(26);
@@ -230,9 +294,6 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		scrollPane_CD.setLocation(10, 20);
 		scrollPane_CD.setSize(1244, 310);
 		pnlCacCongDoan.add(scrollPane_CD);
-		
-		modelCongDoan.addRow(new Object[] {"xxxxxx0123", "Mã công đoạn", "Tên công đoạn", 300, "32,000"
-				, "Ngày bắt đầu", "Ngày kết thúc", "Ghi chú", "Công đoạn tiên quyết"});
 		
 		JLabel lblTim = new JLabel("Tìm kiếm theo tên sản phẩm:");
 		lblTim.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -252,14 +313,256 @@ public class PhanChiaCongDoan_GUI extends JFrame {
 		pnlPCCD.add(btnTim);
 		
 		
-		JButton btnHoanTat = new JButton("Hoàn tất");
+		btnHoanTat = new JButton("Hoàn tất");
 		btnHoanTat.setBackground(new Color(255, 255, 255));
 		btnHoanTat.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnHoanTat.setBounds(1114, 585, 140, 40);
 		btnHoanTat.setIcon(new ImageIcon("img\\icons\\icons8-checked-checkbox-24.png"));
 		btnHoanTat.setIconTextGap(6);
+		btnHoanTat.setEnabled(false);
 		pnlPCCD.add(btnHoanTat);
 		
+		btnXem.addActionListener(this);
+		btnThem.addActionListener(this);
+		btnXoa.addActionListener(this);
+		btnSua.addActionListener(this);
+		btnHoanTat.addActionListener(this);
+		btnTim.addActionListener(this);
+		
+		tableSanPham.addMouseListener(this);
+		tableCongDoan.addMouseListener(this);
+		
 		return pnlPCCD;
+	}
+	
+	private void layDSSanPhamTuDB() {
+		sp_DAO = new SanPham_DAO();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		modelSanPham.setRowCount(0);
+		for (SanPham sp : sp_DAO.getDSSanPham()) {
+			HopDong hd = hd_DAO.getMotHopDong(sp.getHopDong().getMaHopDong());
+			modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getSoLuong(), sp.getSoLuongCongDoan(),
+					hd.getNgayThanhLyHopDong().format(dtf)});
+		}
+	}
+	
+	private void layDSCongDoanTuDBTheoMaSP(String maSP) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		modelCongDoan.setRowCount(0);
+		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
+			SanPham sp = sp_DAO.getMotSanPham(maSP);
+			modelCongDoan.addRow(new Object[] {sp.getTenSP(), cd.getMaCongDoan(), cd.getTenCongDoan(),
+					cd.getSoLuongSanPham(), cd.getSoLuongCongNhanDuKien(), cd.getGiaTien(), 
+					cd.isTrangThai() ? "Đã xong" : "Chưa xong", cd.getNgayBatDau().format(dtf), 
+					cd.getNgayKetThucDuKien().format(dtf), cd.getCongDoanTienQuyet()});
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object object = e.getSource();
+		
+		if (object.equals(tableSanPham)) {
+			int row = tableSanPham.getSelectedRow();
+			String maSP = modelSanPham.getValueAt(row, 0).toString();
+			
+			if (sp_DAO.getMotSanPham(maSP).getSoLuongCongDoan() > 0) {
+				capNhatCBOTienQuyet(maSP);
+			}
+			layDSCongDoanTuDBTheoMaSP(maSP);
+			txtTenCD.setEnabled(true);
+			txtGiaTien.setEnabled(true);
+			txtSoCNDuKien.setEnabled(true);
+			txtSoLuongSP.setEnabled(true);
+			dcNgayBatDau.setEnabled(true);
+			dcNgayKetThuc.setEnabled(true);
+			btnSua.setEnabled(false);
+			btnXoa.setEnabled(true);
+		}
+		
+		if (object.equals(tableCongDoan)) {
+			txtTenCD.setEnabled(false);
+			txtGiaTien.setEnabled(false);
+			txtSoCNDuKien.setEnabled(false);
+			txtSoLuongSP.setEnabled(false);
+			dcNgayBatDau.setEnabled(false);
+			dcNgayKetThuc.setEnabled(false);
+			btnSua.setEnabled(true);
+		}
+	}
+
+	private void capNhatCBOTienQuyet(String maSP) {
+		modelCBOTienQuyet.removeAllElements();
+		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
+			modelCBOTienQuyet.addElement(cd.getMaCongDoan());
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		
+		if (o.equals(btnThem)) {
+			int row = tableSanPham.getSelectedRow();
+			String tenCD = txtTenCD.getText().trim();
+			String giaTien_String = txtGiaTien.getText().trim();
+			String soLuongSP_String = txtSoLuongSP.getText().trim();
+			String soLuongCN_String = txtSoCNDuKien.getText().trim();
+			
+			if (validation()) {
+				String maSP = modelSanPham.getValueAt(row, 0).toString();
+				int soLuongSP = Integer.parseInt(soLuongSP_String);
+				int soLuongCN = Integer.parseInt(soLuongCN_String);
+				double giaTien = Double.parseDouble(giaTien_String);
+				LocalDate ngayBatDau = dcNgayBatDau.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				LocalDate ngayKetThuc = dcNgayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				String maCD = taoMaCongDoan(maSP);
+				String tienQuyet = cboMaCDTienQuyet.getSelectedItem().toString();
+				SanPham sp = sp_DAO.getMotSanPham(maSP);
+				
+				CongDoan cd = null;
+				if (tienQuyet == null) {
+					cd = new CongDoan(maCD, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, false, "", sp);
+				} else {
+					cd = new CongDoan(maCD, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, false, tienQuyet, sp);
+				}
+				
+				if (cd_DAO.insertCongDoan(cd)) {
+					capNhatSoCongDoanChoSP(maSP);
+					layDSCongDoanTuDBTheoMaSP(maSP);
+					capNhatCBOTienQuyet(maSP);
+				}
+			}
+		}
+		
+		if (o.equals(btnSua)) {
+			btnSua.setEnabled(false);
+			btnHoanTat.setEnabled(true);
+		}
+		
+		if (o.equals(btnXoa)) {
+			String maCD = modelCongDoan.getValueAt(tableCongDoan.getSelectedRow(), 1).toString();
+			int luaChon = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xoá công đoạn này", "Lưu ý", JOptionPane.YES_NO_OPTION);
+			
+			if (luaChon == JOptionPane.YES_OPTION) {
+				if (cd_DAO.deleteCongDoan(maCD)) {
+					JOptionPane.showMessageDialog(null, "Xoá thành công");
+					layDSCongDoanTuDBTheoMaSP(modelSanPham.getValueAt(tableSanPham.getSelectedRow(), 0).toString());
+					capNhatSoCongDoanChoSP(modelSanPham.getValueAt(tableSanPham.getSelectedRow(), 0).toString());
+				}
+			}
+		}
+		
+		if (o.equals(btnHoanTat)) {
+			btnSua.setEnabled(true);
+			btnHoanTat.setEnabled(false);
+		}
+	}
+	
+	private void capNhatSoCongDoanChoSP(String maSP) {
+		SanPham sp = sp_DAO.getMotSanPham(maSP);
+		sp.setSoLuongCongDoan(cd_DAO.getDSCongDoanTheoMaSP(maSP).size());
+		if (sp_DAO.updateSanPham(sp)) {
+			layDSSanPhamTuDB();
+		}
+	}
+
+	private String taoMaCongDoan(String maSP) {
+		return maSP + (cd_DAO.getDSCongDoanTheoMaSP(maSP).size() + 1);
+	}
+
+	private boolean validation() {
+		String maSP = modelSanPham.getValueAt(tableSanPham.getSelectedRow(), 0).toString();
+		SanPham sp = sp_DAO.getMotSanPham(maSP);
+		HopDong hd = hd_DAO.getMotHopDong(sp.getHopDong().getMaHopDong());
+		String tenCD = txtTenCD.getText().trim();
+		String giaTien_String = txtGiaTien.getText().trim();
+		String soLuongSP_String = txtSoLuongSP.getText().trim();
+		String soLuongCN_String = txtSoCNDuKien.getText().trim();
+		
+		if (tenCD.length() <= 0) {
+			thongBaoLoi(txtTenCD, "Hãy nhập tên công đoạn!!!");
+			return false;
+		}
+		
+		try {
+			int soLuongSP = Integer.parseInt(soLuongSP_String);
+			if (soLuongSP <= 0 && soLuongSP > sp.getSoLuong()) {
+				thongBaoLoi(txtSoLuongSP, "Số lượng sản phẩm của công đoạn phải là Số > 0 và không được quá số lượng sản phẩm ban đầu");
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			thongBaoLoi(txtSoLuongSP, "Số lượng sản phẩm phải là Số");
+			return false;
+		}
+		
+		try {
+			int soLuongCN = Integer.parseInt(soLuongCN_String);
+			if (soLuongCN <= 0) {
+				thongBaoLoi(txtSoCNDuKien, "Số lượng công nhân dự kiến phải là Số > 0");
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			thongBaoLoi(txtSoCNDuKien, "Số lượng công nhân dự kiến phải là Số");
+			return false;
+		}
+		
+		try {
+			double giaTien = Double.parseDouble(giaTien_String);
+			if (giaTien < 0) {
+				thongBaoLoi(txtGiaTien, "Hãy nhập SỐ không âm cho giá tiền!!!");
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			thongBaoLoi(txtGiaTien, "Hãy nhập SỐ không âm cho giá tiền!!!");
+			return false;
+		}
+		
+		Date ngayBatDau = dcNgayBatDau.getDate();
+		Date ngayKetThuc = dcNgayKetThuc.getDate();
+		Date ngayThanhLiHD = Date.from(hd.getNgayThanhLyHopDong().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		
+		if (ngayKetThuc.after(ngayThanhLiHD)) {
+			JOptionPane.showMessageDialog(null, "Ngày kết thúc công đoạn phải từ ngày thanh lí hơp đồng trở về trước");
+			dcNgayKetThuc.requestFocus();
+			return false;
+		}
+		if (ngayBatDau.after(ngayKetThuc)) {
+			JOptionPane.showMessageDialog(null, "Ngày bắt đầu công đoạn phải trước ngày kết thúc");
+			dcNgayBatDau.requestFocus();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private void thongBaoLoi(JTextField txt, String mess) {
+		JOptionPane.showMessageDialog(null, mess);
+		txt.requestFocus();
+		txt.selectAll();
 	}
 }

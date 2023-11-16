@@ -101,7 +101,7 @@ public class DoiMatKhau_GUI extends JFrame implements ActionListener, WindowList
 		pwdMK = new JPasswordField();
 		pwdMK.setBounds(29, 209, 370, 40);
 		pnlForm.add(pwdMK);
-		
+
 		btnXacNhan = new JButton("Xác Nhận");
 		btnXacNhan.setBounds(144, 360, 160, 50);
 		pnlForm.add(btnXacNhan);
@@ -167,6 +167,4 @@ public class DoiMatKhau_GUI extends JFrame implements ActionListener, WindowList
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
 }

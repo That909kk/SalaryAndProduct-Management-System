@@ -1,5 +1,6 @@
 package entity;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 
@@ -176,7 +177,7 @@ public class NhanVien {
 	public String getMaNV() {
 		return maNV;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "NhanVien [maNV=" + maNV + ", anhDaiDien=" + Arrays.toString(anhDaiDien) + ", ho=" + ho + ", ten=" + ten

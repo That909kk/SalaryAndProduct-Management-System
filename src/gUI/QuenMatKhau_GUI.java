@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import connectDB.ConnectDB;
+
 /**
  * Lớp này dùng để tạo giao diện quên mật khẩu
  * Tạo bởi: Huỳnh Kim Thành - 21086351
@@ -35,7 +36,6 @@ public class QuenMatKhau_GUI extends JFrame implements ActionListener, MouseList
 	private JLabel lblLinkQMK;
 	
 	public QuenMatKhau_GUI() {
-		
 		super("Quên mật khẩu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(900, 500);
