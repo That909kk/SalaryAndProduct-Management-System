@@ -73,8 +73,8 @@ public class CongDoan_DAO {
 			while (rs.next()) {
 				String maCD = rs.getString(1);
 				String tenCD = rs.getString(2);
-				int soLuong = rs.getInt(3);
-				int soLuongCN = rs.getInt(4);
+				int soLuongCN = rs.getInt(3);
+				int soLuong = rs.getInt(4);
 				boolean trangThai = rs.getBoolean(5);
 				double giaTien = rs.getDouble(6);
 				LocalDate ngayBatDau = rs.getDate(7).toLocalDate();
@@ -153,5 +153,43 @@ public class CongDoan_DAO {
 			}
 		}
 		return n > 0;
+	}
+	
+	public CongDoan getMotCongDoanTheoMaCD(String ma) {
+		CongDoan cd = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "Select * from CongDoan where maCongDoan = ?";
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, ma);
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String tenCD = rs.getString(2);
+				int soLuongCN = rs.getInt(3);
+				int soLuongSP = rs.getInt(4);
+				boolean trangThai = rs.getBoolean(5);
+				double giaTien = rs.getDouble(6);
+				LocalDate ngayBatDau = rs.getDate(7).toLocalDate();
+				LocalDate ngayKetThuc = rs.getDate(8).toLocalDate();
+				String cdTienQuyet = rs.getString(9);
+				SanPham sp = new SanPham(rs.getNString(10));
+				
+				cd = new CongDoan(ma, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, trangThai, cdTienQuyet, sp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return cd;
 	}
 }
