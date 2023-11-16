@@ -467,12 +467,14 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		}
 	}
 	private String taoMaHopDong(LocalDate ngayKi) {
+		hd_DAO = new HopDong_DAO();
 		int day = ngayKi.getDayOfMonth();
 		int month = ngayKi.getMonthValue();
 		int year = ngayKi.getYear();
 		String maCanTao = "00";
 		String day_String = maCanTao.substring(0, maCanTao.length() - String.valueOf(day).length()) + day;
 		String month_String = maCanTao.substring(0, maCanTao.length() - String.valueOf(month).length()) + month;
+		String stt = maCanTao.substring(0, maCanTao.length() - String.valueOf(rootPaneCheckingEnabled).length());
 		return day_String + month_String + (year % 100);
 	}
 	/**

@@ -48,8 +48,7 @@ public class CongNhan {
 
 	public CongNhan(String maCN) {
 		super();
-		idCounter += 1;
-        this.maCN = "CN" + String.format("%06d", idCounter);
+		this.maCN = maCN;
 	}
 
 	public byte[] getAnhDaiDien() {
@@ -119,11 +118,7 @@ public class CongNhan {
 	}
 
 	public void setDiaChi(String diaChi) {
-		if (diaChi.matches("[a-zA-Z0-9,\\/ ]+")) {
-            this.diaChi = diaChi;
-        } else {
-            throw new IllegalArgumentException("Địa chỉ chỉ được phép chứa ký số, ký tự và ký tự đặc biệt “,”, “/”");
-        }
+		this.diaChi = diaChi;
 	}
 
 	public String getSoDienThoai() {
