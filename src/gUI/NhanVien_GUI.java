@@ -609,6 +609,8 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		String[] cols_datphong = {"Mã nhân viên", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Bậc lương", "Lương cơ bản","Hệ số lương","Phụ cấp","Bộ phận"};
         modelDsNV = new DefaultTableModel(cols_datphong, 0);
         tblDsNV = new JTable(modelDsNV);
+        tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        tblDsNV.setRowHeight(24);
         JScrollPane scrollPane = new JScrollPane(tblDsNV);
         pnCenter.add(scrollPane);
         scrollPane.setPreferredSize(new Dimension(1220,400));
