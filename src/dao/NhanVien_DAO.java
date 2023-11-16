@@ -35,7 +35,7 @@ public class NhanVien_DAO {
 				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
-				nv.setHo(rs.getString("hoDem"));
+				nv.setHo(rs.getString("ho"));
 				nv.setGioiTinh(rs.getBoolean("gioiTinh"));
 				nv.setSoDienThoai(rs.getString("soDienThoai"));
 				nv.setDiaChi(rs.getString("diaChi"));
@@ -68,7 +68,7 @@ public class NhanVien_DAO {
         PreparedStatement stmt = null;
         int n = 0;
         try {
-            String sql = "insert into dbo.NhanVien (maNV, anhDaiDien, ten, hoDem, gioiTinh, soDienThoai, diaChi, cCCD, ngaySinh, ngayBatDauLamViec, caLamViec, luongCoBan, thangBacLuong, heSoLuong, maBP, phuCap) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "insert into dbo.NhanVien (maNV, anhDaiDien, ten, ho, gioiTinh, soDienThoai, diaChi, cCCD, ngaySinh, ngayBatDauLamViec, caLamViec, luongCoBan, thangBacLuong, heSoLuong, maBP, phuCap) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             stmt = con.prepareStatement(sql);
             stmt.setString(1, nv.getMaNV());
             stmt.setBytes(2, nv.getAnhDaiDien());
@@ -118,7 +118,7 @@ public class NhanVien_DAO {
 				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
-				nv.setHo(rs.getString("hoDem"));
+				nv.setHo(rs.getString("ho"));
 				nv.setGioiTinh(rs.getBoolean("gioiTinh"));
 				nv.setSoDienThoai(rs.getString("soDienThoai"));
 				nv.setDiaChi(rs.getString("diaChi"));
@@ -159,7 +159,7 @@ public class NhanVien_DAO {
 				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
-				nv.setHo(rs.getString("hoDem"));
+				nv.setHo(rs.getString("ho"));
 				nv.setGioiTinh(rs.getBoolean("gioiTinh"));
 				nv.setSoDienThoai(rs.getString("soDienThoai"));
 				nv.setDiaChi(rs.getString("diaChi"));
@@ -200,7 +200,7 @@ public class NhanVien_DAO {
 				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
-				nv.setHo(rs.getString("hoDem"));
+				nv.setHo(rs.getString("ho"));
 				nv.setGioiTinh(rs.getBoolean("gioiTinh"));
 				nv.setSoDienThoai(rs.getString("soDienThoai"));
 				nv.setDiaChi(rs.getString("diaChi"));
@@ -258,7 +258,7 @@ public class NhanVien_DAO {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		
-		String sql = "update NhanVien set anhDaiDien = ? ,ten = ? , hoDem = ? , gioiTinh = ? ,soDienThoai = ? , diaChi = ?, cCCD= ?, ngaySinh = ?, ngayBatDauLamViec = ? , caLamViec = ?, luongCoBan = ?, thangBacLuong= ?, heSoLuong = ?, maBP=?, phuCap = ? where maNV= ?";
+		String sql = "update NhanVien set anhDaiDien = ? ,ten = ? , ho = ? , gioiTinh = ? ,soDienThoai = ? , diaChi = ?, cCCD= ?, ngaySinh = ?, ngayBatDauLamViec = ? , caLamViec = ?, luongCoBan = ?, thangBacLuong= ?, heSoLuong = ?, maBP=?, phuCap = ? where maNV= ?";
 		PreparedStatement stmt = null;
 		try {
 			stmt= con.prepareStatement(sql);
