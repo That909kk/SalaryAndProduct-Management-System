@@ -25,7 +25,7 @@ public class CongDoan_DAO {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		
-		String sql = "select * from CongDoan";
+		String sql = "select * from CongDoan order by ngayBatDau DESC";
 		Statement stmt = null;
 		
 		try {

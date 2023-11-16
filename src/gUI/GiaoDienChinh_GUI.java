@@ -28,6 +28,7 @@ import javax.swing.border.EmptyBorder;
 
 import connectDB.ConnectDB;
 import dao.HopDong_DAO;
+import dao.NhanVien_DAO;
 import dao.TaiKhoan_DAO;
 import entity.TaiKhoan;
 /**
@@ -64,6 +65,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 	
 	private TaiKhoan_DAO taiKhoan_DAO = new TaiKhoan_DAO();
 	private TaiKhoan tkMain = null;
+	private HopDong_DAO hd_DAO;
+	private NhanVien_DAO nv_DAO;
 	
 	private NhanVien_GUI nv_GUI;
 	private JMenuItem mniQuanLyCN;
@@ -84,8 +87,9 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			e.printStackTrace();
 		}
 		
-		HopDong_DAO hd_DAO = new HopDong_DAO();
+		hd_DAO = new HopDong_DAO();
 		hd_DAO.getDSHopDong();
+		nv_DAO = new NhanVien_DAO();
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setSize(1280, 720);
@@ -101,32 +105,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		tkMain = tk;
 		createGUI(tk);
 		
-		String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
-
-		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
-		case "BPNS" -> {
-			txtDate.setText(dateFormatted);
-			
-			mnLuong.setEnabled(false);
-			mniCCCN.setEnabled(false);
-		}
-		
-		case "BPKT" -> {
-			
-			mnHopDong.setEnabled(false);
-			txtNumHD.setText(hd_DAO.getSize() + "");
-			txtDate.setText(dateFormatted);
-		}
-		
-		case "QLXU" -> {
-			txtDate.setText(dateFormatted);
-			mnNhanVien.setEnabled(false);
-			mniHopDong.setEnabled(false);
-		}
-		
-		default ->
-		throw new IllegalArgumentException("Unexpected value: ");
-		}
 	}
 	
 	public void createGUI(TaiKhoan tk) {
@@ -306,7 +284,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		txtName = new JTextField();
 		txtName.setBackground(new Color(224, 255, 255));
 		txtName.setEditable(false);
-		txtName.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtName.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtName.setBounds(1000, 11, 200, 30);
 		pnlBackGround.add(txtName);
 		txtName.setColumns(10);
@@ -329,6 +307,39 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		lblBackGround.setIcon(new ImageIcon("img\\background\\Refund-bro_resize.png"));
 		lblBackGround.setBounds(0, 0, 1264, 631);
 		pnlBackGround.add(lblBackGround);
+		
+
+		String dateFormatted = chuyenKieuNgay(tk.getNgayDNCuoi());
+		String hoTen = nv_DAO.getMotNVTuMaNV(tk.getNv().getMaNV()).getHo() + " " 
+						+ nv_DAO.getMotNVTuMaNV(tk.getNv().getMaNV()).getTen();
+		
+		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
+		case "BPNS" -> {
+			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+			txtDate.setText(dateFormatted);
+			txtName.setText(hoTen);
+			mnLuong.setEnabled(false);
+			mniCCCN.setEnabled(false);
+		}
+		
+		case "BPKT" -> {
+			mnHopDong.setEnabled(false);
+			txtNumHD.setText(hd_DAO.getSize() + "");
+			txtName.setText(hoTen);
+			txtDate.setText(dateFormatted);
+			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+		}
+		
+		case "QLXU" -> {
+			txtDate.setText(dateFormatted);
+			txtName.setText(hoTen);
+			mnNhanVien.setEnabled(false);
+			mniHopDong.setEnabled(false);
+		}
+		
+		default ->
+		throw new IllegalArgumentException("Unexpected value: ");
+		}
 		
 		mnHome.addMouseListener(this);
 		mniQuanLyCN.addActionListener(this);
