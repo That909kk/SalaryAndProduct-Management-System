@@ -21,10 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 
 import connectDB.ConnectDB;
@@ -264,7 +262,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		btnHoanTat.setBounds(1114, 585, 140, 40);
 		btnHoanTat.setIcon(new ImageIcon("img\\icons\\icons8-checked-checkbox-24.png"));
 		pnlPCCD.add(btnHoanTat);
-
+		
 		btnThem.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
@@ -301,7 +299,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		ArrayList<BangPhanCongCN> listBPCCN = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
 		modelPCCN.setRowCount(0);
 		
-		if (listBPCCN.size() == 0) {
+		if (listBPCCN.size() > 0) {
 			for (CongNhan cn : cn_DAO.getDSCongNhanTheoXuongVaChuaDuocPhanCong(xuong)) {
 				Xuong x = x_DAO.getMotXuong(cn.getXuong().getMaXuong());
 				modelPCCN.addRow(new Object[] {cn.getMaCN(), cn.getHo(), cn.getTen(), cn.getChuyenMon(), cn.getCaLamViec(),
@@ -321,7 +319,9 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		Object o = e.getSource();
 		
 		if (o.equals(btnThem)) {
+			listBPCCN.clear();
 			CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(tableCongDoan.getValueAt(rowCD, 1).toString());
+			
 			for (Integer rowIndex : listRowPCCN) {
 				int soLuongRowPCCNDaChon = listRowPCCN.size();
 				int soLuongSP = soLuongRowPCCNDaChon % 2 == 0 
@@ -330,13 +330,38 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 				
 				modelPCCN.setValueAt(true, rowIndex, 6);
 				modelPCCN.setValueAt(soLuongSP, rowIndex, 7);
+				listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
 			}
 		}
 		
 		if (o.equals(btnHoanTat)) {
+			cd_DAO = new CongDoan_DAO();
+			
+			bPCCN_DAO = new BangPhanCongCN_DAO();
 			for (BangPhanCongCN bangPhanCongCN : listBPCCN) {
-				bangPhanCongCN.setSoLuongSanPham(Integer.parseInt(tablePCCN.getValueAt(rowCD, 7).toString()));
+				bangPhanCongCN.setSoLuongSanPham(Integer.parseInt(tablePCCN.getValueAt(0, 7).toString()));
+				bPCCN_DAO.insertPhanCongCongNhan(bangPhanCongCN);
+			}
+			
+			JOptionPane.showMessageDialog(null, "Phân công công đoạn thành công");
+		}
+		
+		if (o.equals(btnXem)) {
+			bPCCN_DAO = new BangPhanCongCN_DAO();
+			cn_DAO = new CongNhan_DAO();
+			x_DAO = new Xuong_DAO();
+			
+			rowCD = tableCongDoan.getSelectedRow();
+			String maCD = modelCongDoan.getValueAt(rowCD, 1).toString();
+			
+			modelPCCN.setRowCount(0);
+			
+			for (BangPhanCongCN bpccn : bPCCN_DAO.getDSCongNhanTheoXuongVaDuocPhanCong(maCD)) {
+				CongNhan cn = cn_DAO.getCongNhanTheoMaCN(bpccn.getCongNhan().getMaCN());
+				Xuong x = x_DAO.getMotXuong(cn.getXuong().getMaXuong());
 				
+				modelPCCN.addRow(new Object[] {cn.getMaCN(), cn.getHo(), cn.getTen(), cn.getChuyenMon(), cn.getCaLamViec(),
+						x.getTenXuong(), bpccn.isTrangThai(), bpccn.getSoLuongSanPham()});
 			}
 		}
 	}
@@ -344,9 +369,9 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 	public void mouseClicked(MouseEvent e) {
 		Object o = e.getSource();
 		
-		
 		if (o.equals(tableCongDoan)) {
 			listRowPCCN.clear();
+			cn_DAO = new CongNhan_DAO();
 			cd_DAO = new CongDoan_DAO();
 			int row = tableCongDoan.getSelectedRow();
 			rowCD = row;
@@ -356,24 +381,33 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			String tuDauTienCuaTenCongDoan = "%" + layChuoiTruocKyTuTrang(tenCD) + "%";
 			
 			layDSPCCCongNhanTuDBTheoXuong(tuDauTienCuaTenCongDoan, maCD);
-			int soLuongCNTheoXuong = cn_DAO.getDSCongNhanTheoXuongVaChuaDuocPhanCong(tuDauTienCuaTenCongDoan).size();
+			
+			int soLuongCNTheoXuong = modelPCCN.getRowCount();
 			int soLuongCNDuKien = cd_DAO.getMotCongDoanTheoMaCD(maCD).getSoLuongCongNhanDuKien();
 			
-			if (soLuongCNTheoXuong < soLuongCNDuKien) {
-				for (int rowIndex = 0; rowIndex < soLuongCNTheoXuong; rowIndex++) {
-					modelPCCN.setValueAt(true, rowIndex, 6);
-					listRowPCCN.add(rowIndex);
-				}
-			} else if (soLuongCNTheoXuong > soLuongCNDuKien) {
-				for (int rowIndex = 0; rowIndex < soLuongCNDuKien; rowIndex++) {
-					modelPCCN.setValueAt(true, rowIndex, 6);
-					listRowPCCN.add(rowIndex);
-				}
-			} else {
-				for (int rowIndex = 0; rowIndex < soLuongCNTheoXuong; rowIndex++) {
-					modelPCCN.setValueAt(true, rowIndex, 6);
-					listRowPCCN.add(rowIndex);
-				}
+			System.out.println(soLuongCNTheoXuong);
+			if (soLuongCNTheoXuong == 0)
+				modelPCCN.setRowCount(0);
+			else {
+				if (soLuongCNTheoXuong < soLuongCNDuKien) {
+					for (int rowIndex = 0; rowIndex < soLuongCNTheoXuong; rowIndex++) {
+						modelPCCN.setValueAt(true, rowIndex, 6);
+						listRowPCCN.add(rowIndex);
+						listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+					}
+				} else if (soLuongCNTheoXuong > soLuongCNDuKien) {
+					for (int rowIndex = 0; rowIndex < soLuongCNDuKien; rowIndex++) {
+						modelPCCN.setValueAt(true, rowIndex, 6);
+						listRowPCCN.add(rowIndex);
+						listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+					}
+				} else {
+					for (int rowIndex = 0; rowIndex < soLuongCNTheoXuong; rowIndex++) {
+						modelPCCN.setValueAt(true, rowIndex, 6);
+						listRowPCCN.add(rowIndex);
+						listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+					}
+				} 
 			}
 		}
 		
@@ -419,28 +453,19 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
         }
     }
 	
-	private void getDSCongNhanDuocChon() {
+	private BangPhanCongCN getDSCongNhanDuocChon(int rowPCCN) {
 		cn_DAO = new CongNhan_DAO();
 		cd_DAO = new CongDoan_DAO();
 		
-		int rowPCCN = tablePCCN.getSelectedRow();
-		if (Boolean.parseBoolean(modelPCCN.getValueAt(rowPCCN, 6).toString()) == true) {
-			String maCN = modelPCCN.getValueAt(rowPCCN, 0).toString();
-			String maCD = modelCongDoan.getValueAt(rowCD, 1).toString();
-			
-			String maPCCN = maCN + maCD;
-			
-			CongNhan cn = cn_DAO.getCongNhanTheoMaCN(maCN);
-			CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(maCD);
-			int soLuongSP = Integer.parseInt(tablePCCN.getValueAt(rowPCCN, 7).toString());
-			
-			BangPhanCongCN bPCCN = new BangPhanCongCN(maPCCN, true, LocalDate.now(), 0, cn, cd);
-			listBPCCN.add(bPCCN);
-			listRowPCCN.add(rowPCCN);
-		} else {
-			
-			listBPCCN.clear();
-			listRowPCCN.clear();
-		}
+		String maCN = modelPCCN.getValueAt(rowPCCN, 0).toString();
+		String maCD = modelCongDoan.getValueAt(rowCD, 1).toString();
+		
+		String maPCCN = maCN.substring(2) + maCD;
+		
+		CongNhan cn = cn_DAO.getCongNhanTheoMaCN(maCN);
+		CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(maCD);
+		
+		BangPhanCongCN bPCCN = new BangPhanCongCN(maPCCN, true, LocalDate.now(), 0, cn, cd);
+		return bPCCN;
 	}
 }

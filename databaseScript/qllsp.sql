@@ -406,8 +406,4 @@ VALUES
 go
 
 
-select Top 4 cn.* from CongNhan cn join Xuong x
-on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
-on cn.maCN = bpccn.maCN
-where bpccn.maPCCN is null
-go
+select * from BangPhanCongCN

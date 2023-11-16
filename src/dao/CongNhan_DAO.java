@@ -249,10 +249,10 @@ public class CongNhan_DAO {
 	}
 	
 	public CongNhan getCongNhanTheoMaCN(String ma) {
-		CongNhan cn = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		
+		CongNhan cn = null;
 		String sql = "select * from CongNhan where maCN = ?";
 		PreparedStatement stmt = null;
 		try {
@@ -339,4 +339,6 @@ public class CongNhan_DAO {
 		}
 		return listCNTheoXuong;
 	}
+	
+	
 }
