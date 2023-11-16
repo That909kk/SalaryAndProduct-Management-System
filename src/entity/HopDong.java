@@ -4,21 +4,23 @@ import java.time.LocalDate;
 
 public class HopDong {
 	private String maHopDong;
-	private String tenHopDong;
+	private String tenDoiTac;
 	private LocalDate ngayKy;
 	private LocalDate ngayThanhLyHopDong;
+	private boolean trangThai;
 
 	public HopDong() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public HopDong(String maHopDong, String tenHopDong, LocalDate ngayKy, LocalDate ngayThanhLyHopDong) {
+	public HopDong(String maHopDong, String tenDoiTac, LocalDate ngayKy, LocalDate ngayThanhLyHopDong, boolean trangThai) {
 		super();
 		this.maHopDong = maHopDong;
-		this.tenHopDong = tenHopDong;
+		this.tenDoiTac = tenDoiTac;
 		this.ngayKy = ngayKy;
 		this.ngayThanhLyHopDong = ngayThanhLyHopDong;
+		this.trangThai = trangThai;
 	}
 
 	public HopDong(String maHopDong) {
@@ -26,12 +28,12 @@ public class HopDong {
 		this.maHopDong = maHopDong;
 	}
 
-	public String getTenHopDong() {
-		return tenHopDong;
+	public String getTenDoiTac() {
+		return tenDoiTac;
 	}
 
-	public void setTenHopDong(String tenHopDong) {
-		this.tenHopDong = tenHopDong;
+	public void setTenDoiTac(String tenHopDong) {
+		this.tenDoiTac = tenHopDong;
 	}
 
 	public LocalDate getNgayKy() {
@@ -50,14 +52,21 @@ public class HopDong {
 		this.ngayThanhLyHopDong = ngayThanhLyHopDong;
 	}
 
+	public boolean isTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
+	}
+
 	public String getMaHopDong() {
 		return maHopDong;
 	}
 
 	@Override
 	public String toString() {
-		return "HopDong [maHopDong=" + maHopDong + ", tenHopDong=" + tenHopDong + ", ngayKy=" + ngayKy
-				+ ", ngayThanhLyHopDong=" + ngayThanhLyHopDong + "]";
+		return "";
 	}
 
 	@Override

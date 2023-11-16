@@ -30,8 +30,9 @@ public class NhanVien_DAO {
 			stmt = con.createStatement();
 			ResultSet rs  = stmt.executeQuery(sql);
 			while(rs.next()) {
-				NhanVien nv = new NhanVien();
-				nv.setMaNV(rs.getString("maNV"));
+				
+				String maNV =rs.getString("maNV");
+				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
 				nv.setHo(rs.getString("hoDem"));
@@ -113,8 +114,8 @@ public class NhanVien_DAO {
 			stmt.setString(1, maBP);
 			ResultSet rs  = stmt.executeQuery();
 			while(rs.next()) {
-				NhanVien nv = new NhanVien();
-				nv.setMaNV(rs.getString("maNV"));
+				String maNV =rs.getString("maNV");
+				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
 				nv.setHo(rs.getString("hoDem"));
@@ -154,8 +155,8 @@ public class NhanVien_DAO {
 			stmt.setInt(1, nam);
 			ResultSet rs  = stmt.executeQuery();
 			while(rs.next()) {
-				NhanVien nv = new NhanVien();
-				nv.setMaNV(rs.getString("maNV"));
+				String maNV =rs.getString("maNV");
+				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
 				nv.setHo(rs.getString("hoDem"));
@@ -195,8 +196,8 @@ public class NhanVien_DAO {
 			stmt.setString(2, maBP);
 			ResultSet rs  = stmt.executeQuery();
 			while(rs.next()) {
-				NhanVien nv = new NhanVien();
-				nv.setMaNV(rs.getString("maNV"));
+				String maNV =rs.getString("maNV");
+				NhanVien nv = new NhanVien(maNV);
 				nv.setAnhDaiDien(rs.getBytes("anhDaiDien"));
 				nv.setTen(rs.getString("ten"));
 				nv.setHo(rs.getString("hoDem"));
@@ -291,6 +292,45 @@ public class NhanVien_DAO {
 			}
 		}
 		return n>0;
+	}
+	
+	public NhanVien getMotNVTuMaNV(String maNVien){
+		NhanVien nv = null;
+		ConnectDB.getInstance();
+		PreparedStatement stmt = null;
+		try {
+			Connection con  = ConnectDB.getConnection();
+			String sql = "SELECT * FROM dbo.NhanVien where maNV = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, maNVien);
+			ResultSet rs  = stmt.executeQuery();
+			while(rs.next()) {
+				String maNV = rs.getString(1);
+				byte[] anhDaiDien = rs.getBytes(2);
+				String hoNV = rs.getString(3);
+				String tenNV = rs.getString(4);
+				boolean gioiTinh = rs.getBoolean(5);
+				String sdt = rs.getString(6);
+				String diaChi = rs.getString(7);
+				String cccd = rs.getString(8);
+				LocalDate ngaySinh = rs.getDate(9).toLocalDate();
+				LocalDate ngayBatDauLamViec = rs.getDate(10).toLocalDate();
+				int caLam = rs.getInt(11);
+				double luongCB = rs.getDouble(12);
+				int thangBacLuong = rs.getInt(13);
+				double heSoLuong = rs.getDouble(14);
+				double phuCap = rs.getDouble(15);
+				BoPhan bp = new BoPhan(rs.getString(16));
+				
+				nv = new NhanVien(maNV, anhDaiDien, hoNV, tenNV, gioiTinh, 
+						sdt, diaChi, cccd, ngaySinh, ngayBatDauLamViec, caLam, 
+						luongCB, thangBacLuong, heSoLuong, phuCap, bp);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nv;
 	}
 
 }

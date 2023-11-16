@@ -1,27 +1,28 @@
 package gUI;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.toedter.calendar.JDateChooser;
-import javax.swing.border.EtchedBorder;
+import connectDB.ConnectDB;
+import dao.CongDoan_DAO;
+import dao.SanPham_DAO;
+import entity.CongDoan;
+import entity.SanPham;
 
 public class PhanCongCongNhan_GUI extends JFrame {
 
@@ -29,18 +30,40 @@ public class PhanCongCongNhan_GUI extends JFrame {
 	private JPanel Menu;
 	private JPanel pnlPCCD;
 	
-	private DefaultTableModel modelSanPham;
-	private JTable tableSanPham;
-	private JTextField txtSoCN;
-	private JTextField txtSoCD;
 	private DefaultTableModel modelCongDoan;
 	private JTable tableCongDoan;
+	private JTextField txtSoCN;
+	private JTextField txtSoCD;
+	private DefaultTableModel modelPCCN;
+	private JTable tableCongNhan;
 	private JTextField txtNDTim;
+	private JButton btnXem;
+	private JButton btnThem;
+	private JButton btnSua;
+	private JButton btnXoa;
+	
+	private SanPham_DAO sp_DAO;
+	private CongDoan_DAO cd_DAO;
+	
+	public static void main(String[] args) {
+		PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
+		pccn.setVisible(true);
+	}
 	/**
 	 * Create the frame.
 	 */
 	public PhanCongCongNhan_GUI() {
 		super("Phân công công nhân");
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		sp_DAO = new SanPham_DAO();
+		cd_DAO = new CongDoan_DAO();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
@@ -68,25 +91,27 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		
 		
 		String[] header = {"Tên sản phẩm", "Công đoạn", "Số lượng sản phẩm", "Số lượng công nhân", "Ngày bắt đầu", "Ngày kết thúc dự kiến"};
-		modelSanPham = new DefaultTableModel(header, 0);
-		tableSanPham = new JTable(modelSanPham);
+		modelCongDoan = new DefaultTableModel(header, 0);
+		tableCongDoan = new JTable(modelCongDoan);
 		
-		tableSanPham.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		tableSanPham.setRowHeight(26);
+		tableCongDoan.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		tableCongDoan.setRowHeight(26);
 		
-		tableSanPham.getColumnModel().getColumn(0).setPreferredWidth(135);
-		tableSanPham.getColumnModel().getColumn(1).setPreferredWidth(100);
-		tableSanPham.getColumnModel().getColumn(2).setPreferredWidth(130);
-		tableSanPham.getColumnModel().getColumn(3).setPreferredWidth(130);
-		tableSanPham.getColumnModel().getColumn(4).setPreferredWidth(115);
-		tableSanPham.getColumnModel().getColumn(5).setPreferredWidth(145);
+		tableCongDoan.getColumnModel().getColumn(0).setPreferredWidth(135);
+		tableCongDoan.getColumnModel().getColumn(1).setPreferredWidth(100);
+		tableCongDoan.getColumnModel().getColumn(2).setPreferredWidth(130);
+		tableCongDoan.getColumnModel().getColumn(3).setPreferredWidth(130);
+		tableCongDoan.getColumnModel().getColumn(4).setPreferredWidth(115);
+		tableCongDoan.getColumnModel().getColumn(5).setPreferredWidth(145);
 		
-		JScrollPane scrollPane = new JScrollPane(tableSanPham);
-		scrollPane.setBackground(new Color(255, 255, 255));
-		scrollPane.setBounds(0, 0, 750, 240);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		layDSCongDoanVaSanPhamTuDB();
 		
-		pnlPCCD.add(scrollPane);
+		JScrollPane scrCongDoan = new JScrollPane(tableCongDoan);
+		scrCongDoan.setBackground(new Color(255, 255, 255));
+		scrCongDoan.setBounds(0, 0, 750, 240);
+		scrCongDoan.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		pnlPCCD.add(scrCongDoan);
 		
 		JPanel pnlThongTinCongDoan = new JPanel();
 		pnlThongTinCongDoan.setBackground(new Color(240, 248, 255));
@@ -100,7 +125,7 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		lblSoCN.setBounds(15, 20, 284, 30);
 		pnlThongTinCongDoan.add(lblSoCN);
 		
-		txtSoCN = new JTextField("800");
+		txtSoCN = new JTextField("");
 		txtSoCN.setDisabledTextColor(new Color(255, 0, 0));
 		txtSoCN.setForeground(new Color(255, 0, 0));
 		txtSoCN.setBackground(new Color(240, 248, 255));
@@ -116,7 +141,7 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		lblSoCD.setBounds(15, 60, 284, 30);
 		pnlThongTinCongDoan.add(lblSoCD);
 		
-		txtSoCD = new JTextField("12");
+		txtSoCD = new JTextField("");
 		txtSoCD.setDisabledTextColor(new Color(255, 0, 0));
 		txtSoCD.setBackground(new Color(240, 248, 255));
 		txtSoCD.setBorder(null);
@@ -126,14 +151,14 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		txtSoCD.setBounds(300, 60, 100, 30);
 		pnlThongTinCongDoan.add(txtSoCD);
 		
-		JButton btnXem = new JButton("Xem chi tiết");
+		btnXem = new JButton("Xem chi tiết");
 		btnXem.setBackground(new Color(255, 255, 255));
 		btnXem.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnXem.setBounds(48, 111, 180, 50);
 		btnXem.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
 		pnlThongTinCongDoan.add(btnXem);
 		
-		JButton btnThem = new JButton("<html>Thêm vào<br>công đoạn</html>");
+		btnThem = new JButton("<html>Thêm vào<br>công đoạn</html>");
 		btnThem.setBackground(new Color(255, 255, 255));
 		btnThem.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnThem.setBounds(48, 172, 180, 50);
@@ -141,7 +166,7 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		btnThem.setIconTextGap(6);
 		pnlThongTinCongDoan.add(btnThem);
 		
-		JButton btnSua = new JButton("Sửa");
+		btnSua = new JButton("Sửa");
 		btnSua.setBackground(new Color(255, 255, 255));
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnSua.setBounds(273, 111, 180, 50);
@@ -149,7 +174,7 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		btnSua.setIconTextGap(6);
 		pnlThongTinCongDoan.add(btnSua);
 		
-		JButton btnXoa = new JButton("Xóa");
+		btnXoa = new JButton("Xóa");
 		btnXoa.setBackground(new Color(255, 255, 255));
 		btnXoa.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnXoa.setBounds(273, 172, 180, 50);
@@ -168,17 +193,18 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		pnlPCCD.add(pnlCacCongDoan);
 		pnlCacCongDoan.setLayout(null);
 		
-		String[] header_CongDoan = {"Mã Công Nhân", "Họ", "Tên", "Chuyên môn", "Ca làm", "Xưởng", "Trạng thái giao việc", "Số lượng", "ghi chú"};
-		modelCongDoan = new DefaultTableModel(header_CongDoan, 0);
-		tableCongDoan = new JTable(modelCongDoan);
-		tableCongDoan.setRowHeight(26);
-		tableCongDoan.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		JScrollPane scrollPane_CD = new JScrollPane(tableCongDoan);
-		scrollPane_CD.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		scrollPane_CD.setBackground(new Color(255, 255, 255));
-		scrollPane_CD.setLocation(10, 20);
-		scrollPane_CD.setSize(1244, 310);
-		pnlCacCongDoan.add(scrollPane_CD);
+		String[] header_CongDoan = {"Mã Công Nhân", "Họ", "Tên", "Chuyên môn", "Ca làm", "Xưởng", "Trạng thái giao việc", 
+				"Số lượng được phân công", "ghi chú"};
+		modelPCCN = new DefaultTableModel(header_CongDoan, 0);
+		tableCongNhan = new JTable(modelPCCN);
+		tableCongNhan.setRowHeight(26);
+		tableCongNhan.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JScrollPane scrPCCN = new JScrollPane(tableCongNhan);
+		scrPCCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		scrPCCN.setBackground(new Color(255, 255, 255));
+		scrPCCN.setLocation(10, 20);
+		scrPCCN.setSize(1244, 310);
+		pnlCacCongDoan.add(scrPCCN);
 		
 		JLabel lblTim = new JLabel("Tìm kiếm theo tên sản phẩm:");
 		lblTim.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -205,5 +231,18 @@ public class PhanCongCongNhan_GUI extends JFrame {
 		pnlPCCD.add(btnHoanTat);
 		
 		return pnlPCCD;
+	}
+
+	private void layDSCongDoanVaSanPhamTuDB() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		sp_DAO = new SanPham_DAO();
+		cd_DAO = new CongDoan_DAO();
+		modelCongDoan.setRowCount(0);
+		
+		for (CongDoan cd : cd_DAO.getDSCongDoan()) {
+			SanPham sp = sp_DAO.getMotSanPham(cd.getSanPham().getMaSP());
+			modelCongDoan.addRow(new Object[] {sp.getTenSP(), cd.getTenCongDoan(), cd.getSoLuongSanPham(),
+					cd.getSoLuongCongNhanDuKien(), cd.getNgayBatDau().format(dtf), cd.getNgayKetThucDuKien().format(dtf)});
+		}
 	}
 }

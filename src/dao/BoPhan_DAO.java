@@ -18,7 +18,7 @@ public class BoPhan_DAO {
 		return instance;
 	}
 	
-	public ArrayList<BoPhan> getdsBoPhan(){
+	public ArrayList<BoPhan> getdsBoPhan() {
 		ArrayList<BoPhan> dsBP = new ArrayList<BoPhan>();
 		ConnectDB.getInstance();
 		Statement state = null;
@@ -32,9 +32,9 @@ public class BoPhan_DAO {
 				String tenBP = rs.getString(2);
 				String sdt = rs.getString(3);
 				BoPhan bp = new BoPhan(maBP,tenBP,sdt);
-				dsBP.add(bp);		
+				dsBP.add(bp);
+
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
