@@ -146,15 +146,8 @@ public class CongNhan {
 		this.chuyenMon = chuyenMon;
 	}
 
-	public String getCaLamViec() {
-		switch (caLamViec) {
-          case 1:
-              return "Sáng";
-          case 2:
-              return "Tối";
-          default:
-              return "Không xác định";
-      }
+	public int getCaLamViec() {
+		return caLamViec;
 	}
 
 	public void setCaLamViec(int caLamViec) {

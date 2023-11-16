@@ -28,8 +28,7 @@ public class BangChamCongNV_DAO {
 			ResultSet rs = state.executeQuery(Sql);
 			while(rs.next()) {
 				BangChamCongNV ccNV = new BangChamCongNV();
-				ccNV.setMaCCNV(rs.getString(1));
-				ccNV.setNgayCham(rs.getDate(2));
+				ccNV.setNgayCham(rs.getDate(2).toLocalDate());
 				ccNV.setSoGioTangCa(rs.getInt(3));
 				ccNV.setCaLam(rs.getInt(4));
 				ccNV.setGhiChu(rs.getString(5));

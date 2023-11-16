@@ -67,6 +67,8 @@ public class kDatePicker extends JPanel implements ActionListener {
     public void setValueToDay() {
         txt.setText(DialogDatePicker.getToDay());
     }
+    
+
 
     // set giá trị về ngày hiện tại
     public Date getValueToDay() throws ParseException {

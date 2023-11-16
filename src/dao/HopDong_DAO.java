@@ -19,13 +19,15 @@ public class HopDong_DAO {
 		listHD = new ArrayList<HopDong>();
 	}
 	/**
+	 * cre: Huỳnh Kim Thành
 	 * Hàm lấy số lượng phân tử trong mảng
-	 * @return
+	 * @return int
 	 */
 	public int getSize() {
 		return listHD.size();
 	}
 	/**
+	 * cre: Huỳnh Kim Thành
 	 * hàm lấy danh sách hợp đồng
 	 * @return ArrayList<HopDong>
 	 */
@@ -55,7 +57,12 @@ public class HopDong_DAO {
 		}
 		return listHD;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức thêm một hợp đồng vào database
+	 * @param hd
+	 * @return true nếu thêm vào thành công
+	 */
 	public boolean insertHopDong(HopDong hd) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -85,7 +92,12 @@ public class HopDong_DAO {
 		}
 		return n > 0;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức lấy một hợp đồng từ mã hợp đồng
+	 * @param ma
+	 * @return HopDong
+	 */
 	public HopDong getMotHopDong(String ma) {
 		HopDong hd = null;
 		ConnectDB.getInstance();
@@ -113,7 +125,12 @@ public class HopDong_DAO {
 		}
 		return hd;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức cập nhật 1 hợp đồng trong database
+	 * @param hd
+	 * @return true nếu cập nhật thành công
+	 */
 	public boolean updateHopDong(HopDong hd) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -141,7 +158,12 @@ public class HopDong_DAO {
 		}
 		return n > 0;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức xoá 1 hợp đồng trong database
+	 * @param maHD
+	 * @return true nếu xoá thành công
+	 */
 	public boolean deleteHopDong(String maHD) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -166,7 +188,12 @@ public class HopDong_DAO {
 		}
 		return n > 0;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức trả về danh sách hợp đồng theo trạng thái được nhập.
+	 * @param tinhTrang
+	 * @return ArrayList<HopDong>
+	 */
 	public ArrayList<HopDong> getListHDTheoTrangThai(boolean tinhTrang) {
 		ArrayList<HopDong> listTheoTrangThai = new ArrayList<HopDong>();
 		ConnectDB.getInstance();
@@ -201,7 +228,12 @@ public class HopDong_DAO {
 		}
 		return listTheoTrangThai;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức trả về danh sách hợp đồng theo năm được nhập.
+	 * @param year
+	 * @return ArrayList<HopDong>
+	 */
 	public ArrayList<HopDong> getDSHopDongTheoNam(int year) {
 		ArrayList<HopDong> listTheoNam = new ArrayList<HopDong>();
 
@@ -237,23 +269,43 @@ public class HopDong_DAO {
 		}
 		return listTheoNam;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức trả về danh sách các năm kí hợp đồng
+	 * @param tinhTrang
+	 * @return ArrayList<Integer>
+	 */
 	public ArrayList<Integer> getDSNamKiHopDong() {
 		HashSet<Integer> setNam = new HashSet<Integer>();
-		ArrayList<Integer> dsNam = new ArrayList<Integer>();
 		
-		for (HopDong hopDong : listHD) {
-			dsNam.add(hopDong.getNgayKy().getYear());
-		}
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
 		
-		for (Integer namKi : dsNam) {
-			setNam.add(namKi);
+		String sql = "select Year(ngayKi) from HopDong";
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				int nam = rs.getInt(1);
+				
+				setNam.add(nam);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		ArrayList<Integer> listNamKi = new ArrayList<Integer>(setNam);
 		return listNamKi;
 	}
-	
+	/**
+	 * cre: Huỳnh Kim Thành
+	 * Phương thức trả về danh sách hợp đồng theo trạng thái và năm được nhập.
+	 * @param year, tinhTrang
+	 * @return ArrayList<HopDong>
+	 */
 	public ArrayList<HopDong> getDSHopDongTheoNamvaTT(int year, boolean tinhTrang) {
 		ArrayList<HopDong> listTheoNamVaTT = new ArrayList<HopDong>();
 

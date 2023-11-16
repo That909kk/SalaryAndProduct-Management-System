@@ -8,17 +8,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import connectDB.ConnectDB;
 import entity.CongNhan;
 import entity.Xuong;
 
 public class CongNhan_DAO {
 	private static CongNhan_DAO instance = new CongNhan_DAO();
+	private ArrayList<CongNhan> listCN;
+	
 	public static CongNhan_DAO getInstance() {
 		return instance;
 	}
-
+	
+	public CongNhan_DAO() {
+		listCN = new ArrayList<CongNhan>();
+	}
 	public ArrayList<CongNhan> getListCN(){
 		ArrayList<CongNhan> dsCN = new ArrayList<CongNhan>();
 		ConnectDB.getInstance();
@@ -158,4 +162,5 @@ public class CongNhan_DAO {
 		}
 		return n>0;
 	}
+	
 }
