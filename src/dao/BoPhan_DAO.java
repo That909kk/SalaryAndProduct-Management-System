@@ -31,8 +31,9 @@ public class BoPhan_DAO {
 				String maBP = rs.getString(1);
 				String tenBP = rs.getString(2);
 				String sdt = rs.getString(3);
-				BoPhan bp = new BoPhan(maBP, tenBP, sdt);
+				BoPhan bp = new BoPhan(maBP,tenBP,sdt);
 				dsBP.add(bp);
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
