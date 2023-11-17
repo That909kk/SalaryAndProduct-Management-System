@@ -339,7 +339,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		sp_DAO = new SanPham_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		modelSanPham.setRowCount(0);
-		for (SanPham sp : sp_DAO.getDSSanPham()) {
+		for (SanPham sp : sp_DAO.getDSSanPhamTheoTrangThai(false)) {
 			HopDong hd = hd_DAO.getMotHopDong(sp.getHopDong().getMaHopDong());
 			modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getSoLuong(), sp.getSoLuongCongDoan(),
 					hd.getNgayThanhLyHopDong().format(dtf)});

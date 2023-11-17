@@ -153,7 +153,7 @@ create table BangLuongNhanVien (
 	maNV nvarchar(8) not null,
 	thang int,
 	nam int,
-	soNgayDiLam date,
+	soNgayDiLam int,
 	soNgayNghiKhongPhep int,
 	tienPhat float,
 	bhxh float,
@@ -163,7 +163,7 @@ create table BangLuongNhanVien (
 )
 
 create table BangChamCongNhanVien (
-	maChamCong nvarchar(12) not null primary key,
+	maChamCong nvarchar(14) not null primary key,
 	maNV nvarchar(8) not null,
 	ngayCham date not null,
 	soGioTangCa int,
@@ -241,7 +241,7 @@ insert into TaiKhoan (maTK, taiKhoan, matKhau, maNV, ngayDNCuoi)
 values
 	(N'TK230004', '230004', CONVERT(varchar(16), HASHBYTES('MD5', '230004'), 2), N'NV230004', '03/11/2023'),
 	(N'TK230010', '230010', CONVERT(varchar(16), HASHBYTES('MD5', '230010'), 2), N'NV230010', '03/11/2023'),
-	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV230001', '03/11/2023')
+	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV220001', '03/11/2023')
 go
 
 insert into HopDong 
@@ -401,8 +401,6 @@ VALUES
     (N'CN230098', N'Hồ', N'Nam', 1, '12-20-1989', '484950515253', '0909090909', N'56 Đường ABC, Quận 10', '05-01-2023', 'MA1', 'May', 1, 500000, 2000000),
     (N'CN230099', N'Võ', N'Thịnh', 1, '01-25-1994', '545556575859', '0123456789', N'78 Đường DEF, Quận 11', '05-05-2023', 'MA1', 'May', 1, 500000, 2000000),
     (N'CN230100', N'Trần', N'Đức', 1, '02-10-1989', '606162636465', '0909090909', N'90 Đường GHI, Quận 12', '05-10-2023', 'MA1', 'May', 1, 500000, 2000000)
-    
-
 go
 
 
@@ -410,3 +408,12 @@ select bpccn.* from CongNhan cn join Xuong x
 on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
 on cn.maCN = bpccn.maCN
 where maPCCN is not null and maCD = '07102301013'
+
+insert into BangLuongNhanVien (maLuongNV,maNV,thang,nam,soNgayDiLam,soNgayNghiKhongPhep,tienPhat,bhxh,luongTong)
+values
+('MT21236134','NV220003',6,2022,20,10,20000,10000,400000000),
+('MT21989723','NV220003',4,2022,20,10,20000,10000,400000000),
+('MT25632133','NV220010',7,2022,20,10,20000,10000,400000000);
+go
+
+select distinct thang, nam, maBP from BangLuongNhanVien join NhanVien on BangLuongNhanVien.maNV = NhanVien.maNV 

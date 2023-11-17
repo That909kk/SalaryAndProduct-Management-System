@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
@@ -24,6 +28,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDayChooser;
+
+import connectDB.ConnectDB;
+import dao.CongNhan_DAO;
+import entity.CongNhan;
+
 import com.toedter.calendar.JDateChooser;
 
 public class CongNhan_GUI extends JFrame {
@@ -37,6 +46,8 @@ public class CongNhan_GUI extends JFrame {
 	private JTextField txtCCCD;
 	private JTextField txtTen;
 	private JTextField txtHoDem;
+	
+	private CongNhan_DAO cn_DAO = new CongNhan_DAO();
 
 	/**
 	 * Launch the application.
@@ -58,6 +69,12 @@ public class CongNhan_GUI extends JFrame {
 	 * Create the frame.
 	 */
 	public CongNhan_GUI() {
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
 		setLocationRelativeTo(null);
@@ -244,7 +261,6 @@ public class CongNhan_GUI extends JFrame {
 	    model.addColumn("Ca làm việc");
 	    model.addColumn("Chuyên môn");
 	    model.addColumn("Bộ phận");
-	    model.addColumn("Trạng thái làm việc");
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(10, 240, 1246, 380);
 		pnlCN.add(scrollPane);
@@ -309,6 +325,17 @@ public class CongNhan_GUI extends JFrame {
 		panel_TacVu.add(btnXoa);
 		btnXoa.setIcon(new ImageIcon("img\\icons\\icons8-delete-20.png"));
 		btnXoa.setFont(new Font("Tahoma", Font.BOLD, 16));
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		cn_DAO = new CongNhan_DAO();
+		model.setRowCount(0);
+		ArrayList<CongNhan> listCN = cn_DAO.getDSCongNhan();
+		for (CongNhan cn : listCN) {
+			model.addRow(new Object[] {cn.getMaCN(), cn.getHo(), cn.getTen(), 18, cn.getNgaySinh(), cn.getcCCD(),
+					cn.isGioiTinh() ? "Nam" : "Nữ", cn.getSoDienThoai(), cn.getDiaChi(), cn.getNgayBatDauLamViec(),
+							cn.getCaLamViec(), cn.getChuyenMon(), cn.getXuong().getMaXuong()});
+		}
+		
 		return pnlCN;
 	}
 }
