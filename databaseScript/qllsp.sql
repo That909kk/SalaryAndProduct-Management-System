@@ -163,7 +163,7 @@ create table BangLuongNhanVien (
 )
 
 create table BangChamCongNhanVien (
-	maChamCong nvarchar(12) not null primary key,
+	maChamCong nvarchar(14) not null primary key,
 	maNV nvarchar(8) not null,
 	ngayCham date not null,
 	soGioTangCa int,
@@ -408,3 +408,4 @@ select bpccn.* from CongNhan cn join Xuong x
 on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
 on cn.maCN = bpccn.maCN
 where maPCCN is not null and maCD = '07102301013'
+

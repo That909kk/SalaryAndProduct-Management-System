@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 
 public class kDatePicker extends JPanel implements ActionListener {
-    private JTextField txt;
+    public JTextField txt;
     private JButton btn;
     private int widthDefault = 150;
     DialogDatePicker f = new DialogDatePicker();
