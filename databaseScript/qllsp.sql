@@ -153,7 +153,7 @@ create table BangLuongNhanVien (
 	maNV nvarchar(8) not null,
 	thang int,
 	nam int,
-	soNgayDiLam date,
+	soNgayDiLam int,
 	soNgayNghiKhongPhep int,
 	tienPhat float,
 	bhxh float,
@@ -401,8 +401,6 @@ VALUES
     (N'CN230098', N'Hồ', N'Nam', 1, '12-20-1989', '484950515253', '0909090909', N'56 Đường ABC, Quận 10', '05-01-2023', 'MA1', 'May', 1, 500000, 2000000),
     (N'CN230099', N'Võ', N'Thịnh', 1, '01-25-1994', '545556575859', '0123456789', N'78 Đường DEF, Quận 11', '05-05-2023', 'MA1', 'May', 1, 500000, 2000000),
     (N'CN230100', N'Trần', N'Đức', 1, '02-10-1989', '606162636465', '0909090909', N'90 Đường GHI, Quận 12', '05-10-2023', 'MA1', 'May', 1, 500000, 2000000)
-    
-
 go
 
 

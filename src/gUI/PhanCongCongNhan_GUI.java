@@ -67,6 +67,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 	
 	private JButton btnTim;
 	private JButton btnHoanTat;
+	
 	public static void main(String[] args) {
 		PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
 		pccn.setVisible(true);
@@ -299,7 +300,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		ArrayList<BangPhanCongCN> listBPCCN = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
 		modelPCCN.setRowCount(0);
 		
-		if (listBPCCN.size() > 0) {
+		if (listBPCCN.size() == 0) {
 			for (CongNhan cn : cn_DAO.getDSCongNhanTheoXuongVaChuaDuocPhanCong(xuong)) {
 				Xuong x = x_DAO.getMotXuong(cn.getXuong().getMaXuong());
 				modelPCCN.addRow(new Object[] {cn.getMaCN(), cn.getHo(), cn.getTen(), cn.getChuyenMon(), cn.getCaLamViec(),
@@ -309,6 +310,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			for (BangPhanCongCN bangPhanCongCN : listBPCCN) {
 				CongNhan cn = cn_DAO.getCongNhanTheoMaCN(bangPhanCongCN.getCongNhan().getMaCN());
 				Xuong x = x_DAO.getMotXuong(cn.getXuong().getMaXuong());
+				
 				modelPCCN.addRow(new Object[] {cn.getMaCN(), cn.getHo(), cn.getTen(), cn.getChuyenMon(), cn.getCaLamViec(),
 						x.getTenXuong(), bangPhanCongCN.isTrangThai(), bangPhanCongCN.getSoLuongSanPham()});
 			}

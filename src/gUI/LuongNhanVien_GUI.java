@@ -53,6 +53,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	private BangChamCongNV_DAO bcc_DAO;
 	private NhanVien_DAO nv_DAO;
 	private BangChamCongNV_DAO bc_DAO;
+	JButton btnTinhLuongNV;
 	
 	/**
 	 * Launch the application.
@@ -148,7 +149,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		
 		tblThangLuongNhanVien = new JTable(modelTableThangLuongNV);
 		tblThangLuongNhanVien.setFont(UIManager.getFont("TableHeader.font"));
-		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		tblThangLuongNhanVien.setCellSelectionEnabled(true);
 		tblThangLuongNhanVien.setBackground(new Color(255, 255, 255));
 		layDSBangLuongtuDB();
@@ -246,7 +247,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		btnXemChiTietLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnXemChiTietLuongNV);
 		
-		JButton btnTinhLuongNV = new JButton("Tính Lương");
+		btnTinhLuongNV = new JButton("Tính Lương");
 		btnTinhLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnTinhLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnTinhLuongNV);
@@ -286,7 +287,9 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		pnlThongKeTinhLuong.add(txtSoNVChuaTinhLuong);
 		pnlThongKeTinhLuong.add(txtTongLuongCanTraNV);
 		pnlThongKeTinhLuong.add(txtTongSoNV);
-		
+		tblThangLuongNhanVien.addMouseListener(this);
+		btnTinhLuongNV.addActionListener(this);
+	
 		btnInBangLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -294,6 +297,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		
 		btnTinhLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		
@@ -305,16 +309,17 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		for(BangLuongNV bl :bl_DAO.getDSBangLuongNV()){
 			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
 			modelTableThangLuongNV.addRow(new Object[]{
-					bl.getThang(), bl.getNam(), nv.getBoPhan().getTenBoPhan()
+					bl.getThang(), bl.getNam(), nv.getBoPhan().getMaBoPhan()
 			});
 		}
 	}
-	private void layDSBangLuongtuDBtheomaNV(String maNV){
-
-		modelTableDSLuongNV.setRowCount(0);
+	private void layDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
+		bl_DAO = new BangLuongNV_DAO();
+		nv_DAO = new NhanVien_DAO();
 		
-		for(BangLuongNV bl : bl_DAO.getDSBangLuongtheomaNV(maNV)){
-			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getMaLuongNV());
+		modelTableDSLuongNV.setRowCount(0);
+		for(BangLuongNV bl : bl_DAO.getDSBangLuongtheoDK(thang, nam, mabp)){
+			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
 			modelTableDSLuongNV.addRow(new Object[]{
 					nv.getMaNV(), nv.getHo()+nv.getTen(), nv.getLuongCoBan(), nv.getThangBacLuong(), nv.getHeSoLuong(), bl.getSoNgayDiLam(),
 					nv.getPhuCap(), bl.getTienPhat(), "",0 , "", ""
@@ -324,6 +329,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
 		
 	}
 
@@ -332,8 +338,10 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		Object object = e.getSource();
 		if(object.equals(tblThangLuongNhanVien)){
 			int row = tblThangLuongNhanVien.getSelectedRow();
-			String maNV = modelTableThangLuongNV.getValueAt(row, 0).toString();
-			layDSBangLuongtuDBtheomaNV(maNV);
+			int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
+			int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
+			String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
+			layDSBangLuongtuDBtheoDK(thang, nam, mabp);
 
 		}
 		if (object.equals(tblDSLuongNV)) {
@@ -344,24 +352,24 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
 	}
 }
