@@ -241,7 +241,7 @@ insert into TaiKhoan (maTK, taiKhoan, matKhau, maNV, ngayDNCuoi)
 values
 	(N'TK230004', '230004', CONVERT(varchar(16), HASHBYTES('MD5', '230004'), 2), N'NV230004', '03/11/2023'),
 	(N'TK230010', '230010', CONVERT(varchar(16), HASHBYTES('MD5', '230010'), 2), N'NV230010', '03/11/2023'),
-	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV230001', '03/11/2023')
+	(N'TK220001', '220001', CONVERT(varchar(16), HASHBYTES('MD5', '220001'), 2), N'NV220001', '03/11/2023')
 go
 
 insert into HopDong 
@@ -409,3 +409,11 @@ on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
 on cn.maCN = bpccn.maCN
 where maPCCN is not null and maCD = '07102301013'
 
+insert into BangLuongNhanVien (maLuongNV,maNV,thang,nam,soNgayDiLam,soNgayNghiKhongPhep,tienPhat,bhxh,luongTong)
+values
+('MT21236134','NV220003',6,2022,20,10,20000,10000,400000000),
+('MT21989723','NV220003',4,2022,20,10,20000,10000,400000000),
+('MT25632133','NV220010',7,2022,20,10,20000,10000,400000000);
+go
+
+select distinct thang, nam, maBP from BangLuongNhanVien join NhanVien on BangLuongNhanVien.maNV = NhanVien.maNV 

@@ -316,6 +316,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		switch (taiKhoan_DAO.getBoPhanCuaNV(tk)) {
 		case "BPNS" -> {
 			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+			txtNumHD.setText(hd_DAO.getSize() + "");
 			txtDate.setText(dateFormatted);
 			txtName.setText(hoTen);
 			mnLuong.setEnabled(false);

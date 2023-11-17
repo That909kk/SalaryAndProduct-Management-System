@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -375,7 +376,8 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
         		repaint();
         	}
         }; 
-       
+       tblDsNV.setRowHeight(26);
+       tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
         	
         
        
