@@ -144,7 +144,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		JLabel lblMaCD = new JLabel("Mã công đoạn:");
 		lblMaCD.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblMaCD.setBounds(15, 20, 100, 26);
+		lblMaCD.setBounds(15, 20, 110, 26);
 		pnlThongTinCongDoan.add(lblMaCD);
 		
 		txtMaCD = new JTextField();
@@ -184,6 +184,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		cboMaCDTienQuyet = new JComboBox<String>(modelCBOTienQuyet);
 		cboMaCDTienQuyet.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		cboMaCDTienQuyet.setBounds(455, 20, 149, 26);
+		cboMaCDTienQuyet.addItem(" ");
 		
 		pnlThongTinCongDoan.add(cboMaCDTienQuyet);
 		
@@ -297,7 +298,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		JLabel lblTim = new JLabel("Tìm kiếm theo tên sản phẩm:");
 		lblTim.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTim.setBounds(10, 590, 210, 30);
+		lblTim.setBounds(10, 590, 220, 30);
 		pnlPCCD.add(lblTim);
 		
 		txtNDTim = new JTextField();
@@ -393,6 +394,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 
 	private void capNhatCBOTienQuyet(String maSP) {
 		modelCBOTienQuyet.removeAllElements();
+		modelCBOTienQuyet.addElement(" ");
 		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
 			modelCBOTienQuyet.addElement(cd.getMaCongDoan());
 		}
@@ -445,7 +447,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 				SanPham sp = sp_DAO.getMotSanPham(maSP);
 				
 				CongDoan cd = null;
-				if (tienQuyet == null) {
+				if (tienQuyet.equals(" ")) {
 					cd = new CongDoan(maCD, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, false, "", sp);
 				} else {
 					cd = new CongDoan(maCD, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, false, tienQuyet, sp);

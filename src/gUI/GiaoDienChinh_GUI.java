@@ -229,7 +229,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		JLabel lblTongNhanVien = new JLabel("Tổng số nhân viên hiện có:");
 		lblTongNhanVien.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblTongNhanVien.setBounds(10, 50, 241, 30);
+		lblTongNhanVien.setBounds(10, 50, 250, 30);
 		pnlBackGround.add(lblTongNhanVien);
 		
 		txtNumberNV = new JTextField();
@@ -278,7 +278,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		JLabel lblUser = new JLabel("Xin Chào! ");
 		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblUser.setBounds(918, 11, 82, 30);
+		lblUser.setBounds(918, 11, 90, 30);
 		pnlBackGround.add(lblUser);
 		
 		txtName = new JTextField();
@@ -319,23 +319,25 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			txtNumHD.setText(hd_DAO.getSize() + "");
 			txtDate.setText(dateFormatted);
 			txtName.setText(hoTen);
-			mnLuong.setEnabled(false);
-			mniCCCN.setEnabled(false);
+			mnLuong.setVisible(false);
+			mniCCCN.setVisible(false);
 		}
 		
 		case "BPKT" -> {
-			mnHopDong.setEnabled(false);
 			txtNumHD.setText(hd_DAO.getSize() + "");
 			txtName.setText(hoTen);
 			txtDate.setText(dateFormatted);
 			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+			mniCCCN.setVisible(false);
+			mniCCNV.setVisible(false);
+			mnCongDoan.setVisible(false);
 		}
 		
 		case "QLXU" -> {
 			txtDate.setText(dateFormatted);
 			txtName.setText(hoTen);
-			mnNhanVien.setEnabled(false);
-			mniHopDong.setEnabled(false);
+			mnNhanVien.setVisible(false);
+			mniHopDong.setVisible(false);
 		}
 		
 		default ->
