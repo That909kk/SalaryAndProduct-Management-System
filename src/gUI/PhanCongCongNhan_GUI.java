@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +24,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import connectDB.ConnectDB;
@@ -37,7 +42,7 @@ import entity.CongNhan;
 import entity.SanPham;
 import entity.Xuong;
 
-public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, MouseListener{
+public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, MouseListener, TableModelListener, ListSelectionListener{
 
 	private JPanel contentPane;
 	private JPanel Menu;
@@ -64,6 +69,9 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 	private ArrayList<BangPhanCongCN> listBPCCN = new ArrayList<BangPhanCongCN>();
 	private ArrayList<Integer> listRowPCCN = new ArrayList<Integer>();
 	private ArrayList<Integer> listRowUnchecked = new ArrayList<Integer>();
+	private int minSelectedRow = -1;
+	private int maxSelectedRow = -1;
+	private boolean tableModelListenerIsChanging = false;
 	
 	private JButton btnTim;
 	private JButton btnHoanTat;
@@ -259,7 +267,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		
 		btnHoanTat = new JButton("Hoàn tất");
 		btnHoanTat.setBackground(new Color(255, 255, 255));
-		btnHoanTat.setFont(new Font("Tahoma", Font.BOLD, 18));
+		btnHoanTat.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnHoanTat.setBounds(1114, 585, 140, 40);
 		btnHoanTat.setIcon(new ImageIcon("img\\icons\\icons8-checked-checkbox-24.png"));
 		pnlPCCD.add(btnHoanTat);
@@ -273,6 +281,8 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		
 		tablePCCN.addMouseListener(this);
 		tableCongDoan.addMouseListener(this);
+		modelPCCN.addTableModelListener(this);
+		tablePCCN.getSelectionModel().addListSelectionListener(this);
 		return pnlPCCD;
 	}
 
@@ -321,25 +331,40 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		Object o = e.getSource();
 		
 		if (o.equals(btnThem)) {
+			int count = listRowUnchecked.size();
 			listBPCCN.clear();
 			CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(tableCongDoan.getValueAt(rowCD, 1).toString());
 			
 			for (Integer rowIndex : listRowPCCN) {
-				int soLuongRowPCCNDaChon = listRowPCCN.size();
-				int soLuongSP = soLuongRowPCCNDaChon % 2 == 0 
+				if (!listRowUnchecked.contains(rowIndex)) {
+					modelPCCN.setValueAt(true, rowIndex, 6);
+				} else {
+					modelPCCN.setValueAt(false, rowIndex, 6);
+					modelPCCN.setValueAt(0, rowIndex, 7);
+				}
+			}
+			
+			for (Integer rowIndex : listRowPCCN) {
+				int soLuongRowPCCNDaChon = listRowPCCN.size() - count;
+				int soLuongSP = (soLuongRowPCCNDaChon) % 2 == 0 
 						? (cd.getSoLuongSanPham() / soLuongRowPCCNDaChon) 
-								: ((cd.getSoLuongSanPham() + (cd.getSoLuongSanPham() % soLuongRowPCCNDaChon) + 1) / soLuongRowPCCNDaChon);
+						: ((cd.getSoLuongSanPham() + (cd.getSoLuongSanPham() % soLuongRowPCCNDaChon) + 1) / soLuongRowPCCNDaChon);
 				
-				modelPCCN.setValueAt(true, rowIndex, 6);
-				modelPCCN.setValueAt(soLuongSP, rowIndex, 7);
-				listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+				if (!listRowUnchecked.contains(rowIndex)) {
+					modelPCCN.setValueAt(true, rowIndex, 6);
+					modelPCCN.setValueAt(soLuongSP, rowIndex, 7);
+					listBPCCN.add(getCongNhanDuocChon(rowIndex));
+				} else {
+					modelPCCN.setValueAt(false, rowIndex, 6);
+					modelPCCN.setValueAt(0, rowIndex, 7);
+				}
 			}
 		}
 		
 		if (o.equals(btnHoanTat)) {
 			cd_DAO = new CongDoan_DAO();
-			
 			bPCCN_DAO = new BangPhanCongCN_DAO();
+			
 			for (BangPhanCongCN bangPhanCongCN : listBPCCN) {
 				bangPhanCongCN.setSoLuongSanPham(Integer.parseInt(tablePCCN.getValueAt(0, 7).toString()));
 				bPCCN_DAO.insertPhanCongCongNhan(bangPhanCongCN);
@@ -373,8 +398,11 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		
 		if (o.equals(tableCongDoan)) {
 			listRowPCCN.clear();
+			listRowUnchecked.clear();
+			
 			cn_DAO = new CongNhan_DAO();
 			cd_DAO = new CongDoan_DAO();
+			
 			int row = tableCongDoan.getSelectedRow();
 			rowCD = row;
 			
@@ -387,7 +415,6 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			int soLuongCNTheoXuong = modelPCCN.getRowCount();
 			int soLuongCNDuKien = cd_DAO.getMotCongDoanTheoMaCD(maCD).getSoLuongCongNhanDuKien();
 			
-			System.out.println(soLuongCNTheoXuong);
 			if (soLuongCNTheoXuong == 0)
 				modelPCCN.setRowCount(0);
 			else {
@@ -395,34 +422,38 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 					for (int rowIndex = 0; rowIndex < soLuongCNTheoXuong; rowIndex++) {
 						modelPCCN.setValueAt(true, rowIndex, 6);
 						listRowPCCN.add(rowIndex);
-						listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+						listBPCCN.add(getCongNhanDuocChon(rowIndex));
 					}
 				} else if (soLuongCNTheoXuong > soLuongCNDuKien) {
 					for (int rowIndex = 0; rowIndex < soLuongCNDuKien; rowIndex++) {
 						modelPCCN.setValueAt(true, rowIndex, 6);
 						listRowPCCN.add(rowIndex);
-						listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+						listBPCCN.add(getCongNhanDuocChon(rowIndex));
 					}
 				} else {
 					for (int rowIndex = 0; rowIndex < soLuongCNTheoXuong; rowIndex++) {
 						modelPCCN.setValueAt(true, rowIndex, 6);
 						listRowPCCN.add(rowIndex);
-						listBPCCN.add(getDSCongNhanDuocChon(rowIndex));
+						listBPCCN.add(getCongNhanDuocChon(rowIndex));
 					}
 				} 
 			}
 		}
 		
 		if (o.equals(tablePCCN)) {
-			cn_DAO = new CongNhan_DAO();
-			cd_DAO = new CongDoan_DAO();
-			
 			int rowPCCN = tablePCCN.getSelectedRow();
-			modelPCCN.setValueAt(0, rowPCCN, 7);
-			modelPCCN.setValueAt(false, rowPCCN, 6);
 			
-			listRowUnchecked.add(rowPCCN);
-			listRowPCCN.remove(rowPCCN);
+			if (!((Boolean) modelPCCN.getValueAt(rowPCCN, 6)).booleanValue()) {
+				modelPCCN.setValueAt(0, rowPCCN, 7);
+				modelPCCN.setValueAt(false, rowPCCN, 6);
+				listRowUnchecked.add(rowPCCN);
+				listRowPCCN.remove(listRowPCCN.indexOf(rowPCCN));
+				System.out.println(rowPCCN);
+			} else {
+				modelPCCN.setValueAt(true, rowPCCN, 6);
+				listRowPCCN.add(rowPCCN);
+				listRowUnchecked.remove(listRowUnchecked.indexOf(rowPCCN));
+			}
 		}
 	}
 	@Override
@@ -455,7 +486,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
         }
     }
 	
-	private BangPhanCongCN getDSCongNhanDuocChon(int rowPCCN) {
+	private BangPhanCongCN getCongNhanDuocChon(int rowPCCN) {
 		cn_DAO = new CongNhan_DAO();
 		cd_DAO = new CongDoan_DAO();
 		
@@ -469,5 +500,44 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		
 		BangPhanCongCN bPCCN = new BangPhanCongCN(maPCCN, true, LocalDate.now(), 0, cn, cd);
 		return bPCCN;
+	}
+	@Override
+	public void tableChanged(TableModelEvent e) {
+		Object o = e.getSource();
+		if (o.equals(modelPCCN)) {
+			if (tableModelListenerIsChanging)
+				return;
+			
+			int firstRow = e.getFirstRow();
+			int column = e.getColumn();
+			
+			if (column != 1 || maxSelectedRow == -1 || minSelectedRow == -1) {
+				return;
+			}
+			
+			tableModelListenerIsChanging = true;
+			
+			boolean value = ((Boolean) modelPCCN.getValueAt(firstRow, column)).booleanValue();
+			
+			for (int i = minSelectedRow; i <= maxSelectedRow; i++) {
+				modelPCCN.setValueAt(0, i, column + 1);
+				modelPCCN.setValueAt(Boolean.valueOf(value), i, column);
+			} 
+			
+			minSelectedRow = -1;
+			maxSelectedRow = -1;
+			
+			tableModelListenerIsChanging = false;
+		}
+	}
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(tablePCCN)) {
+			if (e.getValueIsAdjusting())
+				return;
+			minSelectedRow = ((DefaultListSelectionModel) e.getSource()).getMinSelectionIndex();
+			maxSelectedRow = ((DefaultListSelectionModel) e.getSource()).getMaxSelectionIndex();
+		}
 	}
 }
