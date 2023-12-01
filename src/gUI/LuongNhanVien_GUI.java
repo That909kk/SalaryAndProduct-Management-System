@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -12,12 +13,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,6 +36,7 @@ import connectDB.ConnectDB;
 import dao.BangChamCongNV_DAO;
 import dao.BangLuongNV_DAO;
 import dao.NhanVien_DAO;
+import entity.BangChamCongNV;
 import entity.BangLuongNV;
 import entity.NhanVien;
 
@@ -53,6 +58,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	private BangChamCongNV_DAO bcc_DAO;
 	private NhanVien_DAO nv_DAO;
 	private BangChamCongNV_DAO bc_DAO;
+	JButton btnTinhLuongNV;
 	
 	/**
 	 * Launch the application.
@@ -133,7 +139,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 //		menuBar.add(mnGioiThieu);
 		
 		contentPane.add(this.getLuongNVGUI());
-		
+
 	}
 	
 	public JPanel getLuongNVGUI() {
@@ -148,8 +154,9 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		
 		tblThangLuongNhanVien = new JTable(modelTableThangLuongNV);
 		tblThangLuongNhanVien.setFont(UIManager.getFont("TableHeader.font"));
-		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tblThangLuongNhanVien.setCellSelectionEnabled(true);
+		tblThangLuongNhanVien.setRowHeight(26);
+		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tblThangLuongNhanVien.setRowSelectionAllowed(true);
 		tblThangLuongNhanVien.setBackground(new Color(255, 255, 255));
 		layDSBangLuongtuDB();
 		JScrollPane scrThangLuong = new JScrollPane(tblThangLuongNhanVien);
@@ -159,10 +166,18 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		
 		String headerDSLuong[] = {"Mã nhân viên", "Họ tên", "Lương cơ bản", "Bậc lương", "Hệ số lương", "Số ngày làm",
 				"Thưởng ", "Khấu trừ", "Bảo hiểm xã hội", "Tổng lương", "Đã tính lương", "Ghi chú"};
-		modelTableDSLuongNV = new DefaultTableModel(headerDSLuong, 0);
+			modelTableDSLuongNV = new DefaultTableModel(headerDSLuong, 0) {
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				if (columnIndex == 10)
+					return Boolean.class;
+				return Object.class;
+			}
+		};
 		tblDSLuongNV = new JTable(modelTableDSLuongNV);
+		tblDSLuongNV.setRowHeight(26);
 		tblDSLuongNV.setFillsViewportHeight(true);
-		tblDSLuongNV.setCellSelectionEnabled(true);
+		tblDSLuongNV.setRowSelectionAllowed(true);
 		tblDSLuongNV.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		pnlLuongNV.add(tblDSLuongNV);
 		
@@ -246,7 +261,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		btnXemChiTietLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnXemChiTietLuongNV);
 		
-		JButton btnTinhLuongNV = new JButton("Tính Lương");
+		btnTinhLuongNV = new JButton("Tính Lương");
 		btnTinhLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnTinhLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnTinhLuongNV);
@@ -286,7 +301,9 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		pnlThongKeTinhLuong.add(txtSoNVChuaTinhLuong);
 		pnlThongKeTinhLuong.add(txtTongLuongCanTraNV);
 		pnlThongKeTinhLuong.add(txtTongSoNV);
-		
+		tblThangLuongNhanVien.addMouseListener(this);
+		btnTinhLuongNV.addActionListener(this);
+	
 		btnInBangLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -294,36 +311,115 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		
 		btnTinhLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			}
+				DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+				int [] rows = tblDSLuongNV.getSelectedRows();
+				if(rows.length > 0){
+					for (int i=0;i<rows.length;i++){
+						int row = rows[i];
+						boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
+						if( daTinhLuong==false){
+							double luongCoBan = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 2).toString().replace(",", ""));
+							double bacLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 3).toString().replace(",", ""));
+							double heSoLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 4).toString().replace(",", ""));
+							double soNgayDiLam = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", ""));
+							double phuCap = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 6).toString().replace(",", ""));
+							double tienPhat = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", ""));
+							double luongTinh = ((luongCoBan*bacLuong*heSoLuong)/30)*soNgayDiLam + phuCap - tienPhat;
+							double baoHiemXH = luongTinh*0.105;
+							double tongLuong = luongTinh - baoHiemXH;
+
+							modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH), row, 8);
+							modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), row, 9);
+							modelTableDSLuongNV.setValueAt(true, row, 10);
+						}
+					}
+				}
+	}
 		});
+		btnTimKiemTheoTenNV.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Lấy nội dung nhập từ ô tìm kiếm
+		        String tenCanTim = txtTimKiemTheoTenNV.getText().trim().toLowerCase();
+
+		        // Kiểm tra nếu ô nhập rỗng
+		        if (tenCanTim.isEmpty()) {
+		            // Reset lại chiều cao của tất cả các dòng để hiển thị lại toàn bộ danh sách
+		            for (int i = 0; i < tblDSLuongNV.getRowCount(); i++) {
+		                tblDSLuongNV.setRowHeight(i, tblDSLuongNV.getRowHeight());
+		            }
+		        } else {
+		            boolean timThay = false;
+		            int firstFoundRow = -1;
+
+		            // Duyệt qua các dòng trong bảng
+		            for (int i = 0; i < tblDSLuongNV.getRowCount(); i++) {
+		                String tenNhanVien = tblDSLuongNV.getValueAt(i, 1).toString().toLowerCase();
+
+		                // Sử dụng biểu thức chính quy để kiểm tra nếu tên chứa từ khóa tìm kiếm
+		                boolean coChuaTen = tenNhanVien.matches(".*" + tenCanTim + ".*");
+
+		                // Đặt chiều cao của dòng dựa trên kết quả tìm kiếm
+		                tblDSLuongNV.setRowHeight(i, coChuaTen ? 25 : tblDSLuongNV.getRowHeight());
+
+		                // Kiểm tra nếu có ít nhất một dòng được tìm thấy
+		                if (coChuaTen) {
+		                    timThay = true;
+		                    if (firstFoundRow == -1) {
+		                        firstFoundRow = i;
+		                    }
+		                }
+		            }
+
+		            // Hiển thị thông báo nếu không có dòng nào được tìm thấy
+		            if (!timThay) {
+		                JOptionPane.showMessageDialog(LuongNhanVien_GUI.this, "Không tìm thấy nhân viên có tên: " + tenCanTim, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+		            } else {
+		                // Đưa dòng đầu tiên được tìm thấy lên đầu bảng và chọn nó
+		                tblDSLuongNV.setRowSelectionInterval(firstFoundRow, firstFoundRow);
+		                tblDSLuongNV.scrollRectToVisible(new Rectangle(tblDSLuongNV.getCellRect(firstFoundRow, 0, true)));
+		            }
+		        }
+		    }
+		});
+
+
+
+
 		
 		return pnlLuongNV;
 	}
+	//
+	
+	//
+	
+	
 	private void layDSBangLuongtuDB(){
 		bl_DAO = new BangLuongNV_DAO();
 		modelTableThangLuongNV.setRowCount(0);
 		for(BangLuongNV bl :bl_DAO.getDSBangLuongNV()){
 			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
 			modelTableThangLuongNV.addRow(new Object[]{
-					bl.getThang(), bl.getNam(), nv.getBoPhan().getTenBoPhan()
+					bl.getThang(), bl.getNam(), nv.getBoPhan().getMaBoPhan()
 			});
 		}
 	}
-	private void layDSBangLuongtuDBtheomaNV(String maNV){
-
+	private void layDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
+		bl_DAO = new BangLuongNV_DAO();
+		nv_DAO = new NhanVien_DAO();
+		DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
 		modelTableDSLuongNV.setRowCount(0);
-		
-		for(BangLuongNV bl : bl_DAO.getDSBangLuongtheomaNV(maNV)){
-			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getMaLuongNV());
+		for(BangLuongNV bl : bl_DAO.getDSBangLuongtheoDK(thang, nam, mabp)){
+			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
 			modelTableDSLuongNV.addRow(new Object[]{
-					nv.getMaNV(), nv.getHo()+nv.getTen(), nv.getLuongCoBan(), nv.getThangBacLuong(), nv.getHeSoLuong(), bl.getSoNgayDiLam(),
-					nv.getPhuCap(), bl.getTienPhat(), "",0 , "", ""
+					nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bl.getSoNgayDiLam()),
+					decimalFormat.format(nv.getPhuCap()), decimalFormat.format(bl.getTienPhat()),0,0,false, ""
 			});
 		}
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
 		
 	}
 
@@ -332,8 +428,10 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		Object object = e.getSource();
 		if(object.equals(tblThangLuongNhanVien)){
 			int row = tblThangLuongNhanVien.getSelectedRow();
-			String maNV = modelTableThangLuongNV.getValueAt(row, 0).toString();
-			layDSBangLuongtuDBtheomaNV(maNV);
+			int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
+			int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
+			String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
+			layDSBangLuongtuDBtheoDK(thang, nam, mabp);
 
 		}
 		if (object.equals(tblDSLuongNV)) {
@@ -344,24 +442,24 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+//		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
 	}
 }
