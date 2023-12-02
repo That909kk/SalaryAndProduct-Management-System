@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -27,10 +29,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import connectDB.ConnectDB;
 import dao.BangChamCongNV_DAO;
@@ -59,22 +64,22 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	private NhanVien_DAO nv_DAO;
 	private BangChamCongNV_DAO bc_DAO;
 	JButton btnTinhLuongNV;
-	
+
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					LuongNhanVien frame = new LuongNhanVien();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	//	public static void main(String[] args) {
+	//		EventQueue.invokeLater(new Runnable() {
+	//			public void run() {
+	//				try {
+	//					LuongNhanVien frame = new LuongNhanVien();
+	//					frame.setVisible(true);
+	//				} catch (Exception e) {
+	//					e.printStackTrace();
+	//				}
+	//			}
+	//		});
+	//	}
 
 	/**
 	 * Create the frame.
@@ -97,61 +102,61 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-//		JMenuBar menuBar = new JMenuBar();
-//		menuBar.setBounds(0, 0, 1264, 50);
-//		menuBar.setBackground(new Color(255, 255, 255));
-//		contentPane.add(menuBar);
-//		
-//		mnHome = new JMenu("");
-//		mnHome.setHorizontalAlignment(SwingConstants.CENTER);
-//		mnHome.setIcon(new ImageIcon("D:\\PTUD_Project\\SalaryAndProduct-Management-System\\img\\icons\\icons8-home-40.gif"));
-//		mnHome.setIconTextGap(20);
-//		menuBar.add(mnHome);
-//		
-//		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
-//		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
-//		menuBar.add(mnCongNhan);
-//		
-//		JMenu mnNhanVien = new JMenu("  NHÂN VIÊN  ");
-//		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnNhanVien);
-//		
-//		JMenu mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
-//		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
-//		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnCongDoan);
-//		
-//		JMenu mnLuong = new JMenu("  LƯƠNG  ");
-//		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnLuong);
-//		
-//		JMenu mnHopDong = new JMenu("  HỢP ĐỒNG  ");
-//		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnHopDong);
-//		
-//		JMenu mnTroGiup = new JMenu("  TRỢ GIÚP  ");
-//		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnTroGiup);
-//		
-//		JMenu mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
-//		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnGioiThieu);
-		
+		//		JMenuBar menuBar = new JMenuBar();
+		//		menuBar.setBounds(0, 0, 1264, 50);
+		//		menuBar.setBackground(new Color(255, 255, 255));
+		//		contentPane.add(menuBar);
+		//		
+		//		mnHome = new JMenu("");
+		//		mnHome.setHorizontalAlignment(SwingConstants.CENTER);
+		//		mnHome.setIcon(new ImageIcon("D:\\PTUD_Project\\SalaryAndProduct-Management-System\\img\\icons\\icons8-home-40.gif"));
+		//		mnHome.setIconTextGap(20);
+		//		menuBar.add(mnHome);
+		//		
+		//		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
+		//		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
+		//		menuBar.add(mnCongNhan);
+		//		
+		//		JMenu mnNhanVien = new JMenu("  NHÂN VIÊN  ");
+		//		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		menuBar.add(mnNhanVien);
+		//		
+		//		JMenu mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
+		//		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
+		//		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		menuBar.add(mnCongDoan);
+		//		
+		//		JMenu mnLuong = new JMenu("  LƯƠNG  ");
+		//		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		menuBar.add(mnLuong);
+		//		
+		//		JMenu mnHopDong = new JMenu("  HỢP ĐỒNG  ");
+		//		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		menuBar.add(mnHopDong);
+		//		
+		//		JMenu mnTroGiup = new JMenu("  TRỢ GIÚP  ");
+		//		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		menuBar.add(mnTroGiup);
+		//		
+		//		JMenu mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
+		//		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		//		menuBar.add(mnGioiThieu);
+
 		contentPane.add(this.getLuongNVGUI());
 
 	}
-	
+
 	public JPanel getLuongNVGUI() {
 		JPanel pnlLuongNV = new JPanel();
 		pnlLuongNV.setBackground(new Color(240, 248, 255));
 		pnlLuongNV.setBounds(0, 50, 1264, 632);
 		pnlLuongNV.setLayout(null);
-		
+
 		String headerThangLuong[] = {"Tháng", "Năm", "Bộ Phận"};
 		modelTableThangLuongNV = new DefaultTableModel(headerThangLuong, 0);
-		
-		
+
+
 		tblThangLuongNhanVien = new JTable(modelTableThangLuongNV);
 		tblThangLuongNhanVien.setFont(UIManager.getFont("TableHeader.font"));
 		tblThangLuongNhanVien.setRowHeight(26);
@@ -163,10 +168,10 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		scrThangLuong.setBackground(new Color(255, 255, 255));
 		scrThangLuong.setBounds(0, 0, 604, 190);
 		pnlLuongNV.add(scrThangLuong);
-		
+
 		String headerDSLuong[] = {"Mã nhân viên", "Họ tên", "Lương cơ bản", "Bậc lương", "Hệ số lương", "Số ngày làm",
-				"Thưởng ", "Khấu trừ", "Bảo hiểm xã hội", "Tổng lương", "Đã tính lương", "Ghi chú"};
-			modelTableDSLuongNV = new DefaultTableModel(headerDSLuong, 0) {
+				"Thưởng và Phụ Cấp ", "Khấu trừ", "Bảo hiểm xã hội", "Tổng lương", "Đã tính lương", "Ghi chú"};
+		modelTableDSLuongNV = new DefaultTableModel(headerDSLuong, 0) {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				if (columnIndex == 10)
@@ -180,247 +185,438 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		tblDSLuongNV.setRowSelectionAllowed(true);
 		tblDSLuongNV.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		pnlLuongNV.add(tblDSLuongNV);
-		
+
 		txtGhiChuLuongNV = new JTextField();
 		txtGhiChuLuongNV.setBounds(268, 29, 369, 30);
 		txtGhiChuLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(txtGhiChuLuongNV);
 		txtGhiChuLuongNV.setColumns(10);
-		
+
 		JLabel lblGhiChuLuongNV = new JLabel("Ghi Chú:");
 		lblGhiChuLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblGhiChuLuongNV.setBounds(21, 29, 98, 30);
 		pnlLuongNV.add(lblGhiChuLuongNV);
-		
+
 		JLabel lblSoNVChuaTinhLuong = new JLabel("Số Nhân Viên Chưa Tính Lương:");
 		lblSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblSoNVChuaTinhLuong.setBounds(21, 69, 243, 30);
 		pnlLuongNV.add(lblSoNVChuaTinhLuong);
-		
+
 		txtSoNVChuaTinhLuong = new JTextField();
 		txtSoNVChuaTinhLuong.setColumns(10);
 		txtSoNVChuaTinhLuong.setBounds(268, 69, 369, 30);
 		txtSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(txtSoNVChuaTinhLuong);
-		
+
 		JLabel lblTongSoNV = new JLabel("Tổng Số Nhân Viên:");
 		lblTongSoNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblTongSoNV.setBounds(21, 109, 196, 30);
 		pnlLuongNV.add(lblTongSoNV);
-		
+
 		txtTongSoNV = new JTextField();
 		txtTongSoNV.setColumns(10);
 		txtTongSoNV.setBounds(268, 109, 369, 30);
 		txtTongSoNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(txtTongSoNV);
-		
+
 		JLabel lblTongLuongCanTraNV = new JLabel("Tổng Tiền Lương Cần Trả:");
 		lblTongLuongCanTraNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblTongLuongCanTraNV.setBounds(21, 149, 197, 30);
 		pnlLuongNV.add(lblTongLuongCanTraNV);
-		
+
 		txtTongLuongCanTraNV = new JTextField();
 		txtTongLuongCanTraNV.setColumns(10);
 		txtTongLuongCanTraNV.setBounds(268, 149, 369, 30);
 		txtTongLuongCanTraNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(txtTongLuongCanTraNV);
-		
+
 		JScrollPane scrThangLuongNhanVien = new JScrollPane(tblDSLuongNV);
 		scrThangLuongNhanVien.setBounds(0, 15, 14, 170);
 		pnlLuongNV.add(scrThangLuongNhanVien);
-		
+
 		JLabel lblTimKiemTheoTenNV = new JLabel("Tìm Kiếm Theo Tên:");
 		lblTimKiemTheoTenNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblTimKiemTheoTenNV.setBounds(10, 579, 159, 30);
 		pnlLuongNV.add(lblTimKiemTheoTenNV);
-		
+
 		txtTimKiemTheoTenNV = new JTextField();
 		txtTimKiemTheoTenNV.setColumns(10);
 		txtTimKiemTheoTenNV.setBounds(161, 581, 221, 30);
 		txtTimKiemTheoTenNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(txtTimKiemTheoTenNV);
-		
+
 		JButton btnTimKiemTheoTenNV = new JButton("");
 		btnTimKiemTheoTenNV.setBounds(392, 580, 39, 30);
 		btnTimKiemTheoTenNV.setBackground(new Color(255, 255, 255));
 		btnTimKiemTheoTenNV.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));	
 		pnlLuongNV.add(btnTimKiemTheoTenNV);
-		
+
 		JPanel pnlButtonLuongNV = new JPanel();
 		pnlButtonLuongNV.setBorder(UIManager.getBorder("Button.border"));
 		pnlButtonLuongNV.setBounds(453, 563, 787, 57);
 		pnlLuongNV.add(pnlButtonLuongNV);
-		
+
 		GridLayout gl_pnlButtonLuongNV = new GridLayout(0, 5, 0, 0);
-        gl_pnlButtonLuongNV.setHgap(10);
-        gl_pnlButtonLuongNV.setVgap(10);
+		gl_pnlButtonLuongNV.setHgap(10);
+		gl_pnlButtonLuongNV.setVgap(10);
 		pnlButtonLuongNV.setLayout(gl_pnlButtonLuongNV);
-		
+
 		JButton btnXemChiTietLuongNV = new JButton("Xem Chi Tiết");
 		btnXemChiTietLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnXemChiTietLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnXemChiTietLuongNV);
-		
+
 		btnTinhLuongNV = new JButton("Tính Lương");
 		btnTinhLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnTinhLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnTinhLuongNV);
-		
+
 		JButton btnXoaKhoiDanhSachLuongNV = new JButton("Xóa");
 		btnXoaKhoiDanhSachLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnXoaKhoiDanhSachLuongNV.setBackground(new Color(255, 255 ,255));
 		pnlButtonLuongNV.add(btnXoaKhoiDanhSachLuongNV);
-		
+
 		JButton btnHoanTatLuongNV = new JButton("Hoàn Tất");
 		btnHoanTatLuongNV.setBackground(new Color(255, 255, 255));
 		btnHoanTatLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		pnlButtonLuongNV.add(btnHoanTatLuongNV);
-		
+
 		JButton btnInBangLuongNV = new JButton("In");
 		btnInBangLuongNV.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnInBangLuongNV.setBackground(new Color(255, 255, 255));
 		pnlButtonLuongNV.add(btnInBangLuongNV);
-		
+
 		JScrollPane scrDSLuongNV = new JScrollPane(tblDSLuongNV);
 		scrDSLuongNV.setBounds(0, 205, 1268, 347);
 		pnlLuongNV.add(scrDSLuongNV);
-		
+
 		JPanel pnlThongKeTinhLuong = new JPanel();
 		pnlThongKeTinhLuong.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Th\u1ED1ng k\u00EA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		pnlThongKeTinhLuong.setBackground(new Color(240, 248, 255));
 		pnlThongKeTinhLuong.setBounds(604, 0, 660, 190);
 		pnlLuongNV.add(pnlThongKeTinhLuong);
 		pnlThongKeTinhLuong.setLayout(null);
-		
+
 		pnlThongKeTinhLuong.add(lblGhiChuLuongNV);
 		pnlThongKeTinhLuong.add(lblSoNVChuaTinhLuong);
 		pnlThongKeTinhLuong.add(lblTongLuongCanTraNV);
 		pnlThongKeTinhLuong.add(lblTongSoNV);
-		
+
 		pnlThongKeTinhLuong.add(txtGhiChuLuongNV);
 		pnlThongKeTinhLuong.add(txtSoNVChuaTinhLuong);
 		pnlThongKeTinhLuong.add(txtTongLuongCanTraNV);
 		pnlThongKeTinhLuong.add(txtTongSoNV);
 		tblThangLuongNhanVien.addMouseListener(this);
 		btnTinhLuongNV.addActionListener(this);
-	
+		btnHoanTatLuongNV.addActionListener(this);
+
 		btnInBangLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		
 		btnTinhLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
+				DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
 				int [] rows = tblDSLuongNV.getSelectedRows();
-				if(rows.length > 0){
-					for (int i=0;i<rows.length;i++){
-						int row = rows[i];
-						boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
-						if( daTinhLuong==false){
-							double luongCoBan = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 2).toString().replace(",", ""));
-							double bacLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 3).toString().replace(",", ""));
-							double heSoLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 4).toString().replace(",", ""));
-							double soNgayDiLam = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", ""));
-							double phuCap = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 6).toString().replace(",", ""));
-							double tienPhat = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", ""));
-							double luongTinh = ((luongCoBan*bacLuong*heSoLuong)/30)*soNgayDiLam + phuCap - tienPhat;
-							double baoHiemXH = luongTinh*0.105;
-							double tongLuong = luongTinh - baoHiemXH;
 
-							modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH), row, 8);
-							modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), row, 9);
-							modelTableDSLuongNV.setValueAt(true, row, 10);
+				if (rows.length > 0) {
+					// Kiểm tra xem bảng có đang sử dụng sorter hay không
+					if (tblDSLuongNV.getRowSorter() != null) {
+						TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) tblDSLuongNV.getRowSorter();
+
+						for (int i = 0; i < rows.length; i++) {
+							int row = rows[i];
+
+							// Kiểm tra xem selectedRow có hợp lệ trong bộ lọc hay không
+							if (row < tblDSLuongNV.getRowCount()) {
+								int modelRow = sorter.convertRowIndexToModel(row);
+								boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(modelRow, 10);
+								if (daTinhLuong == false) {
+									String maNV = modelTableDSLuongNV.getValueAt(modelRow, 0).toString();
+									String tenNV = modelTableDSLuongNV.getValueAt(modelRow, 1).toString();
+									int rowas = tblThangLuongNhanVien.getSelectedRow();
+									int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(rowas, 0).toString());
+									int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(rowas, 1).toString());
+									double luongCoBan = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 2).toString().replace(",", ""));
+									double bacLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 3).toString().replace(",", ""));
+									double heSoLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 4).toString().replace(",", ""));
+									double soNgayDiLam = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 5).toString().replace(",", ""));
+									double thuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 6).toString().replace(",", ""));
+									double tienPhat = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 7).toString().replace(",", ""));
+									if(kiemSoBangChamCongCua1NV(maNV, thang, nam)){
+										double luongTinh = ((luongCoBan*bacLuong*heSoLuong)/30)*soNgayDiLam + thuong - tienPhat;
+										double baoHiemXH = luongTinh*0.105;
+										double tongLuong = luongTinh - baoHiemXH;
+
+										modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH), modelRow, 8);
+										modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), modelRow, 9);
+										modelTableDSLuongNV.setValueAt(true, modelRow, 10);}
+									else{
+										int chon =JOptionPane.showConfirmDialog(null, "Nhân viên: "+tenNV+"và có Mã Số: "+maNV+" chưa có đủ bảng chấm công tháng "+thang+" năm "+nam+". Bạn có muốn tiếp tục tính lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
+										if (chon ==JOptionPane.YES_OPTION) {
+											double luongTinh = ((luongCoBan*bacLuong*heSoLuong)/30)*soNgayDiLam + thuong - tienPhat;
+											double baoHiemXH = luongTinh*0.105;
+											double tongLuong = luongTinh - baoHiemXH;
+											modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH),modelRow, 8);
+											modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong),modelRow, 9);
+											modelTableDSLuongNV.setValueAt(true, modelRow, 10);
+										}
+									}
+
+
+								}
+
+							}
+						}
+					} else {
+						for (int i=0;i<rows.length;i++){
+
+							int row = rows[i];
+							boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
+							if( daTinhLuong==false){
+								String maNV = modelTableDSLuongNV.getValueAt(row, 0).toString();
+								String tenNV = modelTableDSLuongNV.getValueAt(row, 1).toString();
+								int rowas = tblThangLuongNhanVien.getSelectedRow();
+								int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(rowas, 0).toString());
+								int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(rowas, 1).toString());
+								double luongCoBan = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 2).toString().replace(",", ""));
+								double bacLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 3).toString().replace(",", ""));
+								double heSoLuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 4).toString().replace(",", ""));
+								double soNgayDiLam = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", ""));
+								double thuong = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 6).toString().replace(",", ""));
+								double tienPhat = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", ""));
+								if(kiemSoBangChamCongCua1NV(maNV, thang, nam)){
+									double luongTinh = ((luongCoBan*bacLuong*heSoLuong)/30)*soNgayDiLam + thuong - tienPhat;
+									double baoHiemXH = luongTinh*0.105;
+									double tongLuong = luongTinh - baoHiemXH;
+									modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH), row, 8);
+									modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), row, 9);
+									modelTableDSLuongNV.setValueAt(true, row, 10);}
+								else{
+									int chon =JOptionPane.showConfirmDialog(null, "Nhân viên: "+tenNV+"và có Mã Số: "+maNV+" chưa có đủ bảng chấm công tháng "+thang+" năm "+nam+". Bạn có muốn tiếp tục tính lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
+									if (chon ==JOptionPane.YES_OPTION) {
+										double luongTinh = ((luongCoBan*bacLuong*heSoLuong)/30)*soNgayDiLam + thuong - tienPhat;
+										double baoHiemXH = luongTinh*0.105;
+										double tongLuong = luongTinh - baoHiemXH;
+										modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH), row, 8);
+										modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), row, 9);
+										modelTableDSLuongNV.setValueAt(true, row, 10);
+									}
+								}
+							}
 						}
 					}
 				}
-	}
+			}
 		});
 		btnTimKiemTheoTenNV.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Lấy nội dung nhập từ ô tìm kiếm
+				String dkCanTim = txtTimKiemTheoTenNV.getText().trim().toLowerCase();
+
+				// Kiểm tra nếu ô nhập rỗng
+				if (dkCanTim.isEmpty()) {
+					// Hiển thị lại toàn bộ danh sách nếu ô tìm kiếm trống
+					tblDSLuongNV.setRowSorter(null);
+				} else {
+					// Tạo một RowFilter để lọc các dòng theo điều kiện tìm kiếm
+					RowFilter<Object, Object> rowFilter = new RowFilter<Object, Object>() {
+						@Override
+						public boolean include(Entry<? extends Object, ? extends Object> entry) {
+							String tenNhanVien = entry.getStringValue(1).toLowerCase();
+							String maNhanVien = entry.getStringValue(0).toLowerCase();
+
+							// Kiểm tra nếu tên hoặc mã chứa từ khóa tìm kiếm
+							return tenNhanVien.contains(dkCanTim) || maNhanVien.contains(dkCanTim);
+						}
+					};
+
+					// Tạo một TableRowSorter với RowFilter đã tạo
+					TableRowSorter<TableModel> sorter = new TableRowSorter<>(modelTableDSLuongNV);
+					sorter.setRowFilter(rowFilter);
+
+					// Đặt TableRowSorter vào bảng để áp dụng bộ lọc
+					tblDSLuongNV.setRowSorter(sorter);
+				}
+			}
+		});
+		btnHoanTatLuongNV.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		        // Lấy nội dung nhập từ ô tìm kiếm
-		        String tenCanTim = txtTimKiemTheoTenNV.getText().trim().toLowerCase();
+		        int[] rows = tblDSLuongNV.getSelectedRows();
 
-		        // Kiểm tra nếu ô nhập rỗng
-		        if (tenCanTim.isEmpty()) {
-		            // Reset lại chiều cao của tất cả các dòng để hiển thị lại toàn bộ danh sách
-		            for (int i = 0; i < tblDSLuongNV.getRowCount(); i++) {
-		                tblDSLuongNV.setRowHeight(i, tblDSLuongNV.getRowHeight());
-		            }
-		        } else {
-		            boolean timThay = false;
-		            int firstFoundRow = -1;
+		        if (rows.length > 0) {
+		            int rowas = tblThangLuongNhanVien.getSelectedRow();
+		            int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(rowas, 0).toString());
+		            int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(rowas, 1).toString());
 
-		            // Duyệt qua các dòng trong bảng
-		            for (int i = 0; i < tblDSLuongNV.getRowCount(); i++) {
-		                String tenNhanVien = tblDSLuongNV.getValueAt(i, 1).toString().toLowerCase();
+		            if (tblDSLuongNV.getRowSorter() != null) {
+		                int chon = JOptionPane.showConfirmDialog(null, "Bạn đang trong danh sách tìm kiếm quay lại để hoàn tất việc chấm lương?", "Thông báo", JOptionPane.YES_NO_OPTION);
 
-		                // Sử dụng biểu thức chính quy để kiểm tra nếu tên chứa từ khóa tìm kiếm
-		                boolean coChuaTen = tenNhanVien.matches(".*" + tenCanTim + ".*");
+		                if (chon == JOptionPane.YES_OPTION) {
+		                    tblDSLuongNV.setRowSorter(null);
 
-		                // Đặt chiều cao của dòng dựa trên kết quả tìm kiếm
-		                tblDSLuongNV.setRowHeight(i, coChuaTen ? 25 : tblDSLuongNV.getRowHeight());
+		                    for (int i = 0; i < rows.length; i++) {
+		                        int row = rows[i];
+		                        boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
 
-		                // Kiểm tra nếu có ít nhất một dòng được tìm thấy
-		                if (coChuaTen) {
-		                    timThay = true;
-		                    if (firstFoundRow == -1) {
-		                        firstFoundRow = i;
+		                        if (daTinhLuong == true) {
+		                            BangLuongNV bl = new BangLuongNV();
+		                            NhanVien_DAO nv_DAO = new NhanVien_DAO();
+		                            bc_DAO = new BangChamCongNV_DAO();
+		                            bl.setMaLuongNV(modelTableDSLuongNV.getValueAt(row, 0).toString() + dinhDangThang(thang) + lay2kitucuoicuaNam(nam));
+		                            bl.setNv(nv_DAO.getMotNVTuMaNV(modelTableDSLuongNV.getValueAt(row, 0).toString()));
+		                            bl.setThang(thang);
+		                            bl.setNam(nam);
+		                            bl.setSoNgayDiLam(Integer.parseInt(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", "")));
+
+		                            int soNgayNghiKhongPhep =(int) bc_DAO.getSoBangChamCongCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam) - bl.getSoNgayDiLam();
+		                            bl.setSoNgayNghiKhongPhep(soNgayNghiKhongPhep);
+
+		                            bl.setTienPhat(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", "")));
+		                            bl.setBhxh(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 8).toString().replace(",", "")));
+		                            bl.setLuongTong(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", "")));
+
+		                            BangLuongNV_DAO bl_DAO = new BangLuongNV_DAO();
+		                            int dk = bl_DAO.getSizeBL(bl_DAO.getDSBangLuongNV());
+		                            if(dk>0) {
+		                            	for (BangLuongNV bl1 : bl_DAO.getDSBangLuongNV()) {
+			                                if (bl1.getMaLuongNV().equals(bl.getMaLuongNV())) {
+			                                    bl_DAO.updateBangLuongNV(bl);
+			                                } else {
+			                                    bl_DAO.insertBangLuongNV(bl);
+			                                }
+			                            }
+		                            }
+		                            else {
+										bl_DAO.insertBangLuongNV(bl);
+									}
+		                            
+		                        }
 		                    }
 		                }
-		            }
+		                
+		            }else {  
+		            	 for (int i = 0; i < rows.length; i++) {
+		                        int row = rows[i];
+		                        boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
 
-		            // Hiển thị thông báo nếu không có dòng nào được tìm thấy
-		            if (!timThay) {
-		                JOptionPane.showMessageDialog(LuongNhanVien_GUI.this, "Không tìm thấy nhân viên có tên: " + tenCanTim, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-		            } else {
-		                // Đưa dòng đầu tiên được tìm thấy lên đầu bảng và chọn nó
-		                tblDSLuongNV.setRowSelectionInterval(firstFoundRow, firstFoundRow);
-		                tblDSLuongNV.scrollRectToVisible(new Rectangle(tblDSLuongNV.getCellRect(firstFoundRow, 0, true)));
-		            }
+		                        if (daTinhLuong == true) {
+		                            BangLuongNV bl = new BangLuongNV();
+		                            NhanVien_DAO nv_DAO = new NhanVien_DAO();
+		                            bc_DAO = new BangChamCongNV_DAO();
+		                            bl.setMaLuongNV(modelTableDSLuongNV.getValueAt(row, 0).toString() + dinhDangThang(thang) + lay2kitucuoicuaNam(nam));
+		                            bl.setNv(nv_DAO.getMotNVTuMaNV(modelTableDSLuongNV.getValueAt(row, 0).toString()));
+		                            bl.setThang(thang);
+		                            bl.setNam(nam);
+		                            bl.setSoNgayDiLam(Integer.parseInt(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", "")));
+
+		                            int soNgayNghiKhongPhep =(int) bc_DAO.getSoBangChamCongCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam) - bl.getSoNgayDiLam();
+		                            bl.setSoNgayNghiKhongPhep(soNgayNghiKhongPhep);
+
+		                            bl.setTienPhat(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", "")));
+		                            bl.setBhxh(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 8).toString().replace(",", "")));
+		                            bl.setLuongTong(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", "")));
+
+		                            BangLuongNV_DAO bl_DAO = new BangLuongNV_DAO();
+		                            int dk = bl_DAO.getSizeBL(bl_DAO.getDSBangLuongNV());
+		                            if(dk>0) {
+		                            	for (BangLuongNV bl1 : bl_DAO.getDSBangLuongNV()) {
+			                                if (bl1.getMaLuongNV().equals(bl.getMaLuongNV())) {
+			                                    bl_DAO.updateBangLuongNV(bl);
+			                                } else {
+			                                    bl_DAO.insertBangLuongNV(bl);
+			                                }
+			                            }
+		                            }
+		                            else {
+										bl_DAO.insertBangLuongNV(bl);
+									}
+		                            
+		                        }
+		                    }
+		                	
+		                }
 		        }
 		    }
 		});
 
-
-
-
-		
 		return pnlLuongNV;
 	}
-	//
-	
-	//
-	
-	
+public String dinhDangThang(int mau) {
+	if(mau<10&&mau>0)
+		return "0"+mau;
+	else
+	return mau+"";
+}
+private String lay2kitucuoicuaNam(int nam){
+
+	String nam2kitucuoi = String.valueOf(nam);
+	nam2kitucuoi = nam2kitucuoi.substring(2, 4);
+	return nam2kitucuoi;
+}
 	private void layDSBangLuongtuDB(){
-		bl_DAO = new BangLuongNV_DAO();
+		nv_DAO = new NhanVien_DAO();
+		bc_DAO = new BangChamCongNV_DAO();
 		modelTableThangLuongNV.setRowCount(0);
-		for(BangLuongNV bl :bl_DAO.getDSBangLuongNV()){
-			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
-			modelTableThangLuongNV.addRow(new Object[]{
-					bl.getThang(), bl.getNam(), nv.getBoPhan().getMaBoPhan()
-			});
+		ArrayList<LocalDate> dsNgayCham = bc_DAO.layTatCaThangvaNamkhacNhau();
+		for (LocalDate ngayCham : dsNgayCham) {
+			ArrayList<String> dsMaBP = bc_DAO.listTatCaBoPhan(bc_DAO.dsBangChamCongNhanVienTheoTungThang(ngayCham.getMonthValue(), ngayCham.getYear()));
+			for (String maBP : dsMaBP) {
+				modelTableThangLuongNV.addRow(new Object[] { dinhDangThang(ngayCham.getMonthValue()),ngayCham.getYear(), hienThiTenBoPhan(maBP) });
+			}
 		}
 	}
-	private void layDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
-		bl_DAO = new BangLuongNV_DAO();
-		nv_DAO = new NhanVien_DAO();
-		DecimalFormat decimalFormat = new DecimalFormat("#,###.##");
-		modelTableDSLuongNV.setRowCount(0);
-		for(BangLuongNV bl : bl_DAO.getDSBangLuongtheoDK(thang, nam, mabp)){
-			NhanVien nv = nv_DAO.getMotNVTuMaNV(bl.getNv().getMaNV());
-			modelTableDSLuongNV.addRow(new Object[]{
-					nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bl.getSoNgayDiLam()),
-					decimalFormat.format(nv.getPhuCap()), decimalFormat.format(bl.getTienPhat()),0,0,false, ""
-			});
+	public String hienThiTenBoPhan(String maBP) {
+		String maBoPhanChu="";
+		if(maBP.trim().equals("BPKT")) {
+			maBoPhanChu="Bộ Phận Kế Toán";
 		}
+		if(maBP.trim().equals("BPNS")) {
+			maBoPhanChu="Bộ Phận Nhân Sự";
+		}
+		if(maBP.trim().equals("QLXU")) {
+			maBoPhanChu="Quản Lí Xưởng";
+		}
+		return maBoPhanChu;
+	}
+	public String mahoaTenBoPhan(String maBP) {
+		String maBoPhanChu="";
+		if(maBP.trim().equals("Bộ Phận Kế Toán")) {
+			maBoPhanChu="BPKT";
+		}
+		if(maBP.trim().equals("Bộ Phận Nhân Sự")) {
+			maBoPhanChu="BPNS";
+		}
+		if(maBP.trim().equals("Quản Lí Xưởng")) {
+			maBoPhanChu="QLXU";
+		}
+		return maBoPhanChu;
+	}
+	private void taoDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
+		nv_DAO = new NhanVien_DAO();
+
+		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		modelTableDSLuongNV.setRowCount(0);
+		for(NhanVien nv : nv_DAO.getListNVtheoBP(mabp)){
+			bc_DAO = new BangChamCongNV_DAO();
+			double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/24)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
+			modelTableDSLuongNV.addRow(new Object[] {nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bc_DAO.getSoNgayDiLamCua1NV(nv.getMaNV(), thang, nam)), decimalFormat.format(thuong+nv.getPhuCap()),0, 0, 0, false, ""});
+		}
+	}
+	private boolean kiemSoBangChamCongCua1NV(String maNV,int thang, int nam){
+		bc_DAO = new BangChamCongNV_DAO();
+		double soBangChamCong = bc_DAO.getSoBangChamCongCua1NV(maNV, thang, nam);
+		if(soBangChamCong <25 ){
+			return false;
+		}
+		return true;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		
+
 	}
 
 	@Override
@@ -431,35 +627,35 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
 			int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
 			String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
-			layDSBangLuongtuDBtheoDK(thang, nam, mabp);
+			taoDSBangLuongtuDBtheoDK(thang,nam,mahoaTenBoPhan(mabp));
 
 		}
 		if (object.equals(tblDSLuongNV)) {
-						
+
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-//		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+		//		throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-//		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+		//		throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-//		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+		//		throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-//		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+		//		throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
 	}
 }
