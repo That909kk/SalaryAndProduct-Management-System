@@ -192,4 +192,5 @@ public class CongDoan_DAO {
 		}
 		return cd;
 	}
+	
 }

@@ -340,7 +340,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		sp_DAO = new SanPham_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		modelSanPham.setRowCount(0);
-		for (SanPham sp : sp_DAO.getDSSanPhamTheoTrangThai(false)) {
+		for (SanPham sp : sp_DAO.getDSSanPhamTheoTrangThai(true)) {
 			HopDong hd = hd_DAO.getMotHopDong(sp.getHopDong().getMaHopDong());
 			modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getSoLuong(), sp.getSoLuongCongDoan(),
 					hd.getNgayThanhLyHopDong().format(dtf)});
@@ -375,6 +375,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			txtGiaTien.setEnabled(true);
 			txtSoCNDuKien.setEnabled(true);
 			txtSoLuongSP.setEnabled(true);
+			txtSoLuongSP.setText(sp_DAO.getMotSanPham(maSP).getSoLuong() + "");
 			dcNgayBatDau.setEnabled(true);
 			dcNgayKetThuc.setEnabled(true);
 			btnSua.setEnabled(false);
