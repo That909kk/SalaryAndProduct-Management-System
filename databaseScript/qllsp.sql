@@ -261,7 +261,7 @@ values
 	(N'1410230101', N'Áo sơ mi trắng', 10000, 2, 1, N'14102301'),
 	(N'0710230101', N'Áo thun đen thời thượng', 20000, 3, 1, N'07102301'),
 	(N'1408230101', N'Quần jeans màu xanh dương', 12000, 3, 1, N'14082301'),
-	(N'3009230101', N'Quần short thể thao màu xanh lam', 30000, 3, 1, N'30092301')
+	(N'3009230101', N'Quần short thể thao màu xanh lam', 30000, 3, 0, N'30092301')
 go
 
 insert into CongDoan (maSP, maCongDoan, tenCongDoan, soLuongSanPham, soLuongCongNhanDuKien, giaTien, trangThai, ngayBatDau, ngayKetThucDuKien, congDoanTienQuyet)
@@ -274,9 +274,9 @@ values
 	('1408230101', '14082301011', N'May vá', 12000, 100, 4000, 1, '08-14-2023', '09-13-2023', ''),
 	('1408230101', '14082301012', N'Nhuộm', 12000, 100, 6000, 1, '08-14-2023', '09-13-2023', '14082301011'),
 	('1408230101', '14082301013', N'Đóng gói', 12000, 100, 4000, 1, '08-14-2023', '09-13-2023', '14082301011'),
-	('3009230101', '30092301011', N'May vá', 30000, 300, 4000, 1, '09-30-2023', '10-29-2023', ''),
-	('3009230101', '30092301012', N'Nhuộm', 30000, 180, 6000, 1, '09-30-2023', '10-29-2023', '30092301011'),
-	('3009230101', '30092301013', N'Đóng gói', 30000, 100, 5000, 1, '09-30-2023', '10-29-2023', '30092301011')
+	('3009230101', '30092301011', N'May vá', 30000, 300, 4000, 0, '09-30-2023', '10-29-2023', ''),
+	('3009230101', '30092301012', N'Nhuộm', 30000, 180, 6000, 0, '09-30-2023', '10-29-2023', '30092301011'),
+	('3009230101', '30092301013', N'Đóng gói', 30000, 100, 5000, 0, '09-30-2023', '10-29-2023', '30092301011')
 go
 
 INSERT INTO CongNhan (maCN, ho, ten, gioiTinh, ngaySinh, cCCD, soDienThoai, diaChi, ngayBatDauLamViec, maXuong, chuyenMon, caLamViec, phuCap, luongCoBan)
@@ -408,6 +408,8 @@ select bpccn.* from CongNhan cn join Xuong x
 on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
 on cn.maCN = bpccn.maCN
 where maPCCN is not null and maCD = '07102301013'
+
+select * from BangPhanCongCN where maCD = '30092301011'
 
 insert into BangLuongNhanVien (maLuongNV,maNV,thang,nam,soNgayDiLam,soNgayNghiKhongPhep,tienPhat,bhxh,luongTong)
 values
