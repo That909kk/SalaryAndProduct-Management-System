@@ -182,4 +182,33 @@ public class BangLuongNV_DAO {
 	public int getSizeBL(ArrayList<BangLuongNV> listBangLuongNV){
 		return listBangLuongNV.size();
 	}
+	public BangLuongNV lay1BangLuongTheoMaNVThangNam(String maNV,int thang,int nam){
+		BangLuongNV blnv = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "Select * from BangLuongNhanVien where maNV = ? and thang = ? and nam = ?";
+		PreparedStatement stmt = null;
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, maNV);
+			stmt.setInt(2, thang);
+			stmt.setInt(3, nam);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				String maLuongNV = rs.getString(1);
+				NhanVien nv = new NhanVien(rs.getString(2));
+				int thang1 = rs.getInt(3);
+				int nam1 = rs.getInt(4);
+				int soNgayDiLam = rs.getInt(5);
+				int soNgayNghiKhongPhep = rs.getInt(6);
+				double tienPhat = rs.getDouble(7);
+				double bhxh = rs.getDouble(8);
+				double luongTong = rs.getDouble(9);
+				blnv = new BangLuongNV(maLuongNV, nv, thang1, nam1, soNgayDiLam, soNgayNghiKhongPhep, tienPhat, bhxh, luongTong);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return blnv;
+	}
 }

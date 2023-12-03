@@ -160,7 +160,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		tblThangLuongNhanVien = new JTable(modelTableThangLuongNV);
 		tblThangLuongNhanVien.setFont(UIManager.getFont("TableHeader.font"));
 		tblThangLuongNhanVien.setRowHeight(26);
-		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tblThangLuongNhanVien.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblThangLuongNhanVien.setRowSelectionAllowed(true);
 		tblThangLuongNhanVien.setBackground(new Color(255, 255, 255));
 		layDSBangLuongtuDB();
@@ -331,6 +331,13 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 							if (row < tblDSLuongNV.getRowCount()) {
 								int modelRow = sorter.convertRowIndexToModel(row);
 								boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(modelRow, 10);
+								boolean coLuongRoi = Double.parseDouble(modelTableDSLuongNV.getValueAt(modelRow, 9).toString().replace(",", ""))>0?true:false;
+								if(daTinhLuong==true&&coLuongRoi==true){
+									int luaChon = JOptionPane.showConfirmDialog(null, "Nhân viên "+modelTableDSLuongNV.getValueAt(row, 1).toString()+" có mã số "+modelTableDSLuongNV.getValueAt(row, 0).toString()+" đã có lương. Bạn có muốn tính lại lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
+									if(luaChon==JOptionPane.YES_OPTION){
+										modelTableDSLuongNV.setValueAt(false, modelRow, 10);
+									}
+								}
 								if (daTinhLuong == false) {
 									String maNV = modelTableDSLuongNV.getValueAt(modelRow, 0).toString();
 									String tenNV = modelTableDSLuongNV.getValueAt(modelRow, 1).toString();
@@ -373,6 +380,13 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 							int row = rows[i];
 							boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
+							boolean coLuongRoi = Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", ""))>0?true:false;
+							if(daTinhLuong==true&&coLuongRoi==true){
+								int luaChon = JOptionPane.showConfirmDialog(null, "Nhân viên "+modelTableDSLuongNV.getValueAt(row, 1).toString()+" có mã số "+modelTableDSLuongNV.getValueAt(row, 0).toString()+" đã có lương. Bạn có muốn tính lại lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
+								if(luaChon==JOptionPane.YES_OPTION){
+									modelTableDSLuongNV.setValueAt(false, row, 10);
+								}
+							}
 							if( daTinhLuong==false){
 								String maNV = modelTableDSLuongNV.getValueAt(row, 0).toString();
 								String tenNV = modelTableDSLuongNV.getValueAt(row, 1).toString();
@@ -439,6 +453,17 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 					// Đặt TableRowSorter vào bảng để áp dụng bộ lọc
 					tblDSLuongNV.setRowSorter(sorter);
 				}
+
+				txtTimKiemTheoTenNV.selectAll();
+				txtTimKiemTheoTenNV.requestFocusInWindow();
+			}
+
+		});
+		btnXoaKhoiDanhSachLuongNV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				chonTatCaFalse();
+
 			}
 		});
 		btnHoanTatLuongNV.addActionListener(new ActionListener() {
@@ -457,111 +482,111 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 						if (chon == JOptionPane.YES_OPTION) {
 							tblDSLuongNV.setRowSorter(null);
 
-							for (int i = 0; i < rows.length; i++) {
-								int row = rows[i];
-								boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
+							//							for (int i = 0; i < rows.length; i++) {
+							//								int row = rows[i];
+							//								boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
+							//								
+							//								if (daTinhLuong == true) {
+							//									BangLuongNV bl = new BangLuongNV();
+							//									NhanVien_DAO nv_DAO = new NhanVien_DAO();
+							//									bc_DAO = new BangChamCongNV_DAO();
+							//									bl.setMaLuongNV(modelTableDSLuongNV.getValueAt(row, 0).toString() + dinhDangThang(thang) + lay2kitucuoicuaNam(nam));
+							//									bl.setNv(nv_DAO.getMotNVTuMaNV(modelTableDSLuongNV.getValueAt(row, 0).toString()));
+							//									bl.setThang(thang);
+							//									bl.setNam(nam);
+							//									bl.setSoNgayDiLam(Integer.parseInt(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", "")));
+							//
+							//									int soNgayNghiKhongPhep =(int) bc_DAO.getSoBangChamCongCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam) - bl.getSoNgayDiLam();
+							//									bl.setSoNgayNghiKhongPhep(soNgayNghiKhongPhep);
+							//
+							//									bl.setTienPhat(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", "")));
+							//									bl.setBhxh(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 8).toString().replace(",", "")));
+							//									bl.setLuongTong(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", "")));
+							//
+							//									BangLuongNV_DAO bl_DAO = new BangLuongNV_DAO();
+							//									BangLuongNV bl2=bl_DAO.lay1BangLuongTheoMaNVThangNam(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam);
+							//									if(bl2==null)
+							//										bl_DAO.insertBangLuongNV(bl);
+							//									else
+							//										bl_DAO.updateBangLuongNV(bl);
+							//									
+							//									
+							//									JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thành công!");
+							//								}
+							//								else {
+							//									JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại!Vui Lòng tính lương trước!");
+							//								}
+							//							}
+						}
+					}else {  int thongBao=0; int dk=0;
+						for (int i = 0; i < rows.length; i++) {
+							int row = rows[i];
+							boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
+							if (daTinhLuong == true) {
+								BangLuongNV bl = new BangLuongNV();
+								NhanVien_DAO nv_DAO = new NhanVien_DAO();
+								bc_DAO = new BangChamCongNV_DAO();
+								bl.setMaLuongNV(modelTableDSLuongNV.getValueAt(row, 0).toString() + dinhDangThang(thang) + lay2kitucuoicuaNam(nam));
+								bl.setNv(nv_DAO.getMotNVTuMaNV(modelTableDSLuongNV.getValueAt(row, 0).toString()));
+								bl.setThang(thang);
+								bl.setNam(nam);
+								bl.setSoNgayDiLam(Integer.parseInt(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", "")));
 
-								if (daTinhLuong == true) {
-									BangLuongNV bl = new BangLuongNV();
-									NhanVien_DAO nv_DAO = new NhanVien_DAO();
-									bc_DAO = new BangChamCongNV_DAO();
-									bl.setMaLuongNV(modelTableDSLuongNV.getValueAt(row, 0).toString() + dinhDangThang(thang) + lay2kitucuoicuaNam(nam));
-									bl.setNv(nv_DAO.getMotNVTuMaNV(modelTableDSLuongNV.getValueAt(row, 0).toString()));
-									bl.setThang(thang);
-									bl.setNam(nam);
-									bl.setSoNgayDiLam(Integer.parseInt(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", "")));
+								int soNgayNghiKhongPhep =(int) bc_DAO.getSoBangChamCongCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam) - bl.getSoNgayDiLam();
+								bl.setSoNgayNghiKhongPhep(soNgayNghiKhongPhep);
 
-									int soNgayNghiKhongPhep =(int) bc_DAO.getSoBangChamCongCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam) - bl.getSoNgayDiLam();
-									bl.setSoNgayNghiKhongPhep(soNgayNghiKhongPhep);
+								bl.setTienPhat(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", "")));
+								bl.setBhxh(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 8).toString().replace(",", "")));
+								bl.setLuongTong(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", "")));
 
-									bl.setTienPhat(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", "")));
-									bl.setBhxh(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 8).toString().replace(",", "")));
-									bl.setLuongTong(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", "")));
-
-									BangLuongNV_DAO bl_DAO = new BangLuongNV_DAO();
-									int dk = bl_DAO.getSizeBL(bl_DAO.getDSBangLuongNV());
-									if(dk>0) {
-										for (BangLuongNV bl1 : bl_DAO.getDSBangLuongNV()) {
-											if (bl1.getMaLuongNV().equals(bl.getMaLuongNV())) {
-												bl_DAO.updateBangLuongNV(bl);
-											} else {
-												bl_DAO.insertBangLuongNV(bl);
-											}
-										}
-									}
-									else {
-										bl_DAO.insertBangLuongNV(bl);
-									}
-									
-									JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thành công");
-								}
+								BangLuongNV_DAO bl_DAO = new BangLuongNV_DAO();
+								BangLuongNV bl2=bl_DAO.lay1BangLuongTheoMaNVThangNam(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam);
+								if(bl2==null) {
+									bl_DAO.insertBangLuongNV(bl);
+									thongBao=1;
+									dk=1;}
 								else {
-									JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại!Vui Lòng tính lương trước!");
-								}
+									bl_DAO.updateBangLuongNV(bl);
+									thongBao=1;
+									dk=1;}
+
+
+								
 							}
-						}
-					}else {  
-						 for (int i = 0; i < rows.length; i++) {
-								int row = rows[i];
-								boolean daTinhLuong = (boolean) modelTableDSLuongNV.getValueAt(row, 10);
-
-								if (daTinhLuong == true) {
-									BangLuongNV bl = new BangLuongNV();
-									NhanVien_DAO nv_DAO = new NhanVien_DAO();
-									bc_DAO = new BangChamCongNV_DAO();
-									bl.setMaLuongNV(modelTableDSLuongNV.getValueAt(row, 0).toString() + dinhDangThang(thang) + lay2kitucuoicuaNam(nam));
-									bl.setNv(nv_DAO.getMotNVTuMaNV(modelTableDSLuongNV.getValueAt(row, 0).toString()));
-									bl.setThang(thang);
-									bl.setNam(nam);
-									bl.setSoNgayDiLam(Integer.parseInt(modelTableDSLuongNV.getValueAt(row, 5).toString().replace(",", "")));
-
-									int soNgayNghiKhongPhep =(int) bc_DAO.getSoBangChamCongCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam) - bl.getSoNgayDiLam();
-									bl.setSoNgayNghiKhongPhep(soNgayNghiKhongPhep);
-
-									bl.setTienPhat(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 7).toString().replace(",", "")));
-									bl.setBhxh(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 8).toString().replace(",", "")));
-									bl.setLuongTong(Double.parseDouble(modelTableDSLuongNV.getValueAt(row, 9).toString().replace(",", "")));
-
-									BangLuongNV_DAO bl_DAO = new BangLuongNV_DAO();
-									int dk = bl_DAO.getSizeBL(bl_DAO.getDSBangLuongNV());
-									if(dk>0) {
-										for (BangLuongNV bl1 : bl_DAO.getDSBangLuongNV()) {
-											if (bl1.getMaLuongNV().equals(bl.getMaLuongNV())) {
-												bl_DAO.updateBangLuongNV(bl);
-											} else {
-												bl_DAO.insertBangLuongNV(bl);
-											}
-										}
-									}
-									else {
-										bl_DAO.insertBangLuongNV(bl);
-									}
-									
-									JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thành công");
-								}else {
-									JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại!Vui Lòng tính lương trước!");
-								}
+							else 
+							{	thongBao=1;
+								dk=0;
 							}
-							
+							}
+					if(thongBao==1&&dk==1)
+						JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thành công!");
+					else {
+						if(thongBao==1&&dk==0)
+							JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại!Vui Lòng tính lương trước!");
+						else 
+							JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại");
+					}
 						}
+
+					
 				}
 			}
 		});
 
 		return pnlLuongNV;
 	}
-public String dinhDangThang(int mau) {
-	if(mau<10&&mau>0)
-		return "0"+mau;
-	else
-	return mau+"";
-}
-private String lay2kitucuoicuaNam(int nam){
+	public String dinhDangThang(int mau) {
+		if(mau<10&&mau>0)
+			return "0"+mau;
+		else
+			return mau+"";
+	}
+	private String lay2kitucuoicuaNam(int nam){
 
-	String nam2kitucuoi = String.valueOf(nam);
-	nam2kitucuoi = nam2kitucuoi.substring(2, 4);
-	return nam2kitucuoi;
-}
+		String nam2kitucuoi = String.valueOf(nam);
+		nam2kitucuoi = nam2kitucuoi.substring(2, 4);
+		return nam2kitucuoi;
+	}
 	private void layDSBangLuongtuDB(){
 		nv_DAO = new NhanVien_DAO();
 		bc_DAO = new BangChamCongNV_DAO();
@@ -600,15 +625,36 @@ private String lay2kitucuoicuaNam(int nam){
 		}
 		return maBoPhanChu;
 	}
+	//	private void taoDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
+	//		nv_DAO = new NhanVien_DAO();
+	//
+	//		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+	//		modelTableDSLuongNV.setRowCount(0);
+	//		for(NhanVien nv : nv_DAO.getListNVtheoBP(mabp)){
+	//			
+	//			bc_DAO = new BangChamCongNV_DAO();
+	//			double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/24)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
+	//			modelTableDSLuongNV.addRow(new Object[] {nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bc_DAO.getSoNgayDiLamCua1NV(nv.getMaNV(), thang, nam)), decimalFormat.format(thuong+nv.getPhuCap()),0, 0, 0, false, ""});
+	//		}
+	//	}
 	private void taoDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
 		nv_DAO = new NhanVien_DAO();
 
 		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
 		modelTableDSLuongNV.setRowCount(0);
 		for(NhanVien nv : nv_DAO.getListNVtheoBP(mabp)){
-			bc_DAO = new BangChamCongNV_DAO();
-			double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/24)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
-			modelTableDSLuongNV.addRow(new Object[] {nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bc_DAO.getSoNgayDiLamCua1NV(nv.getMaNV(), thang, nam)), decimalFormat.format(thuong+nv.getPhuCap()),0, 0, 0, false, ""});
+
+			bl_DAO = new BangLuongNV_DAO();
+			BangLuongNV bl=bl_DAO.lay1BangLuongTheoMaNVThangNam(nv.getMaNV(), thang, nam);
+			if (bl == null) {
+				double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/24)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
+				modelTableDSLuongNV.addRow(new Object[] {nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bc_DAO.getSoNgayDiLamCua1NV(nv.getMaNV(), thang, nam)), decimalFormat.format(thuong+nv.getPhuCap()),0, 0, 0, false, ""});
+
+			} else {
+				double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/24)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
+				modelTableDSLuongNV.addRow(new Object[] { nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), bl.getSoNgayDiLam(), decimalFormat.format(thuong+nv.getPhuCap()), bl.getTienPhat(), bl.getBhxh(), bl.getLuongTong(),bl.getLuongTong()>0?true:false,"" });
+			}
+
 		}
 	}
 	private boolean kiemSoBangChamCongCua1NV(String maNV,int thang, int nam){
@@ -619,6 +665,22 @@ private String lay2kitucuoicuaNam(int nam){
 		}
 		return true;
 	}
+	private void chonTatCaFalse() {
+		int rowCount = tblDSLuongNV.getRowCount();
+
+		// Duyệt qua tất cả các dòng trong bảng
+		for (int i = 0; i < rowCount; i++) {
+			// Lấy giá trị tại cột 10 của dòng hiện tại
+			boolean giaTriCot10 = (boolean) modelTableDSLuongNV.getValueAt(i, 10);
+
+			// Kiểm tra nếu giá trị cột 10 là false
+			if (!giaTriCot10) {
+				// Chọn dòng hiện tại
+				tblDSLuongNV.addRowSelectionInterval(i, i);
+			}
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -634,6 +696,7 @@ private String lay2kitucuoicuaNam(int nam){
 			int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
 			String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
 			taoDSBangLuongtuDBtheoDK(thang,nam,mahoaTenBoPhan(mabp));
+
 
 		}
 		if (object.equals(tblDSLuongNV)) {
