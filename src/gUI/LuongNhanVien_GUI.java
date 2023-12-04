@@ -72,18 +72,18 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	/**
 	 * Launch the application.
 	 */
-	//	public static void main(String[] args) {
-	//		EventQueue.invokeLater(new Runnable() {
-	//			public void run() {
-	//				try {
-	//					LuongNhanVien frame = new LuongNhanVien();
-	//					frame.setVisible(true);
-	//				} catch (Exception e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		});
-	//	}
+		public static void main(String[] args) {
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						LuongNhanVien_GUI frame = new LuongNhanVien_GUI();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
 
 	/**
 	 * Create the frame.
@@ -228,6 +228,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		txtSoNVChuaTinhLuong.setBounds(268, 69, 369, 30);
 		txtSoNVChuaTinhLuong.setEditable(false);
 		txtSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtSoNVChuaTinhLuong.setBackground(new Color(240, 248, 255));
 		pnlLuongNV.add(txtSoNVChuaTinhLuong);
 
 		JLabel lblTongSoNV = new JLabel("Tổng Số Nhân Viên:");
@@ -240,6 +241,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		txtTongSoNV.setBounds(268, 109, 369, 30);
 		txtTongSoNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtTongSoNV.setEditable(false);
+		txtTongSoNV.setBackground(new Color(240, 248, 255));
 		pnlLuongNV.add(txtTongSoNV);
 
 		JLabel lblTongLuongCanTraNV = new JLabel("Tổng Tiền Lương Cần Trả:");
@@ -252,6 +254,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		txtTongLuongCanTraNV.setBounds(268, 149, 369, 30);
 		txtTongLuongCanTraNV.setEditable(false);
 		txtTongLuongCanTraNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtTongLuongCanTraNV.setBackground(new Color(240, 248, 255));
 		pnlLuongNV.add(txtTongLuongCanTraNV);
 
 		JScrollPane scrThangLuongNhanVien = new JScrollPane(tblDSLuongNV);
