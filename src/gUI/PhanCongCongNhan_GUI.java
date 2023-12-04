@@ -266,7 +266,6 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnSua.setIcon(new ImageIcon("img\\icons\\icons8-pencil-20.png"));
 		btnSua.setIconTextGap(6);
-		btnSua.setEnabled(false);
 		
 		btnHoanTat = new JButton("Hoàn Tất");
 		btnHoanTat.setBackground(new Color(255, 255, 255));
@@ -338,8 +337,15 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		
 		if (o.equals(btnThem)) {
 			int countRowUnchecked = listRowUnchecked.size();
+			int sumOfProducts = 0;
 			listBPCCN.clear();
 			CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(tableCongDoan.getValueAt(rowCD, 1).toString());
+			
+			ArrayList<BangPhanCongCN> listTheoCD = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(tableCongDoan.getValueAt(rowCD, 1).toString());
+			
+			for (BangPhanCongCN bangPhanCongCN : listTheoCD) {
+				sumOfProducts += bangPhanCongCN.getSoLuongSanPham();
+			}
 			
 			for (Integer rowIndex : listRowPCCN) {
 				if (!listRowUnchecked.contains(rowIndex)) {
@@ -349,21 +355,25 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 					modelPCCN.setValueAt(0, rowIndex, 7);
 				}
 			}
-			
-			for (Integer rowIndex : listRowPCCN) {
-				int soLuongRowPCCNDaChon = listRowPCCN.size() - countRowUnchecked;
-				int soLuongSP = (soLuongRowPCCNDaChon) % 2 == 0 
-						? (cd.getSoLuongSanPham() / soLuongRowPCCNDaChon) 
-						: ((cd.getSoLuongSanPham() + (cd.getSoLuongSanPham() % soLuongRowPCCNDaChon) + 1) / soLuongRowPCCNDaChon);
-				
-				if (!listRowUnchecked.contains(rowIndex)) {
-					modelPCCN.setValueAt(true, rowIndex, 6);
-					modelPCCN.setValueAt(soLuongSP, rowIndex, 7);
-					listBPCCN.add(getCongNhanDuocChon(rowIndex));
-				} else {
-					modelPCCN.setValueAt(false, rowIndex, 6);
-					modelPCCN.setValueAt(0, rowIndex, 7);
+			if (sumOfProducts == 0) {
+				for (Integer rowIndex : listRowPCCN) {
+					int soLuongRowPCCNDaChon = listRowPCCN.size() - countRowUnchecked;
+					int soLuongSP = (soLuongRowPCCNDaChon) % 2 == 0 
+							? (cd.getSoLuongSanPham() / soLuongRowPCCNDaChon) 
+							: ((cd.getSoLuongSanPham() + (cd.getSoLuongSanPham() % soLuongRowPCCNDaChon) + 1) / soLuongRowPCCNDaChon);
+					
+					if (!listRowUnchecked.contains(rowIndex)) {
+						modelPCCN.setValueAt(true, rowIndex, 6);
+						modelPCCN.setValueAt(soLuongSP, rowIndex, 7);
+						listBPCCN.add(getCongNhanDuocChon(rowIndex));
+					} else {
+						modelPCCN.setValueAt(false, rowIndex, 6);
+						modelPCCN.setValueAt(0, rowIndex, 7);
+					}
 				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Hiện tại công đoạn này đã phân công đủ số sản phẩm. Hãy chọn công đoạn khác hoặc"
+						+ " chọn nút cập nhật để phân công lại công đoạn này");
 			}
 		}
 		
@@ -387,7 +397,10 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			txtSoCN.setText(cn_DAO.getDSCongNhan().size() - bPCCN_DAO.getDSCongNhanDuocPhanCong().size() + "");
 			
 			
-			if (modelPCCNIsChanging) btnSua.setEnabled(true);
+			if (modelPCCNIsChanging) {
+				btnHoanTat.setEnabled(false);
+				btnSua.setEnabled(true);
+			}
 		}
 		
 		if (o.equals(btnSua)) {
@@ -428,7 +441,17 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		Object o = e.getSource();
 		
 		if (o.equals(tableCongDoan)) {
-				hienThiDSPCCNTrenModel();
+			hienThiDSPCCNTrenModel();
+			String maCD = tableCongDoan.getValueAt(rowCD, 1).toString();
+			ArrayList<BangPhanCongCN> listBPCCNTheoCD = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
+			
+			if (listBPCCNTheoCD.size() != 0) {
+				btnHoanTat.setEnabled(false);
+				btnSua.setEnabled(true);
+			} else {
+				btnHoanTat.setEnabled(true);
+				btnSua.setEnabled(false);
+			}
 		}
 		
 		if (o.equals(tablePCCN)) {
@@ -439,7 +462,6 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 				modelPCCN.setValueAt(false, rowPCCN, 6);
 				listRowUnchecked.add(rowPCCN);
 				listRowPCCN.remove(listRowPCCN.indexOf(rowPCCN));
-				System.out.println(rowPCCN);
 			} else {
 				modelPCCN.setValueAt(true, rowPCCN, 6);
 				listRowPCCN.add(rowPCCN);

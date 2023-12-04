@@ -1,28 +1,19 @@
 package gUI;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,12 +22,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-
-import com.toedter.calendar.JDateChooser;
 
 import connectDB.ConnectDB;
 import dao.HopDong_DAO;
@@ -48,19 +36,16 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 
 	private JPanel contentPane;
 	private JTextField txtTenSanPham;
-	private JTextField txtTimKiem;
-	private JButton btnTimKiem;
 	private JButton btnThem;
 	private JButton btnXoa;
 	private JButton btnSua;
 	private JButton btnXacNhan;
-	private JCheckBox chkHDVaTT;
 	private JTable tblDSSanPham;
 	private DefaultTableModel modelDSSanPham;
-	private DefaultComboBoxModel<String> modelCBOHopDong;
 	private DefaultComboBoxModel<String> modelCBOTrangThai;
+	private DefaultTableModel modelTblHopDong;
+	private JTable tblHopDong;
 	private JComboBox<String> cboTrangThai;
-	private JComboBox<String> cboHopDong;
 	private JTextField txtSoLuong;
 	
 	private HopDong_DAO hd_DAO;
@@ -118,7 +103,7 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		JPanel pnlThongTin = new JPanel();
 		pnlThongTin.setBorder(new TitledBorder(null, "Th\u00F4ng Tin", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlThongTin.setBackground(new Color(240, 248, 255));
-		pnlThongTin.setBounds(10, 10, 450, 150);
+		pnlThongTin.setBounds(348, 10, 450, 150);
 		pnlSP.add(pnlThongTin);
 		pnlThongTin.setLayout(null);
 		
@@ -167,34 +152,28 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		btnThem = new JButton("Thêm");
 		btnThem.setBackground(new Color(255, 255, 255));
 		btnThem.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnThem.setBounds(30, 50, 170, 40);
+		btnThem.setBounds(30, 36, 170, 40);
 		btnThem.setIcon(new ImageIcon("img\\icons\\icons8-add-20.png"));
 		pnlChucNang.add(btnThem);
 		
 		btnXoa = new JButton("Xoá");
 		btnXoa.setBackground(new Color(255, 255, 255));
 		btnXoa.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnXoa.setBounds(250, 50, 170, 40);
+		btnXoa.setBounds(250, 36, 170, 40);
 		btnXoa.setIcon(new ImageIcon("img\\icons\\icons8-delete-20.png"));
 		pnlChucNang.add(btnXoa);
 		
 		btnSua = new JButton("Sửa");
 		btnSua.setBackground(new Color(255, 255, 255));
 		btnSua.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnSua.setBounds(250, 100, 170, 40);
+		btnSua.setBounds(250, 86, 170, 40);
 		btnSua.setIcon(new ImageIcon("img\\icons\\icons8-pencil-20.png"));
 		pnlChucNang.add(btnSua);
-		
-		chkHDVaTT = new JCheckBox("Lọc theo hợp đồng và trạng thái");
-		chkHDVaTT.setBackground(new Color(240, 248, 255));
-		chkHDVaTT.setBounds(30, 20, 250, 23);
-		pnlChucNang.add(chkHDVaTT);
-		chkHDVaTT.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		btnXacNhan = new JButton("Đã xong");
 		btnXacNhan.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnXacNhan.setBackground(Color.WHITE);
-		btnXacNhan.setBounds(30, 100, 170, 40);
+		btnXacNhan.setBounds(30, 86, 170, 40);
 		btnXacNhan.setIcon(new ImageIcon("img\\icons\\icons8-check-20.png"));
 		pnlChucNang.add(btnXacNhan);
 		
@@ -213,91 +192,88 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		scrDSSanPham.setBounds(10, 161, 1248, 460);
 		pnlSP.add(scrDSSanPham);
 		
-		JPanel pnlLoc = new JPanel();
-		pnlLoc.setBorder(new TitledBorder(null, "B\u1ED9 L\u1ECDc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		pnlLoc.setBackground(new Color(240, 248, 255));
-		pnlLoc.setBounds(459, 10, 340, 149);
-		pnlSP.add(pnlLoc);
-		pnlLoc.setLayout(null);
+		JPanel pnlHopDong = new JPanel();
+		pnlHopDong.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "H\u1EE3p \u0110\u1ED3ng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnlHopDong.setBackground(new Color(240, 248, 255));
+		pnlHopDong.setBounds(10, 10, 340, 150);
+		pnlSP.add(pnlHopDong);
+		pnlHopDong.setLayout(null);
 		
-		modelCBOHopDong = new DefaultComboBoxModel<String>();
-		cboHopDong = new JComboBox<String>(modelCBOHopDong);
-		cboHopDong.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cboHopDong.setBounds(110, 20, 220, 30);
+		String headerHopDong[] = {"Mã hợp đồng", "Ngày ký"};
+		modelTblHopDong = new DefaultTableModel(headerHopDong, 0);
+		tblHopDong = new JTable(modelTblHopDong);
+		tblHopDong.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		tblHopDong.setRowHeight(20);
 		
-		for (HopDong hd : hd_DAO.getDSHopDong()) {
-			modelCBOHopDong.addElement(hd.getMaHopDong());
-		}
+		hienThiDSHopDongTheoTT(false);
 		
-		pnlLoc.add(cboHopDong);
-		
-		JLabel lblHopDong = new JLabel("Hợp đồng:");
-		lblHopDong.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblHopDong.setBounds(10, 20, 100, 30);
-		pnlLoc.add(lblHopDong);
+		JScrollPane scrHopDong = new JScrollPane(tblHopDong);
+		scrHopDong.setLocation(10, 50);
+		scrHopDong.setSize(320, 90);
+		pnlHopDong.add(scrHopDong);
 		
 		JLabel lblTrangThai = new JLabel("Trạng Thái:");
-		lblTrangThai.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTrangThai.setBounds(10, 60, 100, 30);
-		pnlLoc.add(lblTrangThai);
+		lblTrangThai.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTrangThai.setBounds(10, 14, 100, 26);
+		pnlHopDong.add(lblTrangThai);
 		
 		modelCBOTrangThai = new DefaultComboBoxModel<String>();
 		cboTrangThai = new JComboBox<String>(modelCBOTrangThai);
-		cboTrangThai.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		cboTrangThai.setBounds(110, 60, 220, 30);
+		cboTrangThai.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cboTrangThai.setBounds(110, 14, 220, 26);
 		modelCBOTrangThai.addElement("Hiển thị tất cả");
 		modelCBOTrangThai.addElement("Đã hoàn thành");
 		modelCBOTrangThai.addElement("Chưa hoàn thành");
-		pnlLoc.add(cboTrangThai);
+		cboTrangThai.setSelectedIndex(2);
 		
-		txtTimKiem = new JTextField("Nhập tên sản phẩm");
-		txtTimKiem.setForeground(new Color(119, 136, 153));
-		txtTimKiem.setFont(new Font("Tahoma", Font.BOLD, 15));
-		txtTimKiem.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (txtTimKiem.getText().equals("Nhập tên đối tác")) {
-					txtTimKiem.setForeground(Color.black);
-					txtTimKiem.setText("");
-				}
-			}
-		});
-		txtTimKiem.setBounds(10, 100, 290, 30);
-		pnlLoc.add(txtTimKiem);
-		txtTimKiem.setColumns(10);
-		
-		btnTimKiem = new JButton("");
-		btnTimKiem.setBackground(new Color(255, 255, 255));
-		btnTimKiem.setBounds(300, 100, 30, 30);
-		btnTimKiem.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
-		pnlLoc.add(btnTimKiem);
+		pnlHopDong.add(cboTrangThai);
 		
 		btnThem.addActionListener(this);
 		btnXacNhan.addActionListener(this);
 	    btnXoa.addActionListener(this);
 	    btnSua.addActionListener(this);
-	    btnTimKiem.addActionListener(this);
 	    tblDSSanPham.addMouseListener(this);
 	    cboTrangThai.addActionListener(this);
-	    cboHopDong.addActionListener(this);
-		chkHDVaTT.addActionListener(this);
+	    tblHopDong.addMouseListener(this);
 		
 		return pnlSP;
 	}
 	
-	private void layDSSanPhamTuDB() {
-		sp_DAO = new SanPham_DAO();
+	private void hienThiDSHopDong() {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		hd_DAO = new HopDong_DAO();
-		ArrayList<SanPham> listSP = sp_DAO.getDSSanPham();
-		modelDSSanPham.setRowCount(0);
+		ArrayList<HopDong> listHD = hd_DAO.getDSHopDong();
 		
-		for (SanPham sanPham : listSP) {
-			HopDong hd = hd_DAO.getMotHopDong(sanPham.getHopDong().getMaHopDong());
-			modelDSSanPham.addRow(new Object[] {hd.getMaHopDong(), sanPham.getMaSP(), sanPham.getTenSP(), sanPham.getSoLuong(),
-					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
+		modelTblHopDong.setRowCount(0);
+		for (HopDong hopDong : listHD) {
+			modelTblHopDong.addRow(new Object[] {hopDong.getMaHopDong(), hopDong.getNgayKy().format(dtf)});
 		}
 	}
 	
+	private void hienThiDSHopDongTheoTT(boolean trangThai) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		hd_DAO = new HopDong_DAO();
+		ArrayList<HopDong> listHD = hd_DAO.getListHDTheoTrangThai(trangThai);
+		
+		modelTblHopDong.setRowCount(0);
+		for (HopDong hopDong : listHD) {
+			modelTblHopDong.addRow(new Object[] {hopDong.getMaHopDong(), hopDong.getNgayKy().format(dtf)});
+		}
+	}
+
+//	private void layDSSanPhamTuDB() {
+//		sp_DAO = new SanPham_DAO();
+//		hd_DAO = new HopDong_DAO();
+//		ArrayList<SanPham> listSP = sp_DAO.getDSSanPham();
+//		modelDSSanPham.setRowCount(0);
+//		
+//		for (SanPham sanPham : listSP) {
+//			HopDong hd = hd_DAO.getMotHopDong(sanPham.getHopDong().getMaHopDong());
+//			modelDSSanPham.addRow(new Object[] {hd.getMaHopDong(), sanPham.getMaSP(), sanPham.getTenSP(), sanPham.getSoLuong(),
+//					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
+//		}
+//	}
+//	
 	private void layDSSanPhamTheoHopDongTuDB(String maHD) {
 		sp_DAO = new SanPham_DAO();
 		hd_DAO = new HopDong_DAO();
@@ -311,31 +287,31 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		}
 	}
 	
-	private void layDSSanPhamTheoTrangThaiTuDB(boolean trangThai) {
-		sp_DAO = new SanPham_DAO();
-		hd_DAO = new HopDong_DAO();
-		ArrayList<SanPham> listSP = sp_DAO.getDSSanPhamTheoTrangThai(trangThai);
-		modelDSSanPham.setRowCount(0);
-		
-		for (SanPham sanPham : listSP) {
-			HopDong hd = hd_DAO.getMotHopDong(sanPham.getHopDong().getMaHopDong());
-			modelDSSanPham.addRow(new Object[] {hd.getMaHopDong(), sanPham.getMaSP(), sanPham.getTenSP(), sanPham.getSoLuong(),
-					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
-		}
-	}
-	
-	private void layDSSanPhamTheoHDvaTTTuDB(String maHD, boolean trangThai) {
-		sp_DAO = new SanPham_DAO();
-		hd_DAO = new HopDong_DAO();
-		ArrayList<SanPham> listSP = sp_DAO.getDSSanPhamTheoHDvaTT(maHD, trangThai);
-		modelDSSanPham.setRowCount(0);
-		
-		for (SanPham sanPham : listSP) {
-			HopDong hd = hd_DAO.getMotHopDong(maHD);
-			modelDSSanPham.addRow(new Object[] {hd.getMaHopDong(), sanPham.getMaSP(), sanPham.getTenSP(), sanPham.getSoLuong(),
-					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
-		}
-	}
+//	private void layDSSanPhamTheoTrangThaiTuDB(boolean trangThai) {
+//		sp_DAO = new SanPham_DAO();
+//		hd_DAO = new HopDong_DAO();
+//		ArrayList<SanPham> listSP = sp_DAO.getDSSanPhamTheoTrangThai(trangThai);
+//		modelDSSanPham.setRowCount(0);
+//		
+//		for (SanPham sanPham : listSP) {
+//			HopDong hd = hd_DAO.getMotHopDong(sanPham.getHopDong().getMaHopDong());
+//			modelDSSanPham.addRow(new Object[] {hd.getMaHopDong(), sanPham.getMaSP(), sanPham.getTenSP(), sanPham.getSoLuong(),
+//					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
+//		}
+//	}
+//	
+//	private void layDSSanPhamTheoHDvaTTTuDB(String maHD, boolean trangThai) {
+//		sp_DAO = new SanPham_DAO();
+//		hd_DAO = new HopDong_DAO();
+//		ArrayList<SanPham> listSP = sp_DAO.getDSSanPhamTheoHDvaTT(maHD, trangThai);
+//		modelDSSanPham.setRowCount(0);
+//		
+//		for (SanPham sanPham : listSP) {
+//			HopDong hd = hd_DAO.getMotHopDong(maHD);
+//			modelDSSanPham.addRow(new Object[] {hd.getMaHopDong(), sanPham.getMaSP(), sanPham.getTenSP(), sanPham.getSoLuong(),
+//					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
+//		}
+//	}
 	
 	private boolean validation() {
 		String tenSanPham = txtTenSanPham.getText().trim();
@@ -370,13 +346,28 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object o = e.getSource();
+		
 		if (o.equals(tblDSSanPham)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			int row = tblDSSanPham.getSelectedRow();
 			
-			txtTenDoiTac.setText(hd_DAO.getMotHopDong(tblDSSanPham.getValueAt(row, 0).toString()).getTenDoiTac());
 			txtTenSanPham.setText(modelDSSanPham.getValueAt(row, 2).toString());
 			txtSoLuong.setText(tblDSSanPham.getValueAt(row, 3).toString());
+		}
+		
+		if (o.equals(tblHopDong)) {
+			int rowHopDong = tblHopDong.getSelectedRow();
+			txtTenDoiTac.setText(hd_DAO.getMotHopDong(tblHopDong.getValueAt(rowHopDong, 0).toString()).getTenDoiTac());
+			String maHD = modelTblHopDong.getValueAt(rowHopDong, 0).toString();
+			
+			ArrayList<SanPham> listSPTheoHD = sp_DAO.getDSSanPhamTheoHopDong(maHD);
+
+			modelDSSanPham.setRowCount(0);
+			
+			for (SanPham sp : listSPTheoHD) {
+				modelDSSanPham.addRow(new Object[] {sp.getHopDong().getMaHopDong(), sp.getMaSP(), sp.getTenSP(),
+						sp.getSoLuong(), sp.getSoLuongCongDoan(), sp.getHopDong().getNgayThanhLyHopDong(),
+						sp.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
+			}
 		}
 	}
 
@@ -415,7 +406,9 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 			
 			if (validation()) {
 				int soLuong = Integer.parseInt(soLuong_String);
-				String maHD = cboHopDong.getSelectedItem().toString();
+				int rowHopDong = tblHopDong.getSelectedRow();
+				
+				String maHD = modelTblHopDong.getValueAt(rowHopDong, 0).toString();
 				String maSP = taoMaSP(maHD);
 				HopDong hd = hd_DAO.getMotHopDong(maHD);
 				
@@ -500,35 +493,12 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		if (o.equals(cboTrangThai)) {
 			switch (cboTrangThai.getSelectedItem().toString()) {
 			
-			case "Hiển thị tất cả" -> layDSSanPhamTuDB();
-			case "Chưa thanh lí" -> layDSSanPhamTheoTrangThaiTuDB(false);
-			case "Đã thanh lí" -> layDSSanPhamTheoTrangThaiTuDB(true);
+			case "Hiển thị tất cả" -> hienThiDSHopDong();
+			case "Đã hoàn thành" -> hienThiDSHopDongTheoTT(true);
+			case "Chưa hoàn thành" -> hienThiDSHopDongTheoTT(false);
 			
 			default ->
 			throw new IllegalArgumentException("Unexpected value: " + cboTrangThai.getSelectedItem());
-			}
-		}
-		
-		if (o.equals(cboHopDong)) {
-			hd_DAO = new HopDong_DAO();
-			String maHD = cboHopDong.getSelectedItem().toString();
-			HopDong hd = hd_DAO.getMotHopDong(maHD);
-			txtTenDoiTac.setText(hd.getTenDoiTac());
-			layDSSanPhamTheoHopDongTuDB(maHD);
-		}
-		
-		if (o.equals(chkHDVaTT)) {
-			String maHD = cboHopDong.getSelectedItem().toString();
-			String trangThai = cboTrangThai.getSelectedItem().toString();
-			
-			switch (trangThai) {
-			
-			case "Hiển thị tất cả" -> layDSSanPhamTheoHopDongTuDB(maHD);
-			case "Chưa thanh lí" -> layDSSanPhamTheoHDvaTTTuDB(maHD, false);
-			case "Đã thanh lí" -> layDSSanPhamTheoHDvaTTTuDB(maHD, true);
-			
-			default ->
-			throw new IllegalArgumentException("Unexpected value: " + trangThai);
 			}
 		}
 	}

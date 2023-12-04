@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -339,8 +340,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 	private void layDSSanPhamTuDB() {
 		sp_DAO = new SanPham_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		modelSanPham.setRowCount(0);
-		for (SanPham sp : sp_DAO.getDSSanPhamTheoTrangThai(true)) {
+		
+		for (SanPham sp : sp_DAO.getDSSanPhamTheoTrangThai(false)) {
 			HopDong hd = hd_DAO.getMotHopDong(sp.getHopDong().getMaHopDong());
 			modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getSoLuong(), sp.getSoLuongCongDoan(),
 					hd.getNgayThanhLyHopDong().format(dtf)});
@@ -349,11 +352,14 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 	
 	private void layDSCongDoanTuDBTheoMaSP(String maSP) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		
 		modelCongDoan.setRowCount(0);
+		
 		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
 			SanPham sp = sp_DAO.getMotSanPham(maSP);
 			modelCongDoan.addRow(new Object[] {sp.getTenSP(), cd.getMaCongDoan(), cd.getTenCongDoan(),
-					cd.getSoLuongSanPham(), cd.getSoLuongCongNhanDuKien(), cd.getGiaTien(), 
+					cd.getSoLuongSanPham(), cd.getSoLuongCongNhanDuKien(), decimalFormat.format(cd.getGiaTien()), 
 					cd.isTrangThai() ? "Đã xong" : "Chưa xong", cd.getNgayBatDau().format(dtf), 
 					cd.getNgayKetThucDuKien().format(dtf), cd.getCongDoanTienQuyet()});
 		}
