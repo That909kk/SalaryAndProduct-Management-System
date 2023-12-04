@@ -287,7 +287,9 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		tablePCCN.getSelectionModel().addListSelectionListener(this);
 		return pnlPCCD;
 	}
-
+	/**
+	 * Phương thức hiển thị danh sách công đoạn từ database
+	 */
 	private void layDSCongDoanVaSanPhamTuDB() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		sp_DAO = new SanPham_DAO();
@@ -304,7 +306,11 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			}
 		}
 	}
-	
+	/**
+	 * Phương thức hiển thị danh sách phân công công nhân từ database theo tên xưởng
+	 * @param xuong
+	 * @param maCD
+	 */
 	private void layDSPCCCongNhanTuDBTheoXuong(String xuong, String maCD) {
 		cd_DAO = new CongDoan_DAO();
 		cn_DAO = new CongNhan_DAO();
@@ -333,7 +339,6 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		
 		
 		if (o.equals(btnThem)) {
 			int countRowUnchecked = listRowUnchecked.size();
@@ -489,7 +494,11 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		// TODO Auto-generated method stub
 		
 	}
-	
+	/**
+	 * Phương thức lấy chuỗi ký tự trước ký tự trắng đầu tiên
+	 * @param input
+	 * @return String firstPart
+	 */
 	private static String layChuoiTruocKyTuTrang(String input) {
         String[] parts = input.split(" ");
         if (parts.length > 0) {
@@ -514,7 +523,9 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		BangPhanCongCN bPCCN = new BangPhanCongCN(maPCCN, true, LocalDate.now(), 0, cn, cd);
 		return bPCCN;
 	}
-	
+	/**
+	 * Phương thức hiển thị danh sách phân công công nhân trên modelTable
+	 */
 	private void hienThiDSPCCNTrenModel() {
 		listRowPCCN.clear();
 		listRowUnchecked.clear();

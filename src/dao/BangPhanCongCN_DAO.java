@@ -21,7 +21,11 @@ public class BangPhanCongCN_DAO {
 	public BangPhanCongCN_DAO() {
 		listPCCD = new ArrayList<BangPhanCongCN>();
 	}
-	
+	/**
+	 * Phương thức lấy danh sách phân công công nhân theo mã công đoạn
+	 * @param ma
+	 * @return ArrayList
+	 */
 	public ArrayList<BangPhanCongCN> getDSPhanCongCongDoanTheoMaCD(String ma) {
 		ArrayList<BangPhanCongCN> listPCCDTheoMaCD = new ArrayList<BangPhanCongCN>();
 		ConnectDB.getInstance();
@@ -56,7 +60,11 @@ public class BangPhanCongCN_DAO {
 		}
 		return listPCCDTheoMaCD;
 	}
-	
+	/**
+	 * Phương thức thêm một phân công công nhân vào database
+	 * @param bpccn
+	 * @return true nếu thêm thành công, false nếu thất bại
+	 */
 	public boolean insertPhanCongCongNhan(BangPhanCongCN bpccn) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -87,7 +95,11 @@ public class BangPhanCongCN_DAO {
 		
 		return n > 0;
 	}
-	
+	/**
+	 * Lấy danh sách công nhân được phân công ở xưởng từ database
+	 * @param ma
+	 * @return ArrayList
+	 */
 	public ArrayList<BangPhanCongCN> getDSCongNhanTheoXuongVaDuocPhanCong(String ma) {
 		ArrayList<BangPhanCongCN> listCNDuocPhanCong = new ArrayList<BangPhanCongCN>();
 		ConnectDB.getInstance();
@@ -125,7 +137,10 @@ public class BangPhanCongCN_DAO {
 		}
 		return listCNDuocPhanCong;
 	}
-	
+	/**
+	 * Phương thức lấy danh sách công nhân được phân công
+	 * @return ArrayList
+	 */
 	public ArrayList<BangPhanCongCN> getDSCongNhanDuocPhanCong() {
 		ArrayList<BangPhanCongCN> listCNTheoXuong = new ArrayList<BangPhanCongCN>();
 		ConnectDB.getInstance();
@@ -162,7 +177,11 @@ public class BangPhanCongCN_DAO {
 		}
 		return listCNTheoXuong;
 	}
-	
+	/**
+	 * Phương thức xoá toàn bộ phân công của công đoạn theo mã công đoạn
+	 * @param ma
+	 * @return true nếu xoá thành công, false nếu thất bại
+	 */
 	public boolean deleteALLPCCuaCongDoan(String ma) {
 		int n = 0;
 		
