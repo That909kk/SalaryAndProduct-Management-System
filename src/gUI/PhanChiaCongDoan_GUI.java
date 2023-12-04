@@ -336,7 +336,9 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		return pnlPCCD;
 	}
-	
+	/**
+	 * Phương thức lấy danh sách sản phẩm từ DB hiển thị lên model
+	 */
 	private void layDSSanPhamTuDB() {
 		sp_DAO = new SanPham_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -349,7 +351,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 					hd.getNgayThanhLyHopDong().format(dtf)});
 		}
 	}
-	
+	/**
+	 * Phương thức lấy danh sách công đoạn theo mã sản phẩm
+	 * @param maSP
+	 */
 	private void layDSCongDoanTuDBTheoMaSP(String maSP) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
@@ -398,7 +403,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			btnSua.setEnabled(true);
 		}
 	}
-
+	/**
+	 * Phương thức cập nhật combobox công đoạn tiên quyết khi có một công đoạn được thêm vào sản phẩm
+	 * @param maSP
+	 */
 	private void capNhatCBOTienQuyet(String maSP) {
 		modelCBOTienQuyet.removeAllElements();
 		modelCBOTienQuyet.addElement(" ");
@@ -491,7 +499,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			btnHoanTat.setEnabled(false);
 		}
 	}
-	
+	/**
+	 * Phương thức cập nhật số công đoạn hiện có cho sản phẩm mỗi khi thêm một công đoạn
+	 * @param maSP
+	 */
 	private void capNhatSoCongDoanChoSP(String maSP) {
 		SanPham sp = sp_DAO.getMotSanPham(maSP);
 		sp.setSoLuongCongDoan(cd_DAO.getDSCongDoanTheoMaSP(maSP).size());
@@ -499,7 +510,11 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			layDSSanPhamTuDB();
 		}
 	}
-
+	/**
+	 * Phương thức tạo mã công đoạn dựa trên mã sản phẩm
+	 * @param maSP
+	 * @return String maCD
+	 */
 	private String taoMaCongDoan(String maSP) {
 		return maSP + (cd_DAO.getDSCongDoanTheoMaSP(maSP).size() + 1);
 	}
@@ -568,7 +583,11 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		return true;
 	}
-	
+	/**
+	 * Phương thức thông báo lỗi, khi không hợp lệ sẽ trỏ đến jtextfield không hợp lệ
+	 * @param txt
+	 * @param mess
+	 */
 	private void thongBaoLoi(JTextField txt, String mess) {
 		JOptionPane.showMessageDialog(null, mess);
 		txt.requestFocus();

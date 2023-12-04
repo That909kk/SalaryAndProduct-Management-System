@@ -20,7 +20,10 @@ public class CongDoan_DAO {
 		listCD = new ArrayList<CongDoan>();
 	}
 	
-
+	/**
+	 * Phương thức lấy danh sách công đoạn từ database
+	 * @return ArrayList<CongDoan> listCD
+	 */
 	public ArrayList<CongDoan> getDSCongDoan() {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -55,7 +58,11 @@ public class CongDoan_DAO {
 		}
 		return listCD;
 	}
-	
+	/**
+	 * Phương thức lấy danh sách công đoạn theo mã sản phẩm từ database
+	 * @param maSP
+	 * @return ArrayList<CongDoan> listCDTheoMaSP
+	 */
 	public ArrayList<CongDoan> getDSCongDoanTheoMaSP(String maSP) {
 		ArrayList<CongDoan> listCDTheoMaSP = new ArrayList<CongDoan>();
 		
@@ -93,7 +100,11 @@ public class CongDoan_DAO {
 		}
 		return listCDTheoMaSP;
 	}
-	
+	/**
+	 * Phương thức thêm một công đoạn vào database
+	 * @param cd
+	 * @return true nếu thêm công đoạn thành công, false nếu thất bại
+	 */
 	public boolean insertCongDoan(CongDoan cd) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -128,7 +139,11 @@ public class CongDoan_DAO {
 		
 		return n > 0;
 	}
-	
+	/**
+	 * Phương thức xoá một công đoạn trong database
+	 * @param cd
+	 * @return true nếu xoá công đoạn thành công, false nếu thất bại
+	 */
 	public boolean deleteCongDoan(String maCD) {
 		int n = 0;
 
@@ -154,7 +169,11 @@ public class CongDoan_DAO {
 		}
 		return n > 0;
 	}
-	
+	/**
+	 * Phương lấy một công đoạn từ mã công đoạn trong database
+	 * @param ma
+	 * @return CongDoan cd
+	 */
 	public CongDoan getMotCongDoanTheoMaCD(String ma) {
 		CongDoan cd = null;
 		ConnectDB.getInstance();

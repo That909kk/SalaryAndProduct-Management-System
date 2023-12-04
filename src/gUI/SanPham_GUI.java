@@ -27,8 +27,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import connectDB.ConnectDB;
+import dao.CongDoan_DAO;
 import dao.HopDong_DAO;
 import dao.SanPham_DAO;
+import entity.CongDoan;
 import entity.HopDong;
 import entity.SanPham;
 
@@ -50,6 +52,7 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 	
 	private HopDong_DAO hd_DAO;
 	private SanPham_DAO sp_DAO;
+	private CongDoan_DAO cd_DAO;
 	private DateTimeFormatter dtfVN = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private JTextField txtTenDoiTac;
 	/**
@@ -94,6 +97,7 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		
 		hd_DAO = new HopDong_DAO();
 		sp_DAO = new SanPham_DAO();
+		cd_DAO = new CongDoan_DAO();
 		
 		JPanel pnlSP = new JPanel();
 		pnlSP.setBackground(new Color(240, 248, 255));
@@ -238,7 +242,9 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		
 		return pnlSP;
 	}
-	
+	/**
+	 * Phương thức hiển thị danh sách hợp đồng trên model
+	 */
 	private void hienThiDSHopDong() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		hd_DAO = new HopDong_DAO();
@@ -249,7 +255,10 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 			modelTblHopDong.addRow(new Object[] {hopDong.getMaHopDong(), hopDong.getNgayKy().format(dtf)});
 		}
 	}
-	
+	/**
+	 * Phương thức hiển thị danh sách các hợp đồng theo trạng thái trên modelTable
+	 * @param trangThai
+	 */
 	private void hienThiDSHopDongTheoTT(boolean trangThai) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		hd_DAO = new HopDong_DAO();
@@ -273,7 +282,10 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 //					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
 //		}
 //	}
-//	
+	/**
+	 * Hiển thị danh sách sản phẩm theo mã hợp đồng trên modelTable
+	 * @param maHD
+	 */
 	private void layDSSanPhamTheoHopDongTuDB(String maHD) {
 		sp_DAO = new SanPham_DAO();
 		hd_DAO = new HopDong_DAO();
@@ -312,7 +324,10 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 //					sanPham.getSoLuongCongDoan(), hd.getNgayThanhLyHopDong().format(dtfVN), sanPham.isTrangThai() ? "Đã hoàn thành" : "Chưa hoàn thành"});
 //		}
 //	}
-	
+	/**
+	 * Phương thức kiểm tra dữ liệu nhập vào các JTextField
+	 * @return true nếu toàn bộ đều hợp lệ, ngược lại trả về false
+	 */
 	private boolean validation() {
 		String tenSanPham = txtTenSanPham.getText().trim();
 		String soLuong_String = txtSoLuong.getText().trim();
@@ -336,7 +351,11 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		
 		return true;
 	}
-	
+	/**
+	 * Hàm thông báo lỗi, khi nhập dữ liệu sai thì trỏ vào txt chứa chuỗi không hợp lệ
+	 * @param txt
+	 * @param mess
+	 */
 	private void thongBaoLoiNhapDuLieu(JTextField txt, String mess) {
 		JOptionPane.showMessageDialog(null, mess);
 		txt.selectAll();
@@ -424,6 +443,7 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 		
 		if (o.equals(btnXacNhan)) {
 			int row = tblDSSanPham.getSelectedRow();
+			boolean trangThaiCuaCongDoan = true;
 			
 			if (row == -1) 
 				JOptionPane.showMessageDialog(null, "Hãy chọn sản phẩm cần xác nhận đã hoàn thành");
@@ -434,10 +454,26 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 					String maSP = tblDSSanPham.getValueAt(row, 0).toString();
 					SanPham sp = sp_DAO.getMotSanPham(maSP);
 					
-					if (sp != null) {
-						sp.setTrangThai(true);
-						sp_DAO.updateSanPham(sp);
-						tblDSSanPham.setValueAt("Đã hoàn thành", row, 4);
+					ArrayList<CongDoan> listCD = cd_DAO.getDSCongDoanTheoMaSP(maSP);
+					
+					if (listCD.size() == 0) {
+						JOptionPane.showMessageDialog(null, "Sản phẩm này chưa có công đoạn");
+					} else {
+						for (CongDoan cd : listCD) {
+							if (!cd.isTrangThai()) {
+								trangThaiCuaCongDoan = false;
+							}
+						}
+						
+						if (trangThaiCuaCongDoan) {
+							if (sp != null) {
+								sp.setTrangThai(true);
+								sp_DAO.updateSanPham(sp);
+								tblDSSanPham.setValueAt("Đã hoàn thành", row, 4);
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "Sản phẩm này có công đoạn chưa hoàn thành");
+						}
 					}
 				}
 			}
@@ -502,7 +538,11 @@ public class SanPham_GUI extends JFrame implements ActionListener, MouseListener
 			}
 		}
 	}
-
+	/**
+	 * Phương thức tạo mã sản phẩm dựa trên mã hợp đồng
+	 * @param maHD
+	 * @return String maSP
+	 */
 	private String taoMaSP(String maHD) {
 		HopDong hd = hd_DAO.getMotHopDong(maHD);
 		String maCanTao = "00";
