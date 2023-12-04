@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -29,9 +30,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -53,6 +57,7 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 	private JCheckBox chkNamVaTT;
 	private JTable tblDSHopDong;
 	private DefaultTableModel modelDSHopDong;
+	private TableRowSorter<DefaultTableModel> sorterHopDong;
 	private DefaultComboBoxModel<String> modelCBONam;
 	private DefaultComboBoxModel<String> modelCBOTrangThai;
 	private JComboBox<String> cboTrangThai;
@@ -198,6 +203,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 			}
 		};
 		tblDSHopDong = new JTable(modelDSHopDong);
+		
+		sorterHopDong = new TableRowSorter<DefaultTableModel>(modelDSHopDong);
+		tblDSHopDong.setRowSorter(sorterHopDong);
+		
 		tblDSHopDong.setRowHeight(30);
 		tblDSHopDong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
@@ -429,6 +438,21 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 					JOptionPane.showMessageDialog(null, "Xoá thành công!");
 				} else {
 					JOptionPane.showMessageDialog(null, "Xoá thất bại! Không tìm thấy hợp đồng cần xoá");
+				}
+			}
+		}
+		
+		if (o.equals(btnTimKiem)) {
+			String tenDoiTac = txtTimKiem.getText().trim();
+			
+			if (tenDoiTac.length() == 0) {
+				sorterHopDong.setRowFilter(null);
+			} else {
+				try {
+					sorterHopDong.setRowFilter(RowFilter.regexFilter(tenDoiTac, 1));
+				} catch (PatternSyntaxException pse) {
+					// TODO Auto-generated catch block
+					System.out.println("Bad regex pattern");
 				}
 			}
 		}
