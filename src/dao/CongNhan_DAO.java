@@ -10,7 +10,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import connectDB.ConnectDB;
+import entity.BoPhan;
 import entity.CongNhan;
+import entity.NhanVien;
 import entity.Xuong;
 
 public class CongNhan_DAO {
@@ -97,7 +99,7 @@ public class CongNhan_DAO {
         return n > 0;
 	}
 	
-	public boolean deletCN(String maCN) {
+	public boolean deleteCN(String maCN) {
 		int n=0;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -162,6 +164,127 @@ public class CongNhan_DAO {
 			}
 		}
 		return n>0;
+	}
+	
+	public ArrayList<CongNhan> getListCNtheoXuong(String maXuong){
+		ArrayList<CongNhan> dsCN = new ArrayList<CongNhan>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "SELECT * FROM dbo.CongNhan where maXuong = ?";
+		PreparedStatement stmt = null;
+        int n = 0;
+		try {
+			stmt= con.prepareStatement(sql);
+			stmt.setString(1, maXuong);
+			ResultSet rs  = stmt.executeQuery();
+			while(rs.next()) {
+				String maCN =rs.getString("maCN");
+				CongNhan cn = new CongNhan(maCN);
+				cn.setAnhDaiDien(rs.getBytes("anhDaiDien"));
+				cn.setTen(rs.getString("ten"));
+				cn.setHo(rs.getString("ho"));
+				cn.setGioiTinh(rs.getBoolean("gioiTinh"));
+				cn.setSoDienThoai(rs.getString("soDienThoai"));
+				cn.setDiaChi(rs.getString("diaChi"));
+				cn.setcCCD(rs.getString("cCCD"));
+				cn.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+				cn.setNgayBatDauLamViec(rs.getDate("ngayBatDauLamViec").toLocalDate());
+				cn.setCaLamViec(rs.getInt("caLamViec"));
+				cn.setChuyenMon(rs.getString("chuyenMon"));
+				cn.setLuongCoBan(rs.getDouble("luongCoBan"));
+				Xuong x = new Xuong(rs.getString("maXuong"));
+				cn.setXuong(x);
+				cn.setPhuCap(rs.getFloat("phuCap"));
+				
+				dsCN.add(cn);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsCN;
+	}
+	
+	public ArrayList<CongNhan> getListCNtheoNamVaoLam(int nam){
+		ArrayList<CongNhan> dsCN = new ArrayList<CongNhan>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "SELECT * FROM dbo.CongNhan where Year(ngayBatDauLamViec) = ?";
+		PreparedStatement stmt = null;
+        int n = 0;
+		try {
+			stmt= con.prepareStatement(sql);
+			stmt.setInt(1, nam);
+			ResultSet rs  = stmt.executeQuery();
+			while(rs.next()) {
+				String maCN =rs.getString("maCN");
+				CongNhan cn = new CongNhan(maCN);
+				cn.setAnhDaiDien(rs.getBytes("anhDaiDien"));
+				cn.setTen(rs.getString("ten"));
+				cn.setHo(rs.getString("ho"));
+				cn.setGioiTinh(rs.getBoolean("gioiTinh"));
+				cn.setSoDienThoai(rs.getString("soDienThoai"));
+				cn.setDiaChi(rs.getString("diaChi"));
+				cn.setcCCD(rs.getString("cCCD"));
+				cn.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+				cn.setNgayBatDauLamViec(rs.getDate("ngayBatDauLamViec").toLocalDate());
+				cn.setCaLamViec(rs.getInt("caLamViec"));
+				cn.setChuyenMon(rs.getString("chuyenMon"));
+				cn.setLuongCoBan(rs.getDouble("luongCoBan"));
+				Xuong x = new Xuong(rs.getString("maXuong"));
+				cn.setXuong(x);
+				cn.setPhuCap(rs.getDouble("phuCap"));
+				
+				dsCN.add(cn);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsCN;
+	}
+	
+	public ArrayList<CongNhan> getListNVtheoNamXuong(int nam, String maXuong){
+		ArrayList<CongNhan> dsCN = new ArrayList<CongNhan>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "SELECT * FROM dbo.CongNhan where Year(ngayBatDauLamViec) = ? and maXuong=?";
+		PreparedStatement stmt = null;
+        int n = 0;
+		try {
+			stmt= con.prepareStatement(sql);
+			stmt.setInt(1, nam);
+			stmt.setString(2, maXuong);
+			ResultSet rs  = stmt.executeQuery();
+			while(rs.next()) {
+				String maCN =rs.getString("maCN");
+				CongNhan cn = new CongNhan(maCN);
+				cn.setAnhDaiDien(rs.getBytes("anhDaiDien"));
+				cn.setTen(rs.getString("ten"));
+				cn.setHo(rs.getString("ho"));
+				cn.setGioiTinh(rs.getBoolean("gioiTinh"));
+				cn.setSoDienThoai(rs.getString("soDienThoai"));
+				cn.setDiaChi(rs.getString("diaChi"));
+				cn.setcCCD(rs.getString("cCCD"));
+				cn.setNgaySinh(rs.getDate("ngaySinh").toLocalDate());
+				cn.setNgayBatDauLamViec(rs.getDate("ngayBatDauLamViec").toLocalDate());
+				cn.setCaLamViec(rs.getInt("caLamViec"));
+				cn.setChuyenMon(rs.getString("chuyenMon"));
+				cn.setLuongCoBan(rs.getDouble("luongCoBan"));
+				Xuong x = new Xuong(rs.getString("maXuong"));
+				cn.setXuong(x);
+				cn.setPhuCap(rs.getDouble("phuCap"));
+				
+				dsCN.add(cn);
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsCN;
 	}
 	
 	public ArrayList<CongNhan> getDSCongNhan() {

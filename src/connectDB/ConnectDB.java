@@ -32,9 +32,4 @@ public class ConnectDB {
 	public static Connection getConnection() {
 		return con;
 	}
-
-	public static void closeConnection(Connection con2) {
-		// TODO Auto-generated method stub
-		
-	}
 }
