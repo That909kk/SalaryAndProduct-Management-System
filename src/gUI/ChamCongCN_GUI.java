@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -57,7 +57,7 @@ public class ChamCongCN_GUI extends JFrame implements ListSelectionListener, Act
 	private JCheckBox chckbxSang, chckbxToi, chckbxThem;
 	private JLabel lblNgayChamCong, lblSanPhamSx, lblCaLam, lblCongDoan, lblXuong;
 	private JComboBox cboXuong, cboCongDoan, cboSP;
-	private JDateChooser dcNgayChamCong;
+	private kDatePicker dcNgayChamCong;
 	private JPanel contentPane;
 	private JFrame frame;
 	private JTextField txtGhiChu;
@@ -132,7 +132,7 @@ public class ChamCongCN_GUI extends JFrame implements ListSelectionListener, Act
 		pnlTop.setLayout(null);
 		
 		JLabel lblNgayChamCong = new JLabel("Ngày chấm công:");
-		lblNgayChamCong.setBounds(10, 18, 141, 24);
+		lblNgayChamCong.setBounds(10, 18, 150, 24);
 		pnlTop.add(lblNgayChamCong);
 		lblNgayChamCong.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
@@ -280,11 +280,11 @@ public class ChamCongCN_GUI extends JFrame implements ListSelectionListener, Act
 		pnlTop.add(txtGhiChu);
 		txtGhiChu.setColumns(10);
 		
-		dcNgayChamCong = new JDateChooser();
+		dcNgayChamCong = new kDatePicker();
 		dcNgayChamCong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		dcNgayChamCong.setBackground(new Color(240, 248, 255));
-		dcNgayChamCong.setDateFormatString("dd/MM/yyyy");
-		dcNgayChamCong.setDate(new Date());
+//		dcNgayChamCong.setDateFormatString("dd/MM/yyyy");
+//		dcNgayChamCong.setDate(new Date());
 		dcNgayChamCong.setBounds(161, 18, 199, 30);
 		pnlTop.add(dcNgayChamCong);
 
@@ -473,7 +473,8 @@ public class ChamCongCN_GUI extends JFrame implements ListSelectionListener, Act
 					ca= "Tối";
 				btnHoanTat.setEnabled(false);
 				try {
-					JOptionPane.showMessageDialog(frame, "Bạn đã chấm công thành công cho  " +String.valueOf(cboXuong.getSelectedItem()) +" ca " +ca +" ngày " +String.valueOf(lblNgayChamCong.getFullDate()) );
+					JOptionPane.showMessageDialog(frame, "Bạn đã chấm công thành công cho  " +String.valueOf(cboXuong.getSelectedItem()) +" ca " +ca +" ngày " 
+							+ String.valueOf(dcNgayChamCong.getFullDate()));
 				} catch (HeadlessException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
