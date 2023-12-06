@@ -1,31 +1,23 @@
 package gUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.regex.Pattern;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,24 +32,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-
-import com.toedter.calendar.JDayChooser;
-
-import connectDB.ConnectDB;
-import dao.BoPhan_DAO;
-import dao.CongNhan_DAO;
-import dao.NhanVien_DAO;
-import dao.Xuong_DAO;
-import entity.BoPhan;
-import entity.CongNhan;
-import entity.NhanVien;
-import entity.Xuong;
 
 import com.toedter.calendar.JDateChooser;
+
+import connectDB.ConnectDB;
+import dao.CongNhan_DAO;
+import dao.Xuong_DAO;
+import entity.CongNhan;
+import entity.Xuong;
 
 public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListener  {
 
@@ -313,7 +297,8 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 	    modelDsCN.addColumn("Ngày bắt đầu làm");
 	    modelDsCN.addColumn("Ca làm việc");
 	    modelDsCN.addColumn("Chuyên môn");
-	    modelDsCN.addColumn("Bộ phận");
+	    modelDsCN.addColumn("Xưởng");
+	    tblDsCN.setRowHeight(26);
 		JScrollPane scrollPane = new JScrollPane(tblDsCN);
 		scrollPane.setBounds(10, 240, 1246, 380);
 		pnlCN.add(scrollPane);
@@ -413,7 +398,9 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 					tenXuong = x.getTenXuong();
 				}
 			}
-	        	Object[] rowData = {cn.getMaCN(),cn.getHo(),cn.getTen(),tinhTuoi(cn),cn.getNgaySinh(),cn.getcCCD(),laGioiTinh(cn),cn.getSoDienThoai(),cn.getDiaChi(),cn.getNgayBatDauLamViec(),layCaLamViec(cn), cn.getChuyenMon(),cn.getLuongCoBan(),cn.getPhuCap(),tenXuong};
+	        	Object[] rowData = {cn.getMaCN(),cn.getHo(),cn.getTen(),tinhTuoi(cn),cn.getNgaySinh(),cn.getcCCD(),
+	        			laGioiTinh(cn),cn.getSoDienThoai(),cn.getDiaChi(),
+	        			cn.getNgayBatDauLamViec(),layCaLamViec(cn), cn.getChuyenMon(),tenXuong};
 	        	modelDsCN.addRow(rowData);
 	        }
 	}
@@ -563,12 +550,7 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 			}
 			
 			LocalDate ngaySinh=null;
-			try {
-				ngaySinh = dcNgaySinh.getFullDate().toLocalDate();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			ngaySinh = dcNgaySinh.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			if(tinhTuoiTheoNS(ngaySinh) < 18) {
 				JOptionPane.showMessageDialog(frame, "Nhân viên chưa đủ 18 tuổi");
 				return;
@@ -581,12 +563,7 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 			}
 			
 			LocalDate ngayBatDauLam = null;
-			try {
-				ngayBatDauLam = dcNgayBatDauLam.getFullDate().toLocalDate();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			ngayBatDauLam = dcNgayBatDauLam.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			if((rdbtnNam.isSelected() == false)&&(rdbtnNu.isSelected()==false)) {
 				JOptionPane.showMessageDialog( frame, "Bạn chưa chọn giới tính");
 				return;	
@@ -609,10 +586,14 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 			}else if(chkToi.isSelected()==true) {
 				caLam = 2;
 			}
+			
 			double phuCap = 500000;
+			String chuyenMon = txtChuyenMon.getText().trim();
 			String maXuong = dsXuong.get(cboXuong.getSelectedIndex()).getMaXuong();
 			Xuong xuong = new Xuong(maXuong);
-			CongNhan cn = new CongNhan(maNV, null, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, phuCap, xuong);
+			
+//			CongNhan cn = new CongNhan(maNV, null, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, phuCap, xuong);
+			CongNhan cn = new CongNhan(maNV, null, hoDem, ten, gioiTinh, ngaySinh, cccd, diaChi, sdt, "", caLam, phuCap, 2000000f, ngayBatDauLam, xuong);
 			congNhanDao.insertCN(cn);
 			dsCN = congNhanDao.getListCN();
 			clearTable();
@@ -751,12 +732,7 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 			}
 			
 			LocalDate ngaySinh=null;
-			try {
-				ngaySinh = dcNgaySinh.getFullDate().toLocalDate();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			ngaySinh = dcNgaySinh.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			if(tinhTuoiTheoNS(ngaySinh) < 18) {
 				JOptionPane.showMessageDialog(frame, "Nhân viên chưa đủ 18 tuổi");
 				return;
@@ -769,12 +745,7 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 			}
 			
 			LocalDate ngayBatDauLam = null;
-			try {
-				ngayBatDauLam = dcNgayBatDauLam.getFullDate().toLocalDate();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			ngayBatDauLam = dcNgayBatDauLam.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 			if((rdbtnNam.isSelected() == false)&&(rdbtnNu.isSelected()==false)) {
 				JOptionPane.showMessageDialog( frame, "Bạn chưa chọn giới tính");
 				return;	
@@ -797,9 +768,11 @@ public class CongNhan_GUI extends JFrame  implements MouseListener, ActionListen
 				caLam = 2;
 			}
 			
+			String chuyenMon = txtChuyenMon.getText().trim();
 			String maXuong = dsXuong.get(cboXuong.getSelectedIndex()).getMaXuong();
 			Xuong xuong = new Xuong(maXuong);
-			CongNhan cn = new CongNhan(ma, null, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, 500000, xuong);
+//			CongNhan cn = new CongNhan(ma, null, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, 500000, xuong);
+			CongNhan cn = new CongNhan(ma, null, hoDem, ten, gioiTinh, ngaySinh, cccd, diaChi, sdt, chuyenMon, caLam, 500000, 2000000, ngayBatDauLam, xuong);
 			
 			int xacNhan = JOptionPane.showConfirmDialog(frame, "Bạn có muốn sửa nhân viên có mã là " +ma+" và có tên là "+hoDem+" "+ten+" không?","Xác nhận",JOptionPane.YES_NO_OPTION);
 			if(xacNhan == JOptionPane.YES_OPTION) {
