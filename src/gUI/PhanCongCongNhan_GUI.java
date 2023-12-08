@@ -374,8 +374,6 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(tableCongDoan.getValueAt(rowCD, 1).toString());
 			
 			ArrayList<BangPhanCongCN> listTheoCD = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(tableCongDoan.getValueAt(rowCD, 1).toString());
-			System.out.println(countRowUnchecked);
-			System.out.println(listRowPCCN.size());
 			
 			for (Integer rowIndex : listRowPCCN) {
 				if (!listRowUnchecked.contains(rowIndex)) {
