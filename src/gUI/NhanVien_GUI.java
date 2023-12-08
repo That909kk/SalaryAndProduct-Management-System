@@ -11,6 +11,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -49,6 +51,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import connectDB.ConnectDB;
 import dao.BoPhan_DAO;
 import dao.NhanVien_DAO;
@@ -67,7 +71,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	private JRadioButton rdoNam, rdoNu; 
 	private DefaultComboBoxModel<String> modelBacLuong, modelHeSoLuong;
 	private JComboBox<String> cboBacLuong, cboHeSoLuong;
-	private JButton btnTimKiem, btnXemChiTiet, btnThem, btnXoa, btnSua; 
+	private JButton btnTimKiem, btnXuatDs, btnThem, btnXoa, btnSua; 
 	private DefaultComboBoxModel<String> modelNam;
 	private JComboBox<String> cboNam;
 	public DefaultTableModel modelDsNV;
@@ -80,6 +84,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	private ArrayList<BoPhan> dsBP;
 	private ArrayList<NhanVien> dsNVBP;
 	private String ma;
+	private ArrayList<String> dsTen;
 
 	
 	public static void main(String[] args) {
@@ -123,6 +128,8 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		boPhanDao = new BoPhan_DAO();
 		dsBP = boPhanDao.getdsBoPhan();
 		dsNVBP = new ArrayList<NhanVien>();
+		dsNV = nhanVienDao.getListNV();
+		dsTen = new ArrayList<String>();
 		
 		JPanel pnlNV = new JPanel();
 		pnlNV.setBounds(0, 50, 1268, 632);;
@@ -419,10 +426,13 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-            	String tatCa = String.valueOf(cboBoPhan.getSelectedItem()); 
-            	if(tatCa.equals("Tất cả")) {
+            	String tenBoPhan = String.valueOf(cboBoPhan.getSelectedItem()); 
+            	if(tenBoPhan.equals("Tất cả")) {
             		if(String.valueOf(cboNam.getSelectedItem())!= "Tất cả") {
             			dsNV = nhanVienDao.getListNVtheoNamVaoLam(Integer.valueOf((String)cboNam.getSelectedItem()));
+            			dsTen.removeAll(dsTen);
+            			dsTen = layDsTen(dsNV);
+            			AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
             			if(dsNVBP.isEmpty() == true) {						
 //							cboBoPhan.setSelectedItem("Tất cả");
 //							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
@@ -441,6 +451,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							modelDsNV.setRowCount(0);
             				return;
             			}
+            			dsTen.removeAll(dsTen);
+            			dsTen = layDsTen(dsNV);
+            			AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
             			clearTable();
                 		docDuLieuVaoTable(dsNV);
                 		return;
@@ -457,6 +470,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
             				return;
             			}
             			else {
+            				dsTen.removeAll(dsTen);
+            				dsTen = layDsTen(dsNVBP);
+                			AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
             				clearTable();
                 			docDuLieuVaoTable(dsNVBP); 		
                 			return;
@@ -473,6 +489,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							modelDsNV.setRowCount(0);
             				return;
             			}
+                    	dsTen.removeAll(dsTen);
+                    	dsTen = layDsTen(dsNVBP);
+            			AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
                     	clearTable();
                     	docDuLieuVaoTable(dsNVBP);
                 		return;
@@ -513,6 +532,41 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		btnTimKiem = new JButton("");
 		btnTimKiem.setPreferredSize(new Dimension(35,50));
 		txtTimKiem.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		
+		dsTen = layDsTen(dsNV);
+		AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
+        
+        txtTimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtTimKiem.setCaretPosition(txtTimKiem.getText().length());
+            }
+        });
+        
+        txtTimKiem.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) { 
+                    if ((txtTimKiem.getSelectionStart() == 1 && txtTimKiem.getSelectionEnd() == txtTimKiem.getText().length())||(txtTimKiem.getSelectionStart() == 0 && txtTimKiem.getSelectionEnd() == txtTimKiem.getText().length())) {
+                        txtTimKiem.setText("");
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+               
+            }
+        });
+		
+		
 		btnTimKiem.setIcon(new ImageIcon("img\\icons\\icons8-magnifying-glass-20.png"));
 		btnTimKiem.setBackground(new Color(255, 255, 255));
 		b31.add(btnTimKiem);
@@ -536,6 +590,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							modelDsNV.setRowCount(0);
             				return;
             			}
+						dsTen.removeAll(dsTen);
+						dsTen = layDsTen(dsNV);
+						AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
 						clearTable();
 						docDuLieuVaoTable(dsNV);
 						return;
@@ -550,6 +607,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
             				return;
             			}
 						else {
+							dsTen.removeAll(dsTen);
+							dsTen = layDsTen(dsNVBP);
+							AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
 							clearTable();
 							docDuLieuVaoTable(dsNVBP);
 							return;
@@ -566,6 +626,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							modelDsNV.setRowCount(0);
             				return;
             			}
+						dsTen.removeAll(dsTen);
+						dsTen = layDsTen(dsNV);
+						AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
 						clearTable();
 						docDuLieuVaoTable(dsNV);
 						return;
@@ -579,6 +642,9 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							modelDsNV.setRowCount(0);
             				return;
             			}
+		            	dsTen.removeAll(dsTen);
+		            	dsTen = layDsTen(dsNVBP);
+		        		AutoCompleteDecorator.decorate(txtTimKiem, dsTen , false);
 		            	clearTable();
 		            	docDuLieuVaoTable(dsNVBP);
 		            	return;
@@ -594,13 +660,13 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		b31.add(Box.createHorizontalStrut(20));
 		
 		b32.add(Box.createHorizontalStrut(20));
-		btnXemChiTiet = new JButton("Xem chi tiết");
-		b32.add(btnXemChiTiet);
-		btnXemChiTiet.setMaximumSize(new Dimension(140, 45));
-		btnXemChiTiet.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
-		btnXemChiTiet.setBackground(new Color(255, 255, 255));
+		btnXuatDs = new JButton("Xuất DS");
+		b32.add(btnXuatDs);
+		btnXuatDs.setMaximumSize(new Dimension(140, 45));
+		btnXuatDs.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
+		btnXuatDs.setBackground(new Color(255, 255, 255));
 		b32.add(Box.createHorizontalStrut(50));
-		btnXemChiTiet.enable(false);
+		
 		
 		btnThem = new JButton("Thêm");
 		b32.add(btnThem);
@@ -629,6 +695,8 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		String[] cols_datphong = {"Mã nhân viên", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Bậc lương", "Lương cơ bản","Hệ số lương","Phụ cấp","Bộ phận"};
         modelDsNV = new DefaultTableModel(cols_datphong, 0);
         tblDsNV = new JTable(modelDsNV);
+        tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        tblDsNV.setRowHeight(24);
         JScrollPane scrollPane = new JScrollPane(tblDsNV);
         pnCenter.add(scrollPane);
         scrollPane.setPreferredSize(new Dimension(1220,400));
@@ -695,8 +763,8 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 				for(BoPhan bp: dsBP) {
 				if(bp.getMaBoPhan().equals(nv.getBoPhan().getMaBoPhan())) {
 					tenBP = bp.getTenBoPhan();
+					}
 				}
-			}
 	        	Object[] rowData = {nv.getMaNV(),nv.getHo(),nv.getTen(),tinhTuoi(nv),nv.getNgaySinh(),nv.getcCCD(),laGioiTinh(nv),nv.getSoDienThoai(),nv.getDiaChi(),nv.getNgayBatDauLamViec(),layCaLamViec(nv),nv.getThangBacLuong(),nv.getLuongCoBan(),nv.getHeSoLuong(),nv.getPhuCap(),tenBP};
 	        	modelDsNV.addRow(rowData);
 	        }
@@ -1085,7 +1153,6 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 					if(xacNhan == JOptionPane.YES_OPTION) {
 						nhanVienDao.deleteNV(ma);
 						dsNVBP = nhanVienDao.getListNVtheoBP(dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
-						dsNV = nhanVienDao.getListNVtheoNamVaoLam(Integer.valueOf(nam));
 						if(dsNVBP.isEmpty()) {
 							modelDsNV.setRowCount(0);
 							return;
@@ -1245,10 +1312,72 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			}
 			return;	
 		}
+		if(o==btnTimKiem) {
+			String ten = txtTimKiem.getText();
+			String boPhan = String.valueOf(cboBoPhan.getSelectedItem());
+			String nam = String.valueOf(cboNam.getSelectedItem());
+			if(!ten.equals("") && !ten.equals("Nhập tên")) {		
+				if(boPhan.equals("Tất cả")){
+					clearTable();
+					for(NhanVien nv: dsNV) {
+						if(nv.getTen().equals(ten)) {
+							String tenBP="" ;
+							for(BoPhan bp: dsBP) {
+							if(bp.getMaBoPhan().equals(nv.getBoPhan().getMaBoPhan())) {
+								tenBP = bp.getTenBoPhan();
+								}
+							}
+						    Object[] rowData = {nv.getMaNV(),nv.getHo(),nv.getTen(),tinhTuoi(nv),nv.getNgaySinh(),nv.getcCCD(),laGioiTinh(nv),nv.getSoDienThoai(),nv.getDiaChi(),nv.getNgayBatDauLamViec(),layCaLamViec(nv),nv.getThangBacLuong(),nv.getLuongCoBan(),nv.getHeSoLuong(),nv.getPhuCap(),tenBP};
+						    modelDsNV.addRow(rowData);
+						}
+					}
+						
+				}
+				else {
+					clearTable();
+					for(NhanVien nv: dsNVBP) {
+						if(nv.getTen().equals(ten)) {
+							String tenBP="" ;
+							for(BoPhan bp: dsBP) {
+							if(bp.getMaBoPhan().equals(nv.getBoPhan().getMaBoPhan())) {
+								tenBP = bp.getTenBoPhan();
+							}
+						}
+					    Object[] rowData = {nv.getMaNV(),nv.getHo(),nv.getTen(),tinhTuoi(nv),nv.getNgaySinh(),nv.getcCCD(),laGioiTinh(nv),nv.getSoDienThoai(),nv.getDiaChi(),nv.getNgayBatDauLamViec(),layCaLamViec(nv),nv.getThangBacLuong(),nv.getLuongCoBan(),nv.getHeSoLuong(),nv.getPhuCap(),tenBP};
+					    modelDsNV.addRow(rowData);
+						}
+					}				
+				}
+				
+			}
+			else {
+				if(boPhan.equals("Tất cả")){
+					clearTable();
+					docDuLieuVaoTable(dsNV);
+				}
+				else {
+					clearTable();
+					docDuLieuVaoTable(dsNVBP);	
+				}
+				
+			}			
 		}
+		if(o==btnXuatDs) {
+			
+		}
+	}
 	
 	public void clearTable() {
 		modelDsNV.getDataVector().removeAllElements();
+	}
+	
+	public ArrayList<String> layDsTen(ArrayList<NhanVien> ds) {
+		ArrayList<String> dsTenNV = new ArrayList<String>();
+		for(NhanVien nv: ds) {
+			dsTenNV.add(nv.getTen());
+		}
+		return dsTenNV;		
+		
 	}
 	
 	

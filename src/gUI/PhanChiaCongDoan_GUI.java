@@ -351,9 +351,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		modelCongDoan.setRowCount(0);
 		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
 			SanPham sp = sp_DAO.getMotSanPham(maSP);
-			modelCongDoan.addRow(new Object[] {sp.getTenSP(), cd.getMaCongDoan(), cd.getTenCongDoan(),cd.getSoLuongCongNhanDuKien(),
-					cd.getSoLuongSanPham(), cd.getGiaTien(), cd.isTrangThai() ? "Đã xong" : "Chưa xong", 
-					cd.getNgayBatDau().format(dtf), cd.getNgayKetThucDuKien().format(dtf), cd.getCongDoanTienQuyet()});
+			modelCongDoan.addRow(new Object[] {sp.getTenSP(), cd.getMaCongDoan(), cd.getTenCongDoan(),
+					cd.getSoLuongSanPham(), cd.getSoLuongCongNhanDuKien(), cd.getGiaTien(), 
+					cd.isTrangThai() ? "Đã xong" : "Chưa xong", cd.getNgayBatDau().format(dtf), 
+					cd.getNgayKetThucDuKien().format(dtf), cd.getCongDoanTienQuyet()});
 		}
 	}
 

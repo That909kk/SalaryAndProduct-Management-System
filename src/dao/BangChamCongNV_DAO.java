@@ -153,5 +153,47 @@ public class BangChamCongNV_DAO {
 	}
 	
 	
+	public ArrayList<BangChamCongNV> getBangCCTheoNgayBPCa(LocalDate ngayChamCong,String maBP, int ca){
+		ArrayList<BangChamCongNV> bangCC = new ArrayList<BangChamCongNV>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "SELECT * FROM dbo.BangChamCongNhanVien JOIN NhanVien ON BangChamCongNhanVien.maNV = NhanVien.maNV\r\n"
+				+ "WHERE BangChamCongNhanVien.ngayCham = ?"
+				+ "      AND NhanVien.maBP = ?"
+				+ "      AND NhanVien.caLamViec = ?";
+		PreparedStatement stmt = null;
+		int n =0;
+		try {
+			stmt= con.prepareStatement(sql);
+			stmt.setString(1, String.valueOf(ngayChamCong));
+			stmt.setString(2, maBP);
+			stmt.setInt(3, ca);
+			ResultSet rs  = stmt.executeQuery();
+			
+			while(rs.next()) {
+				BangChamCongNV ccNV = new BangChamCongNV(rs.getString("maChamCong"));
+				ccNV.setNgayCham(rs.getDate("ngayCham").toLocalDate());
+				ccNV.setSoGioTangCa(rs.getInt("soGioTangCa"));
+				ccNV.setCaLam(rs.getInt("caLam"));
+				ccNV.setGhiChu(rs.getString("ghiChu"));
+				ccNV.setCoPhep(rs.getBoolean("coPhep"));
+				ccNV.setCoMat(rs.getBoolean("coMat"));
+				ccNV.setVangMat(rs.getBoolean("vangMat"));
+				NhanVien nv = new NhanVien(rs.getString("maNV"));
+				ccNV.setNv(nv);
+				
+				bangCC.add(ccNV);
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return bangCC;
+		
+		
+	}
+	
+	
 
 }
