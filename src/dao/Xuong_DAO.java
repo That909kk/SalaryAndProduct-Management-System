@@ -45,7 +45,7 @@ public class Xuong_DAO {
 		Xuong x = null
 				;
 		String sql = "Select * from Xuong where maXuong = ?";
-		PreparedStatement stmt;
+		PreparedStatement stmt = null;
 		try {
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, maXuong);
@@ -60,6 +60,12 @@ public class Xuong_DAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return x;
 	}

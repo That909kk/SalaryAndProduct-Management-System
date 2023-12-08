@@ -15,7 +15,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -29,15 +31,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JDateChooser;
 
 import connectDB.ConnectDB;
 import dao.HopDong_DAO;
+import dao.SanPham_DAO;
 import entity.HopDong;
+import entity.SanPham;
 
 public class HopDong_GUI extends JFrame implements ActionListener, MouseListener {
 	private JPanel contentPane;
@@ -53,12 +60,14 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 	private JCheckBox chkNamVaTT;
 	private JTable tblDSHopDong;
 	private DefaultTableModel modelDSHopDong;
+	private TableRowSorter<DefaultTableModel> sorterHopDong;
 	private DefaultComboBoxModel<String> modelCBONam;
 	private DefaultComboBoxModel<String> modelCBOTrangThai;
 	private JComboBox<String> cboTrangThai;
 	private JComboBox<String> cboNam;
 	
 	private HopDong_DAO hd_DAO;
+	private SanPham_DAO sp_DAO;
 	/**
 	 * Launch the application.
 	 */
@@ -90,7 +99,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		
 		setContentPane(contentPane);
 	}
-
+	/**
+	 * Phương thức lấy JPanel chứa giao diện của HopDong_GUI
+	 * @return
+	 */
 	public JPanel createGUI() {
 		try {
 			ConnectDB.getInstance().connect();
@@ -99,6 +111,7 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		}
 		
 		hd_DAO = new HopDong_DAO();
+		sp_DAO = new SanPham_DAO();
 		
 		JPanel pnlHD = new JPanel();
 		pnlHD.setBackground(new Color(240, 248, 255));
@@ -198,6 +211,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 			}
 		};
 		tblDSHopDong = new JTable(modelDSHopDong);
+		
+		sorterHopDong = new TableRowSorter<DefaultTableModel>(modelDSHopDong);
+		tblDSHopDong.setRowSorter(sorterHopDong);
+		
 		tblDSHopDong.setRowHeight(30);
 		tblDSHopDong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
@@ -381,9 +398,27 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 				HopDong hd = hd_DAO.getMotHopDong(maHD);
 				
 				if (hd != null) {
-					hd.setTrangThai(true);
-					hd_DAO.updateHopDong(hd);
-					tblDSHopDong.setValueAt("Đã thanh lí", row, 4);
+					boolean checkListSP = true;
+					
+					ArrayList<SanPham> listSPDaHoanThanh = sp_DAO.getDSSanPhamTheoHopDong(maHD);
+					
+					if (listSPDaHoanThanh.size() == 0) {
+						JOptionPane.showMessageDialog(null, "Hợp đồng này chưa có sản phẩm");
+					} else {
+						for (SanPham sp : listSPDaHoanThanh) {
+							if (!sp.isTrangThai()) {
+								checkListSP = false;
+							}
+						}
+						
+						if (checkListSP) {
+							hd.setTrangThai(true);
+							hd_DAO.updateHopDong(hd);
+							tblDSHopDong.setValueAt("Đã thanh lí", row, 4);
+						} else {
+							JOptionPane.showMessageDialog(null, "Hợp đồng này còn sản phẩm chưa hoàn thành");
+						}
+					}
 				}
 			}
 		}
@@ -433,6 +468,21 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 			}
 		}
 		
+		if (o.equals(btnTimKiem)) {
+			String tenDoiTac = txtTimKiem.getText().trim();
+			
+			if (tenDoiTac.length() == 0) {
+				sorterHopDong.setRowFilter(null);
+			} else {
+				try {
+					sorterHopDong.setRowFilter(RowFilter.regexFilter(tenDoiTac, 1));
+				} catch (PatternSyntaxException pse) {
+					// TODO Auto-generated catch block
+					System.out.println("Bad regex pattern");
+				}
+			}
+		}
+		
 		if (o.equals(cboTrangThai)) {
 			switch (cboTrangThai.getSelectedItem().toString()) {
 			
@@ -466,6 +516,11 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 			}
 		}
 	}
+	/**
+	 * Hàm tạo mã hợp đồng dựa trên ngày kí và số thứ tự thêm hợp đồng theo ngày kí
+	 * @param ngayKi
+	 * @return String maHopDong
+	 */
 	private String taoMaHopDong(LocalDate ngayKi) {
 		hd_DAO = new HopDong_DAO();
 		int day = ngayKi.getDayOfMonth();
@@ -498,7 +553,11 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		
 		return true;
 	}
-
+	/**
+	 * Hàm thông báo lỗi, khi nhập dữ liệu sai thì trỏ vào txt chứa chuỗi không hợp lệ
+	 * @param txt
+	 * @param mess
+	 */
 	private void thongBaoLoiNhapDuLieu(JTextField txt, String mess) {
 		JOptionPane.showMessageDialog(null, mess);
 		txt.selectAll();
@@ -511,6 +570,7 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		if (o.equals(tblDSHopDong)) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			int row = tblDSHopDong.getSelectedRow();
+			
 			txtTenDoiTac.setText((String) modelDSHopDong.getValueAt(row, 1));
 			
 			try {

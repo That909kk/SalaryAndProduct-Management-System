@@ -20,7 +20,10 @@ public class CongDoan_DAO {
 		listCD = new ArrayList<CongDoan>();
 	}
 	
-
+	/**
+	 * Phương thức lấy danh sách công đoạn từ database
+	 * @return ArrayList<CongDoan> listCD
+	 */
 	public ArrayList<CongDoan> getDSCongDoan() {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -35,8 +38,8 @@ public class CongDoan_DAO {
 			while (rs.next()) {
 				String maCD = rs.getString(1);
 				String tenCD = rs.getString(2);
-				int soLuong = rs.getInt(3);
-				int soLuongCN = rs.getInt(4);
+				int soLuongCN = rs.getInt(3);
+				int soLuong = rs.getInt(4);
 				boolean trangThai = rs.getBoolean(5);
 				double giaTien = rs.getDouble(6);
 				LocalDate ngayBatDau = rs.getDate(7).toLocalDate();
@@ -55,7 +58,11 @@ public class CongDoan_DAO {
 		}
 		return listCD;
 	}
-	
+	/**
+	 * Phương thức lấy danh sách công đoạn theo mã sản phẩm từ database
+	 * @param maSP
+	 * @return ArrayList<CongDoan> listCDTheoMaSP
+	 */
 	public ArrayList<CongDoan> getDSCongDoanTheoMaSP(String maSP) {
 		ArrayList<CongDoan> listCDTheoMaSP = new ArrayList<CongDoan>();
 		
@@ -88,12 +95,20 @@ public class CongDoan_DAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return listCDTheoMaSP;
 	}
-	
+	/**
+	 * Phương thức thêm một công đoạn vào database
+	 * @param cd
+	 * @return true nếu thêm công đoạn thành công, false nếu thất bại
+	 */
 	public boolean insertCongDoan(CongDoan cd) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -128,7 +143,11 @@ public class CongDoan_DAO {
 		
 		return n > 0;
 	}
-	
+	/**
+	 * Phương thức xoá một công đoạn trong database
+	 * @param cd
+	 * @return true nếu xoá công đoạn thành công, false nếu thất bại
+	 */
 	public boolean deleteCongDoan(String maCD) {
 		int n = 0;
 
@@ -154,7 +173,11 @@ public class CongDoan_DAO {
 		}
 		return n > 0;
 	}
-	
+	/**
+	 * Phương lấy một công đoạn từ mã công đoạn trong database
+	 * @param ma
+	 * @return CongDoan cd
+	 */
 	public CongDoan getMotCongDoanTheoMaCD(String ma) {
 		CongDoan cd = null;
 		ConnectDB.getInstance();
@@ -191,5 +214,47 @@ public class CongDoan_DAO {
 			}
 		}
 		return cd;
+	}
+	
+	public ArrayList<CongDoan> getDSCongDoanTheoTrangThai(boolean tinhTrang) {
+		ArrayList<CongDoan> listCDTheoTT = new ArrayList<CongDoan>();
+		
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		
+		String sql = "select * from CongDoan where trangThai = ?";
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setBoolean(1, tinhTrang);
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				String maCD = rs.getString(1);
+				String tenCD = rs.getString(2);
+				int soLuongCN = rs.getInt(3);
+				int soLuong = rs.getInt(4);
+				boolean trangThai = rs.getBoolean(5);
+				double giaTien = rs.getDouble(6);
+				LocalDate ngayBatDau = rs.getDate(7).toLocalDate();
+				LocalDate ngayKetThucDuKien = rs.getDate(8).toLocalDate();
+				String maCDTienQuyet = rs.getString(9);
+				SanPham sp = new SanPham(rs.getString(10));
+				
+				CongDoan cd = new CongDoan(maCD, tenCD, soLuong, soLuongCN, giaTien, ngayBatDau, ngayKetThucDuKien, trangThai,
+						maCDTienQuyet, sp);
+				listCDTheoTT.add(cd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listCDTheoTT;
 	}
 }

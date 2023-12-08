@@ -359,6 +359,11 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
         		repaint();
         	}
         }; 
+       tblDsNV.setRowHeight(26);
+       tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        	
+        
+      
         
         tblDsNV.getModel().addTableModelListener(new TableModelListener() {
             @Override

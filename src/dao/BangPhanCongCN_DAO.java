@@ -21,7 +21,11 @@ public class BangPhanCongCN_DAO {
 	public BangPhanCongCN_DAO() {
 		listPCCD = new ArrayList<BangPhanCongCN>();
 	}
-	
+	/**
+	 * Phương thức lấy danh sách phân công công nhân theo mã công đoạn
+	 * @param ma
+	 * @return ArrayList
+	 */
 	public ArrayList<BangPhanCongCN> getDSPhanCongCongDoanTheoMaCD(String ma) {
 		ArrayList<BangPhanCongCN> listPCCDTheoMaCD = new ArrayList<BangPhanCongCN>();
 		ConnectDB.getInstance();
@@ -47,10 +51,20 @@ public class BangPhanCongCN_DAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return listPCCDTheoMaCD;
 	}
-	
+	/**
+	 * Phương thức thêm một phân công công nhân vào database
+	 * @param bpccn
+	 * @return true nếu thêm thành công, false nếu thất bại
+	 */
 	public boolean insertPhanCongCongNhan(BangPhanCongCN bpccn) {
 		int n = 0;
 		ConnectDB.getInstance();
@@ -81,7 +95,11 @@ public class BangPhanCongCN_DAO {
 		
 		return n > 0;
 	}
-	
+	/**
+	 * Lấy danh sách công nhân được phân công ở xưởng từ database
+	 * @param ma
+	 * @return ArrayList
+	 */
 	public ArrayList<BangPhanCongCN> getDSCongNhanTheoXuongVaDuocPhanCong(String ma) {
 		ArrayList<BangPhanCongCN> listCNDuocPhanCong = new ArrayList<BangPhanCongCN>();
 		ConnectDB.getInstance();
@@ -118,5 +136,74 @@ public class BangPhanCongCN_DAO {
 			}
 		}
 		return listCNDuocPhanCong;
+	}
+	/**
+	 * Phương thức lấy danh sách công nhân được phân công
+	 * @return ArrayList
+	 */
+	public ArrayList<BangPhanCongCN> getDSCongNhanDuocPhanCong() {
+		ArrayList<BangPhanCongCN> listCNTheoXuong = new ArrayList<BangPhanCongCN>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "select bpccn.* from CongNhan cn join Xuong x "
+				+ "on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn "
+				+ "on cn.maCN = bpccn.maCN "
+				+ "where bpccn.maPCCN is not null";
+		PreparedStatement stmt = null;
+		try {
+			stmt = con.prepareStatement(sql);
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				String maPCCN = rs.getString(1);
+				boolean trangThai = rs.getBoolean(2);
+				LocalDate ngayPhanCong = rs.getDate(3).toLocalDate();
+				int soLuongSP = rs.getInt(4);
+				CongNhan cn = new CongNhan(rs.getString(5));
+				CongDoan cd = new CongDoan(rs.getString(6));
+				
+				BangPhanCongCN bpccn = new BangPhanCongCN(maPCCN, trangThai, ngayPhanCong, soLuongSP, cn, cd);
+				listCNTheoXuong.add(bpccn);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+			}
+		}
+		return listCNTheoXuong;
+	}
+	/**
+	 * Phương thức xoá toàn bộ phân công của công đoạn theo mã công đoạn
+	 * @param ma
+	 * @return true nếu xoá thành công, false nếu thất bại
+	 */
+	public boolean deleteALLPCCuaCongDoan(String ma) {
+		int n = 0;
+		
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "delete from BangPhanCongCN where maCD = ?";
+		
+		PreparedStatement stmt = null;
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, ma);
+			n = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return n > 0;
 	}
 }
