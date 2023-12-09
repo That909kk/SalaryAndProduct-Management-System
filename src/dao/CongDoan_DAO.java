@@ -38,8 +38,8 @@ public class CongDoan_DAO {
 			while (rs.next()) {
 				String maCD = rs.getString(1);
 				String tenCD = rs.getString(2);
-				int soLuong = rs.getInt(3);
-				int soLuongCN = rs.getInt(4);
+				int soLuongCN = rs.getInt(3);
+				int soLuong = rs.getInt(4);
 				boolean trangThai = rs.getBoolean(5);
 				double giaTien = rs.getDouble(6);
 				LocalDate ngayBatDau = rs.getDate(7).toLocalDate();
@@ -95,8 +95,12 @@ public class CongDoan_DAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return listCDTheoMaSP;
 	}
@@ -212,4 +216,45 @@ public class CongDoan_DAO {
 		return cd;
 	}
 	
+	public ArrayList<CongDoan> getDSCongDoanTheoTrangThai(boolean tinhTrang) {
+		ArrayList<CongDoan> listCDTheoTT = new ArrayList<CongDoan>();
+		
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		
+		String sql = "select * from CongDoan where trangThai = ?";
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setBoolean(1, tinhTrang);
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				String maCD = rs.getString(1);
+				String tenCD = rs.getString(2);
+				int soLuongCN = rs.getInt(3);
+				int soLuong = rs.getInt(4);
+				boolean trangThai = rs.getBoolean(5);
+				double giaTien = rs.getDouble(6);
+				LocalDate ngayBatDau = rs.getDate(7).toLocalDate();
+				LocalDate ngayKetThucDuKien = rs.getDate(8).toLocalDate();
+				String maCDTienQuyet = rs.getString(9);
+				SanPham sp = new SanPham(rs.getString(10));
+				
+				CongDoan cd = new CongDoan(maCD, tenCD, soLuong, soLuongCN, giaTien, ngayBatDau, ngayKetThucDuKien, trangThai,
+						maCDTienQuyet, sp);
+				listCDTheoTT.add(cd);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listCDTheoTT;
+	}
 }
