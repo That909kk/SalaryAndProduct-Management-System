@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -16,6 +18,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -28,6 +36,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,6 +46,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -47,10 +57,16 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.OverlayLayout;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import connectDB.ConnectDB;
@@ -71,7 +87,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	private JRadioButton rdoNam, rdoNu; 
 	private DefaultComboBoxModel<String> modelBacLuong, modelHeSoLuong;
 	private JComboBox<String> cboBacLuong, cboHeSoLuong;
-	private JButton btnTimKiem, btnXuatDs, btnThem, btnXoa, btnSua; 
+	private JButton btnTimKiem, btnXuatDs, btnThem, btnXoa, btnSua,btnThemAnh; 
 	private DefaultComboBoxModel<String> modelNam;
 	private JComboBox<String> cboNam;
 	public DefaultTableModel modelDsNV;
@@ -335,10 +351,42 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	    
 	    lblHeSoLuong = new JLabel("Hệ số lương");
 	    lblHeSoLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
-	    lblAvt = new JLabel("\\Hình ảnh\\");
+	    
+	    JPanel overlayPanel = new JPanel();
+        overlayPanel.setLayout(new OverlayLayout(overlayPanel));
+        overlayPanel.setPreferredSize(new Dimension(80,90));
+
+	    lblAvt = new JLabel("");
 	    lblAvt.setPreferredSize(new Dimension(50, 110));
-	    b2.add(lblAvt);
-	    b2.add(Box.createVerticalStrut(5));
+	    lblAvt.setMaximumSize(new Dimension(90, 100));
+	   
+
+	    btnThemAnh= new JButton("Chọn ảnh");        
+        overlayPanel.add(lblAvt);
+        overlayPanel.add(btnThemAnh);
+
+        btnThemAnh.setAlignmentX(0.5f);
+        btnThemAnh.setAlignmentY(0.5f);
+        btnThemAnh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "jpg", "jpeg", "png", "gif"));
+
+                int result = fileChooser.showOpenDialog(null);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    resizeAndSetImage(selectedFile, lblAvt);
+                    btnThemAnh.setVisible(false);
+                }
+            }
+        }); 
+	    
+
+	    		 
+	    
+	    b2.add(overlayPanel);
 	    
 	    lblBacLuong = new JLabel("Bậc lương");
 	    lblBacLuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -389,10 +437,11 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	    b21.add(cboBacLuong);
 	    b2.add(b21);
 	    b2.add(Box.createVerticalStrut(10));
-	    
+	    b21.setPreferredSize(new Dimension(50,25));
 	    
 	    b22.add(lblHeSoLuong);
 	    b22.add(Box.createHorizontalStrut(12));
+	    b22.setPreferredSize(new Dimension(50,25));
 	    
 	    modelHeSoLuong = new DefaultComboBoxModel<String>();
 	    cboHeSoLuong = new JComboBox<String>(modelHeSoLuong);
@@ -507,6 +556,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	    b23.add(lblBoPhan);
 	    b23.add(Box.createHorizontalStrut(15));
 	    b23.add(cboBoPhan);
+	    b23.setPreferredSize(new Dimension(50,25));
 	    b2.add(b23);
 	    
 	    b31.add(Box.createHorizontalStrut(20));
@@ -692,8 +742,8 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		
 		pnCenter = new JPanel();
 		pnlNV.add(pnCenter, BorderLayout.CENTER);
-		String[] cols_datphong = {"Mã nhân viên", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Bậc lương", "Lương cơ bản","Hệ số lương","Phụ cấp","Bộ phận"};
-        modelDsNV = new DefaultTableModel(cols_datphong, 0);
+		String[] cols_nhanVien = {"Mã nhân viên", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Bậc lương", "Lương cơ bản","Hệ số lương","Phụ cấp","Bộ phận"};
+        modelDsNV = new DefaultTableModel(cols_nhanVien, 0);
         tblDsNV = new JTable(modelDsNV);
         tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
         tblDsNV.setRowHeight(24);
@@ -711,6 +761,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
         btnXoa.addActionListener(this);
         btnSua.addActionListener(this);
         btnTimKiem.addActionListener(this);
+        btnXuatDs.addActionListener(this);
         
         
         JPopupMenu popupMenu = new JPopupMenu();
@@ -886,6 +937,16 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 							NhanVien nv = dsNVBP.get(row);
 							ma = nv.getMaNV();
 							txtTen.setText(nv.getTen());
+							if(nv.getAnhDaiDien()!=null) {
+								lblAvt.setIcon(convertByteArrayToImageIcon(nv.getAnhDaiDien()));
+								lblAvt.setAlignmentX(0.45f);
+								btnThemAnh.setVisible(false);
+							}else {
+								lblAvt.setText("");
+								lblAvt.setIcon(null);
+								btnThemAnh.setVisible(true);
+								
+							}
 							txtHoDem.setText(nv.getHo());
 							txtSDT.setText(nv.getSoDienThoai());
 							txtDiaChi.setText(nv.getDiaChi());
@@ -920,6 +981,17 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			if(row!= -1) {
 				NhanVien nv = dsNV.get(row);
 				ma = nv.getMaNV();
+				if(nv.getAnhDaiDien()!=null) {
+					lblAvt.setIcon(convertByteArrayToImageIcon(nv.getAnhDaiDien()));
+					lblAvt.setAlignmentX(0.45f);
+					btnThemAnh.setVisible(false);
+				}else {
+					lblAvt.setText("");
+					lblAvt.setIcon(null);
+					btnThemAnh.setVisible(true);
+					
+				}
+				
 				txtTen.setText(nv.getTen());
 				txtHoDem.setText(nv.getHo());
 				txtSDT.setText(nv.getSoDienThoai());
@@ -983,6 +1055,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		if(o==btnThem) {
 			cboNam.setSelectedItem("Tất cả");
 			String ten = txtTen.getText();
+			byte[] avt = convertImageIconToByteArray((ImageIcon) lblAvt.getIcon()) ;
 			String regexTen = "^[A-Z]";
 			if(ten.equals("")) {
 				JOptionPane.showMessageDialog( frame, "Không được để trống tên");
@@ -1099,12 +1172,24 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			double heSoLuong = Double.valueOf((String) cboHeSoLuong.getSelectedItem());
 			String maBoPhan = dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan();
 			BoPhan boPhan = new BoPhan(maBoPhan);
-			NhanVien nv = new NhanVien(maNV, null, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, luongCB, bacLuong, heSoLuong, phuCap, boPhan);
-			nhanVienDao.insertNV(nv);
-			dsNV = nhanVienDao.getListNV();
-			clearTable();
-			dsNVBP = nhanVienDao.getListNVtheoBP(dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
-			docDuLieuVaoTable(dsNVBP);
+			NhanVien nv = new NhanVien(maNV, avt, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, luongCB, bacLuong, heSoLuong, phuCap, boPhan);
+			try {
+				if(JOptionPane.showConfirmDialog(frame, "Bạn có muốn thêm nhân viên có mã là "+maNV+" và tên là "+hoDem+" "+ten+" không?","Xác nhận",JOptionPane.YES_NO_CANCEL_OPTION)==JOptionPane.YES_OPTION){
+					nhanVienDao.insertNV(nv);
+					dsNV = nhanVienDao.getListNV();
+					clearTable();
+					dsNVBP = nhanVienDao.getListNVtheoBP(dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
+					docDuLieuVaoTable(dsNVBP);
+					JOptionPane.showMessageDialog(frame, "Bạn đã thêm thành công nhân viên có mã là "+maNV,"Thông báo",1);
+				}else {
+					JOptionPane.showMessageDialog(frame, "Bạn đã hủy thêm nhân viên!","Thông báo",0);
+				}
+				
+			}catch (Exception e1) {
+				// TODO: handle exception
+				e1.printStackTrace();
+			}
+			
 				
 				
 		}
@@ -1193,7 +1278,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 				return;	
 				
 			}
-			
+			byte[] avt = convertImageIconToByteArray((ImageIcon) lblAvt.getIcon()) ;
 			String hoDem = txtHoDem.getText();
 			String regexHoDem = "^(\\p{Lu}\\p{L}*(\\s|$))+";
 	        Pattern patternHoDem = Pattern.compile(regexHoDem);
@@ -1298,7 +1383,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			double heSoLuong = Double.valueOf((String) cboHeSoLuong.getSelectedItem());
 			String maBoPhan = dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan();
 			BoPhan boPhan = new BoPhan(maBoPhan);
-			NhanVien nv = new NhanVien(ma, null, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, luongCB, bacLuong, heSoLuong, 500000, boPhan);
+			NhanVien nv = new NhanVien(ma, avt, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, luongCB, bacLuong, heSoLuong, 500000, boPhan);
 			
 			int xacNhan = JOptionPane.showConfirmDialog(frame, "Bạn có muốn sửa nhân viên có mã là " +ma+" và có tên là "+hoDem+" "+ten+" không?","Xác nhận",JOptionPane.YES_NO_OPTION);
 			if(xacNhan == JOptionPane.YES_OPTION) {
@@ -1362,14 +1447,88 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 				
 			}			
 		}
-		if(o==btnXuatDs) {
-			
-		}
+		 if (o == btnXuatDs) {
+			 try {
+				    XSSFWorkbook workBook = new XSSFWorkbook();
+				    XSSFSheet sheet = workBook.createSheet();
+
+				    XSSFRow headerRow = sheet.createRow(0);
+				    for (int i = 0; i < tblDsNV.getColumnCount(); i++) {
+				        headerRow.createCell(i, CellType.STRING).setCellValue(tblDsNV.getColumnName(i));
+				    }
+		
+				    for (int i = 0; i < tblDsNV.getRowCount(); i++) {
+				        XSSFRow row = sheet.createRow(i + 1);
+				        for (int j = 0; j < tblDsNV.getColumnCount(); j++) {
+				            Object value = tblDsNV.getValueAt(i, j);
+				            if (value != null) {
+				                if (value instanceof Number) {
+				                    row.createCell(j, CellType.NUMERIC).setCellValue(((Number) value).doubleValue());
+				                } else {
+				                    row.createCell(j, CellType.STRING).setCellValue(value.toString());
+				                }
+				            }
+				        }
+				    }
+
+				    JFileChooser fileChooser = new JFileChooser();
+				    fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+				    fileChooser.setFileFilter(new FileNameExtensionFilter("Tệp Excel (*.xlsx)", "xlsx"));
+				    int returnValue = fileChooser.showSaveDialog(null);
+
+				    if (returnValue == JFileChooser.APPROVE_OPTION) {
+				        File selectedFile = fileChooser.getSelectedFile();
+				        String filePath = selectedFile.getAbsolutePath();
+
+				        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+				            workBook.write(fos);
+				            JOptionPane.showMessageDialog(frame, "In thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+				        } catch (IOException ex) {
+				            ex.printStackTrace();
+				        }
+				    }
+				} catch (Exception ex) {
+				    ex.printStackTrace();
+				}
+			 
+		 }
+		 
+			     
+			         
+	        
+	
 	}
 	
 	public void clearTable() {
 		modelDsNV.getDataVector().removeAllElements();
 	}
+	
+	public static void resizeAndSetImage(File file, JLabel label) {
+        try {
+            // Đọc ảnh từ tệp tin
+            Image originalImage = new ImageIcon(file.getPath()).getImage();
+
+            // Kích thước mới bạn muốn đặt
+            int newWidth = 75;
+            int newHeight = 90;
+
+            // Tạo ảnh mới với kích thước mới
+            Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+            // Tạo ImageIcon từ ảnh mới
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            // Gán ImageIcon vào JLabel
+            label.setIcon(scaledIcon);
+            label.setAlignmentX(0.45f);
+            
+            
+            
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public ArrayList<String> layDsTen(ArrayList<NhanVien> ds) {
 		ArrayList<String> dsTenNV = new ArrayList<String>();
@@ -1379,6 +1538,41 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		return dsTenNV;		
 		
 	}
+	
+	public static byte[] convertImageIconToByteArray(ImageIcon icon) {
+        BufferedImage bufferedImage = new BufferedImage(
+                icon.getIconWidth(),
+                icon.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB
+        );
+        Graphics g = bufferedImage.createGraphics();
+        // Vẽ ImageIcon lên BufferedImage
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            // Ghi BufferedImage vào ByteArrayOutputStream dưới định dạng PNG
+            ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return byteArrayOutputStream.toByteArray();
+    }
+	
+	
+	public ImageIcon convertByteArrayToImageIcon(byte[] imageData) {
+	    try {
+	        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
+	        BufferedImage bufferedImage = ImageIO.read(bais);
+	        return new ImageIcon(bufferedImage);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+
 	
 	
 
