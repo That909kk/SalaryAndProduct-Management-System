@@ -403,11 +403,21 @@ VALUES
     (N'CN230100', N'Trần', N'Đức', 1, '02-10-1989', '606162636465', '0909090909', N'90 Đường GHI, Quận 12', '05-10-2023', 'MA1', 'May', 1, 500000, 2000000)
 go
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+select * from CongNhan
+
+=======
+=======
+>>>>>>> 5ddeae14ae5d20684b287b24c213123302ceeae0
 
 select bpccn.* from CongNhan cn join Xuong x
 on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
 on cn.maCN = bpccn.maCN
 where maPCCN is not null and maCD = '07102301013'
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
 
 select * from BangPhanCongCN where maCD = '30092301011'
 
@@ -419,3 +429,4 @@ values
 go
 
 select distinct thang, nam, maBP from BangLuongNhanVien join NhanVien on BangLuongNhanVien.maNV = NhanVien.maNV 
+>>>>>>> 5ddeae14ae5d20684b287b24c213123302ceeae0

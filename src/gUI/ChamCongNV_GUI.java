@@ -11,12 +11,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -42,8 +45,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import connectDB.ConnectDB;
 import dao.BangChamCongNV_DAO;
@@ -61,7 +67,6 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 	private JTextField txtGhiChu,txtTimKiemTen;
 	private DefaultComboBoxModel<String> modelBoPhan;
 	private JComboBox<String> cboBoPhan;
-	private JTextField textField;
 	private JCheckBox chkCaSang,chkCaToi,chkThem;
 	public DefaultTableModel modelDsNV;
     public JTable tblDsNV;
@@ -71,7 +76,10 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
     private ArrayList<BoPhan> dsBP;
     private ArrayList<NhanVien> dsNVBPCa;
     private BangChamCongNV_DAO chamCongNVDao;
-    private ArrayList<BangChamCongNV> dsDaChamCong;
+    private ArrayList<BangChamCongNV> dsCongLamViec;
+    private ArrayList<String> dsTen;
+   
+    
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -123,13 +131,19 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 		dsBP = boPhanDao.getdsBoPhan();
 		dsNVBPCa = new ArrayList<NhanVien>();
 		nhanVienDao = new NhanVien_DAO();
-		dsDaChamCong = new ArrayList<BangChamCongNV>();
+		dsCongLamViec = new ArrayList<BangChamCongNV>();
 		
-
+		lblNgayCC = new JLabel("Ngày chấm công");
+		dpNgayChamCong = new kDatePicker(120);
+		dpNgayChamCong.setPreferredSize(new Dimension(120, 40));
+		lblBoPhan = new JLabel("Bộ Phận");
+		modelBoPhan = new DefaultComboBoxModel<String>();
+		dsNVBPCa = nhanVienDao.getListNVtheoBPCa(1, dsBP.get(0).getMaBoPhan());
+		dsCongLamViec = chamCongNVDao.getBangCCTheoNgayBPCa(LocalDate.now(), "BPKT", 1);
 		
 		
 		
-		 
+	
 		pnlCCNV.setLayout(new BorderLayout(0, 0));
 		JPanel topPanel = new JPanel();
 		topPanel.setPreferredSize(new Dimension(1000,40));;
@@ -141,57 +155,6 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 		b =  Box.createHorizontalBox();
 		topPanel.add(b);
 		topPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
-	
-		
-		lblNgayCC = new JLabel("Ngày chấm công");
-		dpNgayChamCong = new kDatePicker(120);
-		dpNgayChamCong.setPreferredSize(new Dimension(120, 40));
-		lblBoPhan = new JLabel("Bộ Phận");
-		modelBoPhan = new DefaultComboBoxModel<String>();
-		dpNgayChamCong.txt.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-				try {
-					chkCaSang.setSelected(true);
-					chkCaToi.setSelected(false);
-					LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
-					if(ngayChamCong.isAfter(LocalDate.now())) {
-						
-						JOptionPane.showMessageDialog(frame, "Chưa đến ngày làm không thể chấm công");
-					}
-					else if(ngayChamCong.isBefore(LocalDate.now())) {
-						dsDaChamCong = chamCongNVDao.getBangCCTheoNgay(ngayChamCong);
-						if(boPhanDaChamCongChua(dsNVBPCa)) {
-    						clearTable();
-    						docDuLieuTableDaCC(dsNVBPCa);
-    						btnHoanTat.setEnabled(false);
-    					}
-    					else{
-    						clearTable();
-    						docDuLieuVaoTable(dsNVBPCa);
-    						btnHoanTat.setEnabled(true);
-    					}	
-					}
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				
-				
-			}
-		});
 		
 		
 		
@@ -203,16 +166,12 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 	    cboBoPhan = new JComboBox<String>(modelBoPhan);
 	    cboBoPhan.setPreferredSize(new Dimension(100,40));
 	    cboBoPhan.setSelectedItem(dsBP.get(0).getMaBoPhan());
-//	    dsNVBP = nhanVienDao.getListNVtheoBP(dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
-	    try {
-			dsDaChamCong = chamCongNVDao.getBangCCTheoNgay(dpNgayChamCong.getFullDate().toLocalDate());
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+
+	  
 	    
 	    
 	    
-	    
+	   
 	    
 	    cboBoPhan.addItemListener(new ItemListener() {
 		
@@ -224,32 +183,44 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 					LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
 					if(chkCaSang.isSelected()==true) {
 						dsNVBPCa = nhanVienDao.getListNVtheoBPCa(1,dsBP.get(boPhanIndex).getMaBoPhan());
-						dsDaChamCong = chamCongNVDao.getBangCCTheoNgay(ngayChamCong);
-						if(boPhanDaChamCongChua(dsNVBPCa)) {
+						dsCongLamViec = chamCongNVDao.getBangCCTheoNgayBPCa(ngayChamCong, dsBP.get(boPhanIndex).getMaBoPhan(), 1);
+						dsTen = layDsTen(dsNVBPCa);
+						AutoCompleteDecorator.decorate(txtTimKiemTen, dsTen , false);
+						if(kiemTraChamCong(dsCongLamViec)) {
 							clearTable();
-							docDuLieuTableDaCC(dsNVBPCa);
+							docDuLieuVaoTable();
 							btnHoanTat.setEnabled(false);
+							btnCapNhat.setEnabled(true);
 						}
 						else {
 							clearTable();
-							docDuLieuVaoTable(dsNVBPCa);
+							dsCongLamViec = taoDefaultDsChamCong(dsNVBPCa);
+							docDuLieuVaoTable();
 							btnHoanTat.setEnabled(true);
+							btnCapNhat.setEnabled(false);
 						}
 						
 					}
 					else if(chkCaToi.isSelected()==true) {
 						dsNVBPCa = nhanVienDao.getListNVtheoBPCa(2,dsBP.get(boPhanIndex).getMaBoPhan());
-						dsDaChamCong = chamCongNVDao.getBangCCTheoNgay(ngayChamCong);
-						if(boPhanDaChamCongChua(dsNVBPCa)) {
+						dsCongLamViec = chamCongNVDao.getBangCCTheoNgayBPCa(ngayChamCong, dsBP.get(boPhanIndex).getMaBoPhan(), 2);
+						dsTen = layDsTen(dsNVBPCa);
+						AutoCompleteDecorator.decorate(txtTimKiemTen, dsTen , false);
+						if(kiemTraChamCong(dsCongLamViec)) {
 							clearTable();
-							docDuLieuTableDaCC(dsNVBPCa);
+							docDuLieuVaoTable();
 							btnHoanTat.setEnabled(false);
+							btnCapNhat.setEnabled(true);
+							
 						}
 						
 						else {
 							clearTable();
-							docDuLieuVaoTable(dsNVBPCa);
+							dsCongLamViec = taoDefaultDsChamCong(dsNVBPCa);
+							docDuLieuVaoTable();
 							btnHoanTat.setEnabled(true);
+							btnCapNhat.setEnabled(false);
+							
 						}
 						
 					}
@@ -262,6 +233,8 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 					
 			}
 		});
+	    
+	    
 	    
 	    lblCaLam = new JLabel("Ca Làm:");
         chkCaSang = new JCheckBox("Ca sáng"); 
@@ -299,33 +272,46 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 						ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
 						if (source == chkCaSang) {
 	                        chkCaToi.setSelected(false);
-	                        chkThem.setSelected(false);
 	                        dsNVBPCa = nhanVienDao.getListNVtheoBPCa(1,dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
-	    					dsDaChamCong = chamCongNVDao.getBangCCTheoNgay(ngayChamCong);
-	    					if(boPhanDaChamCongChua(dsNVBPCa)) {
+	    					dsCongLamViec = chamCongNVDao.getBangCCTheoNgayBPCa(ngayChamCong, dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan(), 1);
+	    					dsTen = layDsTen(dsNVBPCa);
+	    					AutoCompleteDecorator.decorate(txtTimKiemTen, dsTen , false);
+	    					if(kiemTraChamCong(dsCongLamViec)) {
 	    						clearTable();
-	    						docDuLieuTableDaCC(dsNVBPCa);
+	    						docDuLieuVaoTable();
 	    						btnHoanTat.setEnabled(false);
+	    						btnCapNhat.setEnabled(true);
+	    						
 	    					}
 	    					else{
 	    						clearTable();
-	    						docDuLieuVaoTable(dsNVBPCa);
+	    						dsCongLamViec = taoDefaultDsChamCong(dsNVBPCa);
+	    						docDuLieuVaoTable();
 	    						btnHoanTat.setEnabled(true);
+	    						btnCapNhat.setEnabled(false);
 	    					}
 	  
 	                    } else if (source == chkCaToi) {
 	                        chkCaSang.setSelected(false);
 	                        chkThem.setSelected(false);
 	                        dsNVBPCa = nhanVienDao.getListNVtheoBPCa(2,dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
-	                        if(boPhanDaChamCongChua(dsNVBPCa)) {
+	                        dsCongLamViec = chamCongNVDao.getBangCCTheoNgayBPCa(ngayChamCong, dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan(), 2);
+	                        dsTen = layDsTen(dsNVBPCa);
+	                        AutoCompleteDecorator.decorate(txtTimKiemTen, dsTen , false);
+	                        if(kiemTraChamCong(dsCongLamViec)) {
 	    						clearTable();
-	    						docDuLieuTableDaCC(dsNVBPCa);
+	    						docDuLieuVaoTable();
 	    						btnHoanTat.setEnabled(false);
+	    						btnCapNhat.setEnabled(true);
+	    						
 	    					}
 	    					else{
 	    						clearTable();
-	    						docDuLieuVaoTable(dsNVBPCa);
+	    						dsCongLamViec = taoDefaultDsChamCong(dsNVBPCa);
+	    						docDuLieuVaoTable();
 	    						btnHoanTat.setEnabled(true);
+	    						btnCapNhat.setEnabled(false);
+	    						
 	    					}
 	                    } 
 					} catch (ParseException e1) {
@@ -333,10 +319,7 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 						e1.printStackTrace();
 					}
                     
-//                    else if (source == chkThem) {
-//                        chkCaSang.setSelected(false);
-//                        chkCaToi.setSelected(false);
-//                    }
+                    
                    
          
                 }
@@ -362,8 +345,8 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
         b.add(Box.createHorizontalStrut(50));
         b.add(chkCaToi);
         b.add(Box.createHorizontalStrut(50));
-//        b.add(chkThem);
         b.add(Box.createHorizontalStrut(30));
+        
         
         JPanel pnTable = new JPanel();
         pnlCCNV.add(pnTable, BorderLayout.CENTER);
@@ -380,8 +363,44 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
        tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
         	
         
-       
+      
         
+        tblDsNV.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if(tblDsNV.getRowCount()==dsCongLamViec.size()) {
+                	if (e.getType() == TableModelEvent.UPDATE && (e.getColumn() == 4 || e.getColumn() == 5 || e.getColumn() == 6) || e.getColumn() == 7 || e.getColumn() == 8) {
+                        int row = e.getFirstRow();
+                        if(((JRadioButton) modelDsNV.getValueAt(row, 4)).isSelected()==true){
+                        	dsCongLamViec.get(row).setCoMat(true);
+                        	dsCongLamViec.get(row).setCoPhep(false);
+                        	dsCongLamViec.get(row).setVangMat(false);
+                        	
+            			}else if(((JRadioButton) modelDsNV.getValueAt(row, 5)).isSelected()==true) {
+            				dsCongLamViec.get(row).setCoMat(false);
+                        	dsCongLamViec.get(row).setCoPhep(true);
+                        	dsCongLamViec.get(row).setVangMat(false);
+            			}else {
+            				dsCongLamViec.get(row).setCoMat(false);
+                        	dsCongLamViec.get(row).setCoPhep(false);
+                        	dsCongLamViec.get(row).setVangMat(true);
+            			}
+                        if(!(modelDsNV.getValueAt(row, 7).toString().equals("") || modelDsNV.getValueAt(row, 7).toString().equals("0")) ) {
+    						dsCongLamViec.get(row).setSoGioTangCa(Integer.parseInt(modelDsNV.getValueAt(row, 7).toString()));
+    					}
+    					
+    					if(!(modelDsNV.getValueAt(row, 8).toString().equals(""))) {
+    						dsCongLamViec.get(row).setGhiChu(modelDsNV.getValueAt(row, 8).toString());
+    					}
+                	}
+                    
+                    
+                    
+                }
+            }
+        });
+        tblDsNV.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        tblDsNV.setRowHeight(24);
         
         tblDsNV.getColumn("Đi làm").setCellRenderer(new Radiorenderer());
         tblDsNV.getColumn("Đi làm").setCellEditor(new RadioEditor(new JCheckBox()));
@@ -424,22 +443,113 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
         b2.add(Box.createHorizontalStrut(40));
         b2.add(btnHoanTat);
         b2.add(Box.createHorizontalStrut(25));
-        pnBottom.setBorder(new EmptyBorder(0, 0, 20,0));
         
-        dsNVBPCa = nhanVienDao.getListNVtheoBPCa(1, dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan());
-        if(boPhanDaChamCongChua(dsNVBPCa)) {
-        	docDuLieuTableDaCC(dsNVBPCa);
-        	btnHoanTat.setEnabled(false);
-        	
-        }else {
-        	docDuLieuVaoTable(dsNVBPCa);
-        }
+        
+        dsTen = new ArrayList<String>();
+        dsTen = layDsTen(dsNVBPCa);
+       
+        AutoCompleteDecorator.decorate(txtTimKiemTen, dsTen , false);
+        
+        txtTimKiemTen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                txtTimKiemTen.setCaretPosition(txtTimKiemTen.getText().length());
+            }
+        });
+        
+        txtTimKiemTen.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) { 
+                    if ((txtTimKiemTen.getSelectionStart() == 1 && txtTimKiemTen.getSelectionEnd() == txtTimKiemTen.getText().length())||(txtTimKiemTen.getSelectionStart() == 0 && txtTimKiemTen.getSelectionEnd() == txtTimKiemTen.getText().length())) {
+                        txtTimKiemTen.setText("");
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+               
+            }
+        });
+
+
+        pnBottom.setBorder(new EmptyBorder(0, 0, 20,0));
         
         btnHoanTat.addActionListener(this);
         btnCapNhat.addActionListener(this);
         btnTimKiemTen.addActionListener(this);
         
+        dpNgayChamCong.txt.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					chkCaSang.setSelected(true);
+					chkCaToi.setSelected(false);
+					LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
+					if(ngayChamCong.isAfter(LocalDate.now())) {
+						
+						JOptionPane.showMessageDialog(frame, "Chưa đến ngày làm không thể chấm công","Chưa đến ngày làm",0);
+						btnHoanTat.setEnabled(false);
+						btnCapNhat.setEnabled(false);
+					}
+					else if(ngayChamCong.isBefore(LocalDate.now()) || ngayChamCong.equals(LocalDate.now())) {
+						dsCongLamViec = chamCongNVDao.getBangCCTheoNgayBPCa(ngayChamCong,dsBP.get(0).getMaBoPhan(),1);
+						if(kiemTraChamCong(dsCongLamViec)) {
+    						clearTable();
+    						docDuLieuVaoTable();
+    						btnHoanTat.setEnabled(false);
+    						btnCapNhat.setEnabled(true);
+    					}
+    					else{
+    						clearTable();
+    						docDuLieuVaoTable();
+    						btnHoanTat.setEnabled(true);
+    						btnCapNhat.setEnabled(false);
+    					}	
+					}
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+				
+			}
+		});
         
+        if(kiemTraChamCong(dsCongLamViec)) {
+        	btnHoanTat.setEnabled(false);
+        	btnCapNhat.setEnabled(true);
+        	
+        	
+        }else {
+        	
+        	btnHoanTat.setEnabled(true);
+        	btnCapNhat.setEnabled(false);
+        	
+        }
+        if(!kiemTraChamCong(dsCongLamViec)) {
+			dsCongLamViec = taoDefaultDsChamCong(dsNVBPCa);
+		}
+        docDuLieuVaoTable();
         
 		return pnlCCNV;
 	}
@@ -478,6 +588,8 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 		
 		
 	}
+	
+	
 	
 	class Radiorenderer implements TableCellRenderer{
 
@@ -528,39 +640,56 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 		
 	}
 	
-	public void docDuLieuVaoTable(ArrayList<NhanVien> dsNV) {
-	
+	public ArrayList<String> layDsTen(ArrayList<NhanVien> dsNV) {
+		ArrayList<String> dsTenNV = new ArrayList<String>();
 		for(NhanVien nv: dsNV) {
-				 Object[] rowData = {nv.getMaNV(), nv.getHo(),nv.getTen(), layCaLamViec(nv), new JRadioButton(), new JRadioButton(), new JRadioButton(),"0",""};
-				 modelDsNV.addRow(rowData);
-            }
-		 for(int i=0; i < dsNV.size();i++) {	
-	        	ButtonGroup bg = new ButtonGroup();
-	        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
-	        	((JRadioButton) modelDsNV.getValueAt(i, 4)).setSelected(true);
-	        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 5));
-	        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 6));
-	        }
-
-	}
-	
-	public Boolean boPhanDaChamCongChua(ArrayList<NhanVien> dsNVBP) {
-		
-		for(int i=0 ; i< dsNVBP.size();i++) {
-			for(BangChamCongNV bangCC: dsDaChamCong) {
-				if(dsNVBP.get(i).getMaNV().equals(bangCC.getNv().getMaNV())) {
-					return true;
-				}
-			}
+			dsTenNV.add(nv.getTen());
 		}
-		return false;
+		return dsTenNV;		
+		
 	}
 	
-	public void docDuLieuTableDaCC(ArrayList<NhanVien> dsNV){
-		for(int i=0 ; i< dsNV.size();i++) {
-			for(BangChamCongNV bangCC: dsDaChamCong) {
-				if(dsNV.get(i).getMaNV().equals(bangCC.getNv().getMaNV())) {
-					Object[] rowData = {dsNV.get(i).getMaNV(), dsNV.get(i).getHo(),dsNV.get(i).getTen(), layCaLamViec(dsNV.get(i)), new JRadioButton(), new JRadioButton(), new JRadioButton(),bangCC.getSoGioTangCa(),bangCC.getGhiChu()};
+	public ArrayList<BangChamCongNV> taoDefaultDsChamCong(ArrayList<NhanVien> dsNVBPCa) {
+		ArrayList<BangChamCongNV> dsCongLam = new ArrayList<BangChamCongNV>();
+		for(NhanVien nv : dsNVBPCa) {
+			LocalDate ngayChamCong;
+			try {
+				ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
+				String maCC = phatSinhMaCC(ngayChamCong, nv.getMaNV());
+				int soGioTangCa = 0;
+				int caLam=1;
+				boolean coMat=true;
+				boolean coPhep=false;
+				boolean vangMat=false;
+				String ghiChu ="";
+				BangChamCongNV bangChamCongNV = new BangChamCongNV(maCC, nv, ngayChamCong, soGioTangCa, caLam, coMat, coPhep, vangMat, ghiChu);
+				dsCongLam.add(bangChamCongNV);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+		}
+		return dsCongLam;
+	}
+	
+	
+
+	
+	
+	
+	public Boolean kiemTraChamCong(ArrayList<BangChamCongNV> dsCongLam) {
+		if(dsCongLam.size()==0)
+			return false;
+		return true;
+	}
+	
+
+	
+	public void docDuLieuVaoTable() {
+		for(int i=0 ; i< dsNVBPCa.size();i++) {
+			for(BangChamCongNV bangCC: dsCongLamViec) {
+				if(dsNVBPCa.get(i).getMaNV().equals(bangCC.getNv().getMaNV())) {
+					Object[] rowData = {dsNVBPCa.get(i).getMaNV(), dsNVBPCa.get(i).getHo(),dsNVBPCa.get(i).getTen(), layCaLamViec(dsNVBPCa.get(i)), new JRadioButton(), new JRadioButton(), new JRadioButton(),bangCC.getSoGioTangCa(),bangCC.getGhiChu()};
 					modelDsNV.addRow(rowData);
 					ButtonGroup bg = new ButtonGroup();
 		        	bg.add((JRadioButton) modelDsNV.getValueAt(i, 4));
@@ -576,7 +705,10 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 				}
 			}
 		}
+
 	}
+	
+	
 	
 	public String layCaLamViec(NhanVien nv) {
 		if(nv.getCaLamViec()==1) {
@@ -607,154 +739,132 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		int i =0;
-		if(o==btnHoanTat) {
-			 if(chkCaSang.isSelected()==true || chkCaToi.isSelected()==true) {
-				for(NhanVien nv: dsNVBPCa) {
-					try {
-						LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
-						String maCC = phatSinhMaCC(ngayChamCong, nv.getMaNV());
-						int soGioTangCa;
-						if(modelDsNV.getValueAt(i, 7).toString().equals("")) {
-							soGioTangCa =0;
-						}
-						else {
-							soGioTangCa = Integer.parseInt(modelDsNV.getValueAt(i, 7).toString()) ;
-						}
-						int caLam=0;
-						
-						
-						caLam = nv.getCaLamViec();
-						
-						boolean coMat=true;
-						boolean coPhep=true;
-						boolean vangMat=true;
-						if(((JRadioButton) modelDsNV.getValueAt(i, 4)).isSelected()==true) {
-							coMat = true;
-							coPhep= false;
-							vangMat =false;
-						}
-						else if(((JRadioButton) modelDsNV.getValueAt(i, 5)).isSelected()==true) {
-							coMat = false;
-							coPhep= true;
-							vangMat =false;
-						}
-						else if(((JRadioButton) modelDsNV.getValueAt(i, 6)).isSelected()==true) {
-							coMat = false;
-							coPhep= false;
-							vangMat =true;
-						}
-						
-						String ghiChu;
-						if(modelDsNV.getValueAt(i, 8).toString().equals("")) {
-							ghiChu="";
-						}else {
-							ghiChu = String.valueOf(modelDsNV.getValueAt(i, 8)) ;
-						}
-						BangChamCongNV bangChamCongNV = new BangChamCongNV(maCC, nv, ngayChamCong, soGioTangCa, caLam, coMat, coPhep, vangMat, ghiChu);
-						chamCongNVDao.insertBangChamCongNV(bangChamCongNV);
-						i++;
-						
-					} catch (Exception e1) {
-						e1.printStackTrace();
+		if(o==btnHoanTat) {	
+			if(JOptionPane.showConfirmDialog(frame, "Bạn hãy xác nhận hoàn thành bảng chấm công","Xác Nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+				for(BangChamCongNV bangChamCong: dsCongLamViec) {
+					 try {
+						 chamCongNVDao.insertBangChamCongNV(bangChamCong);
+					} catch (Exception e2) {
+						// TODO: handle exception
 					}
-					
+					 
+						
 				}
-				String ca;
-				if(chkCaSang.isSelected()) {
-					ca = "Sáng";
-				}
-				else
-					ca= "Tối";
 				btnHoanTat.setEnabled(false);
-				try {
-					JOptionPane.showMessageDialog(frame, "Bạn đã chấm công thành công cho  " +String.valueOf(cboBoPhan.getSelectedItem()) +" ca " +ca +" ngày " +String.valueOf(dpNgayChamCong.getFullDate()) );
-				} catch (HeadlessException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-					
-			}
+				btnCapNhat.setEnabled(true);
+			}else 
+				return;
+			
 			
 		}
 		if(o==btnCapNhat) {
-			for(int n=0 ; n< dsNVBPCa.size();n++) {
-				for(BangChamCongNV bangCC: dsDaChamCong) {
-					if(dsNVBPCa.get(n).getMaNV().equals(bangCC.getNv().getMaNV())) {
-						try {
-							LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
-							String maCC = bangCC.getMaCCNV();
-							int soGioTangCa;
-							if(modelDsNV.getValueAt(n, 7).toString().equals("")) {
-								soGioTangCa =0;
+			if(JOptionPane.showConfirmDialog(frame, "Hãy xác nhận cập nhật bảng chấm công","Xác Nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+				for(BangChamCongNV bangChamCong: dsCongLamViec) {
+					 try {
+						 chamCongNVDao.updateBangChamCongNV(bangChamCong);
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+					 
+						
+				}
+			}else 
+				return;
+		}
+		if(o==btnTimKiemTen) {
+			String ten = txtTimKiemTen.getText();
+			ArrayList<BangChamCongNV> dsBangCCTimKiem  = new ArrayList<BangChamCongNV>();
+			ArrayList<NhanVien> dsNVTimKiem = new ArrayList<NhanVien>();
+			if(!ten.equals("")) {
+				for(NhanVien nv: dsNVBPCa) {
+					if(nv.getTen().equals(ten)) {
+						clearTable();
+						for(BangChamCongNV bangCC: dsCongLamViec) {
+							if(bangCC.getNv().getMaNV().equals(nv.getMaNV())) {
+								dsBangCCTimKiem.add(bangCC);
+								dsNVTimKiem.add(nv);
 							}
-							else {
-								soGioTangCa = Integer.parseInt(modelDsNV.getValueAt(n, 7).toString()) ;
-							}
-							int caLam=0;
-							
-							
-							caLam = bangCC.getCaLam();
-							
-							boolean coMat=true;
-							boolean coPhep=true;
-							boolean vangMat=true;
-							if(((JRadioButton) modelDsNV.getValueAt(n, 4)).isSelected()==true) {
-								coMat = true;
-								coPhep= false;
-								vangMat =false;
-							}
-							else if(((JRadioButton) modelDsNV.getValueAt(n, 5)).isSelected()==true) {
-								coMat = false;
-								coPhep= true;
-								vangMat =false;
-							}
-							else if(((JRadioButton) modelDsNV.getValueAt(n, 6)).isSelected()==true) {
-								coMat = false;
-								coPhep= false;
-								vangMat =true;
-							}
-							
-							String ghiChu;
-							if(modelDsNV.getValueAt(n, 8).toString().equals("")) {
-								ghiChu="";
-							}else {
-								ghiChu = String.valueOf(modelDsNV.getValueAt(n, 8)) ;
-							}
-							BangChamCongNV bangChamCongNV = new BangChamCongNV(maCC, dsNVBPCa.get(n), ngayChamCong, soGioTangCa, caLam, coMat, coPhep, vangMat, ghiChu);
-							chamCongNVDao.updateBangChamCongNV(bangChamCongNV);
-									
-									
-									
-									
-						} catch (ParseException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
 						}
-						
-						
-						
 					}
 				}
+				if(dsNVTimKiem.size()==0) {
+					JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào!","Không tìm thấy",0);
+				}
+				else {
+					clearTable();
+					for(int n=0 ; n< dsNVTimKiem.size();n++) {
+						for(BangChamCongNV bangCC: dsBangCCTimKiem) {
+							if(dsNVTimKiem.get(n).getMaNV().equals(bangCC.getNv().getMaNV())) {
+								Object[] rowData = {dsNVTimKiem.get(n).getMaNV(), dsNVTimKiem.get(n).getHo(),dsNVTimKiem.get(n).getTen(), layCaLamViec(dsNVTimKiem.get(n)), new JRadioButton(), new JRadioButton(), new JRadioButton(),bangCC.getSoGioTangCa(),bangCC.getGhiChu()};
+								modelDsNV.addRow(rowData);
+								ButtonGroup bg = new ButtonGroup();
+					        	bg.add((JRadioButton) modelDsNV.getValueAt(n, 4));
+					        	bg.add((JRadioButton) modelDsNV.getValueAt(n, 5));
+					        	bg.add((JRadioButton) modelDsNV.getValueAt(n, 6));
+					        	if(bangCC.isCoMat()) {
+					        		((JRadioButton) modelDsNV.getValueAt(n, 4)).setSelected(true);
+					        	}else if(bangCC.isCoPhep()){
+					        		((JRadioButton) modelDsNV.getValueAt(n, 5)).setSelected(true);
+					        	}else
+					        		((JRadioButton) modelDsNV.getValueAt(n, 6)).setSelected(true);
+							}
+						}
+					}
+					
+					
+					tblDsNV.getModel().addTableModelListener(new TableModelListener() {
+			            @Override
+			            public void tableChanged(TableModelEvent e) {
+			                if(tblDsNV.getRowCount()< dsCongLamViec.size()) {
+			                	if (e.getType() == TableModelEvent.UPDATE && (e.getColumn() == 4 || e.getColumn() == 5 || e.getColumn() == 6) || e.getColumn() == 7 || e.getColumn() == 8) {
+				                    int row = e.getFirstRow();
+				                    if(((JRadioButton) modelDsNV.getValueAt(row, 4)).isSelected()==true){
+				                    	dsBangCCTimKiem.get(row).setCoMat(true);
+				                    	dsBangCCTimKiem.get(row).setCoPhep(false);
+				                    	dsBangCCTimKiem.get(row).setVangMat(false);
+				                    	
+				        			}else if(((JRadioButton) modelDsNV.getValueAt(row, 5)).isSelected()==true) {
+				        				dsBangCCTimKiem.get(row).setCoMat(false);
+				        				dsBangCCTimKiem.get(row).setCoPhep(true);
+				        				dsBangCCTimKiem.get(row).setVangMat(false);
+				        			}else {
+				        				dsBangCCTimKiem.get(row).setCoMat(false);
+				        				dsBangCCTimKiem.get(row).setCoPhep(false);
+				        				dsBangCCTimKiem.get(row).setVangMat(true);
+				        			}
+				                    if(!(modelDsNV.getValueAt(row, 7).toString().equals("") || modelDsNV.getValueAt(row, 7).toString().equals("0")) ) {
+				                    	dsBangCCTimKiem.get(row).setSoGioTangCa(Integer.parseInt(modelDsNV.getValueAt(row, 7).toString()));
+									}
+									
+									if(!(modelDsNV.getValueAt(row, 8).toString().equals(""))) {
+										dsBangCCTimKiem.get(row).setGhiChu(modelDsNV.getValueAt(row, 8).toString());
+									}
+				                    
+									for(BangChamCongNV bangChamCong: dsCongLamViec) {
+										if(bangChamCong.getMaCCNV().equals(dsBangCCTimKiem.get(row).getMaCCNV())) {
+											bangChamCong.setCoMat(dsBangCCTimKiem.get(row).isCoMat());
+											bangChamCong.setCoPhep(dsBangCCTimKiem.get(row).isCoPhep());
+											bangChamCong.setVangMat(dsBangCCTimKiem.get(row).isVangMat());
+											return;
+										}
+									}
+			                    
+			              }
+			            }
+			          }
+			        });
+					
+				}
+				
+				
+			}else {
+				clearTable();
+				docDuLieuVaoTable();
 			}
-			String ca;
-			if(chkCaSang.isSelected()) {
-				ca = "Sáng";
-			}
-			else
-				ca= "Tối";
-
-			try {
-				JOptionPane.showMessageDialog(frame, "Bạn đã cập nhật thành công bảng chấm công cho  " +String.valueOf(cboBoPhan.getSelectedItem()) +" ca " +ca +" ngày " +String.valueOf(dpNgayChamCong.getFullDate()) );
-			} catch (HeadlessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+	
+				
+			
+				
 		}
 		
 	}
