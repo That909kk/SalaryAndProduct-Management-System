@@ -247,7 +247,7 @@ public class ChamCongCN_GUI extends JFrame implements ListSelectionListener, Act
 		    					else{
 		    						clearTable();
 		    						docDuLieuVaoTable(dsCNXCa);
-		    						btnHoanTat.setEnabled(true);
+		    						btnHoanTat.setEnabled(true);;
 		    					}
 		                    } 
 						} catch (ParseException e1) {
