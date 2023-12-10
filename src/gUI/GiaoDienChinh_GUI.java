@@ -413,7 +413,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		if (o.equals(mniQuanLyCN)) {
 			CongNhan_GUI cn_GUI = new CongNhan_GUI();
-			chuyenGUI(cn_GUI.getPNLCongNhan());
+			chuyenGUI(cn_GUI.createGUI());
 			chuyenMauKhiAnMenu(mnCongNhan, mniQuanLyCN);
 			this.setTitle("Quản Lý Công Nhân");
 		}
@@ -427,7 +427,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		
 		if (o.equals(mniCCCN)) {
 			ChamCongCN_GUI cccn_GUI = new ChamCongCN_GUI();
-			chuyenGUI(cccn_GUI.getPNLCCCongNhan());
+			chuyenGUI(cccn_GUI.createGUI());
 			chuyenMauKhiAnMenu(mnCongNhan, mniCCCN);
 			this.setTitle("Chấm Công Công Nhân");
 		}
