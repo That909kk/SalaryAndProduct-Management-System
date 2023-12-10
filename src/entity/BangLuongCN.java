@@ -8,6 +8,8 @@ public class BangLuongCN {
 	private int tongSanLuong;
 	private int soNgayNghiKhongPhep;
 	private double tienPhat;
+	private double bhxh;
+	private double luongTong;
 
 	public BangLuongCN() {
 		super();
@@ -20,7 +22,7 @@ public class BangLuongCN {
 	}
 
 	public BangLuongCN(String maLuongCN, CongNhan cn, int thang, int nam, int tongSanLuong, int soNgayNghiKhongPhep,
-			double tienPhat) {
+			double tienPhat , double bhxh, double luongTong) {
 		super();
 		this.maLuongCN = maLuongCN;
 		this.cn = cn;
@@ -29,6 +31,9 @@ public class BangLuongCN {
 		this.tongSanLuong = tongSanLuong;
 		this.soNgayNghiKhongPhep = soNgayNghiKhongPhep;
 		this.tienPhat = tienPhat;
+		this.bhxh = bhxh;
+		this.luongTong = luongTong;
+
 	}
 
 	public String getMaLuongCN() {
@@ -87,9 +92,19 @@ public class BangLuongCN {
 		this.tienPhat = tienPhat;
 	}
 
-	private double tongLuong() {
-		return 0.0;
+	public double getBhxh() {
+		return bhxh;
 	}
+	public void setBhxh(double bhxh) {
+		this.bhxh = bhxh;
+	}
+	public double getLuongTong() {
+		return luongTong;
+	}
+	public void setLuongTong(double luongTong) {
+		this.luongTong = luongTong;
+	}
+	
 	
 	@Override
 	public String toString() {

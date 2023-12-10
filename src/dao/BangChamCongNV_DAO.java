@@ -376,8 +376,6 @@ public class BangChamCongNV_DAO {
 		}
 		return n>0;
 	}
-
-	
 	
 	public ArrayList<BangChamCongNV> getBangCCTheoNgayBPCa(LocalDate ngayChamCong,String maBP, int ca){
 		ArrayList<BangChamCongNV> bangCC = new ArrayList<BangChamCongNV>();
@@ -387,6 +385,7 @@ public class BangChamCongNV_DAO {
 				+ "WHERE BangChamCongNhanVien.ngayCham = ?"
 				+ "      AND NhanVien.maBP = ?"
 				+ "      AND NhanVien.caLamViec = ?";
+
 		PreparedStatement stmt = null;
 		int n =0;
 		try {
@@ -409,6 +408,65 @@ public class BangChamCongNV_DAO {
 				ccNV.setNv(nv);
 				
 				bangCC.add(ccNV);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return bangCC;
+	}
+	
+	public boolean updateGhiChiBangChamCongNV(BangChamCongNV bangCC) {
+		int n=0;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		
+		String sql = "update BangChamCongNhanVien set ghiChu=?  where maChamCong= ?";
+		PreparedStatement stmt = null;
+		try {
+			stmt= con.prepareStatement(sql);
+			stmt.setString(1, bangCC.getGhiChu());
+			stmt.setString(2, bangCC.getMaCCNV());
+			n= stmt.executeUpdate();
+			
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		}finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		return n>0;
+	}
+	
+	public BangChamCongNV layBangCCCuoiCungThangCua1NV(String maNV, int thang, int nam) {
+		BangChamCongNV bangCC = new BangChamCongNV();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "SELECT TOP 1 * FROM dbo.BangChamCongNhanVien where maNV = ? and MONTH(ngayCham) = ? and YEAR(ngayCham) = ? order by ngayCham desc";
+		PreparedStatement stmt = null;
+		int n =0;		
+		try {
+			stmt= con.prepareStatement(sql);
+			stmt.setString(1, maNV);
+			stmt.setInt(2, thang);
+			stmt.setInt(3, nam);
+			ResultSet rs  = stmt.executeQuery();
+			
+			while(rs.next()) {
+				 bangCC = new BangChamCongNV(rs.getString("maChamCong"));
+				bangCC.setNgayCham(rs.getDate("ngayCham").toLocalDate());
+				bangCC.setSoGioTangCa(rs.getInt("soGioTangCa"));
+				bangCC.setCaLam(rs.getInt("caLam"));
+				bangCC.setGhiChu(rs.getString("ghiChu"));
+				bangCC.setCoPhep(rs.getBoolean("coPhep"));
+				bangCC.setCoMat(rs.getBoolean("coMat"));
+				bangCC.setVangMat(rs.getBoolean("vangMat"));
+				NhanVien nv = new NhanVien(rs.getString("maNV"));
+				bangCC.setNv(nv);
 				
 			}
 			
@@ -416,11 +474,5 @@ public class BangChamCongNV_DAO {
 			e.printStackTrace();
 		}
 		return bangCC;
-		
-		
 	}
-	
-	
-
-
 }

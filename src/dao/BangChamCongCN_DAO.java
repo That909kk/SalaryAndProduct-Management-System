@@ -19,6 +19,7 @@ public class BangChamCongCN_DAO {
 	public static BangChamCongCN_DAO getInstance() {
 		return instance;
 	}
+	private CongNhan_DAO cn_DAO;
 	
 	public ArrayList<BangChamCongCN> getBangCC(){
 		ArrayList<BangChamCongCN> bangCC = new ArrayList<BangChamCongCN>();
@@ -275,6 +276,261 @@ public class BangChamCongCN_DAO {
 		}
 		return n>0;
 	}
+	// Minh Thật 
+		public ArrayList <BangChamCongCN> getBangCCCNTheoThangvaNam(int thang, int nam){
+			ArrayList<BangChamCongCN> bangCC = new ArrayList<BangChamCongCN>();
+			ConnectDB.getInstance();
+			Statement state = null;
+			try {
+				Connection con = ConnectDB.getConnection();
+				String Sql = "SELECT * FROM dbo.BangChamCongCongNhan where MONTH(NgayCham)="+thang+" and YEAR(NgayCham)="+nam;
+				state = con.createStatement();
+				ResultSet rs = state.executeQuery(Sql);
+				while(rs.next()) {
+					BangChamCongCN ccCN = new BangChamCongCN();
+					ccCN.setMaCCCN(rs.getString(1));
+					java.sql.Date ngayCham = rs.getDate(2);
+					LocalDate NgayCham = ngayCham.toLocalDate();
+					ccCN.setVangMat(rs.getBoolean(4));
+					ccCN.setCoPhep(rs.getBoolean(5));
+					ccCN.setSoGioTangCa(rs.getInt(6));
+					ccCN.setSanLuong(rs.getInt(7));
+					ccCN.setGhiChu(rs.getString(8));
+					cn_DAO = new CongNhan_DAO();
+					CongNhan cn =  cn_DAO.getCongNhanTheoMaCN(rs.getString(3));
+					ccCN.setCn(cn);				
+					ccCN.setCaLam(cn.getCaLamViec());
+					bangCC.add(ccCN);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return bangCC;	
+		}
+		public ArrayList<LocalDate> layTatCaThangvaNamkhacNhauCN(){
+			ArrayList<LocalDate> list = new ArrayList<LocalDate>();
+			ConnectDB.getInstance();
+			Statement state = null;
+			try {
+				Connection con = ConnectDB.getConnection();
+				String Sql = "SELECT DISTINCT MONTH(NgayCham), YEAR(NgayCham) FROM dbo.BangChamCongCongNhan";
+				state = con.createStatement();
+				ResultSet rs = state.executeQuery(Sql);
+				while(rs.next()) {
+					LocalDate date = LocalDate.of(rs.getInt(2), rs.getInt(1), 1);
+					list.add(date);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return list;	
+		}
+		public ArrayList<String> layTatCaCongDoanTheoThang(int thang, int nam){
+			ArrayList<String> list = new ArrayList<String>();
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "SELECT DISTINCT cd.maCongDoan from CongDoan cd join BangPhanCongCN bpc on cd.maCongDoan=bpc.maCD join CongNhan cn on cn.maCN=bpc.maCN join BangChamCongCongNhan bcc on cn.maCN= bcc.maCN where MONTH(NgayCham)="+thang+" and YEAR(NgayCham)="+nam;
+			try {
+				Statement state = con.createStatement();
+				ResultSet rs = state.executeQuery(sql);
+				while(rs.next()) {
+					list.add(rs.getString(1));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}	
+			return list;
+			
+		}
+		public ArrayList<String> laySanPhamTheoCongDoan (String maCD){
+			ArrayList<String> list = new ArrayList<String>();
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "SELECT DISTINCT sp.maSP from SanPham sp join CongDoan cd on sp.maSP=cd.maSP where cd.maCongDoan='"+maCD+"'";
+			try {
+				Statement state = con.createStatement();
+				ResultSet rs = state.executeQuery(sql);
+				while(rs.next()) {
+					list.add(rs.getString(1));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}	
+			return list;
+			
+			
+		}
+		public ArrayList<BangChamCongCN> getBangCCCNTheomaCNThangNam( String maCN,int thang, int nam){
+			ArrayList<BangChamCongCN> bangCC = new ArrayList<BangChamCongCN>();
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String Sql = "SELECT * FROM dbo.BangChamCongCongNhan where maCN= ? and MONTH(NgayCham)=? and YEAR(NgayCham)=?";
+			PreparedStatement stmt = null;
+			try {
+				stmt = con.prepareStatement(Sql);
+				stmt.setString(1, maCN);
+				stmt.setInt(2, thang);
+				stmt.setInt(3, nam);
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next()) {
+					BangChamCongCN ccCN = new BangChamCongCN();
+					ccCN.setMaCCCN(rs.getString(1));
+					java.sql.Date ngayCham = rs.getDate(2);
+					LocalDate NgayCham = ngayCham.toLocalDate();
+					ccCN.setVangMat(rs.getBoolean(4));
+					ccCN.setCoPhep(rs.getBoolean(5));
+					ccCN.setSoGioTangCa(rs.getInt(6));
+					ccCN.setSanLuong(rs.getInt(7));
+					ccCN.setGhiChu(rs.getString(8));
+					cn_DAO = new CongNhan_DAO();
+					CongNhan cn =  cn_DAO.getCongNhanTheoMaCN(rs.getString(3));
+					ccCN.setCn(cn);				
+					ccCN.setCaLam(cn.getCaLamViec());
+					bangCC.add(ccCN);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return bangCC;
+		}
+		public int laySoSanLuongCuaCNTheoThangNam(String maCN, int thang, int nam) {
+			int soSanLuong = 0;
+			ConnectDB.getInstance();
+			Statement state = null;
+			try {
+				Connection con = ConnectDB.getConnection();
+				String Sql = "SELECT SUM(SanLuong) FROM dbo.BangChamCongCongNhan where maCN='"+maCN+"' and MONTH(NgayCham)="+thang+" and YEAR(NgayCham)="+nam;
+				state = con.createStatement();
+				ResultSet rs = state.executeQuery(Sql);
+				while(rs.next()) {
+					soSanLuong = rs.getInt(1);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return soSanLuong;	
+		}
+		public int laySoNgayDiLamCuaCNTheoThangNam(String maCN, int thang, int nam) {
+			int soNgayDiLam = 0;
+			ConnectDB.getInstance();
+			Statement state = null;
+			try {
+				Connection con = ConnectDB.getConnection();
+				String Sql = "SELECT COUNT(NgayCham) FROM dbo.BangChamCongCongNhan where maCN='"+maCN+"' and MONTH(NgayCham)="+thang+" and YEAR(NgayCham)="+nam + " and VangMat=0";
+				state = con.createStatement();
+				ResultSet rs = state.executeQuery(Sql);
+				while(rs.next()) {
+					soNgayDiLam = rs.getInt(1);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return soNgayDiLam;	
+		}
+		public int layTongSoGioTangCaCuaCNTheoThangNam(String maCN, int thang, int nam) {
+			int soGioTangCa = 0;
+			ConnectDB.getInstance();
+			Statement state = null;
+			try {
+				Connection con = ConnectDB.getConnection();
+				String Sql = "SELECT SUM(SoGioTangCa) FROM dbo.BangChamCongCongNhan where maCN='"+maCN+"' and MONTH(NgayCham)="+thang+" and YEAR(NgayCham)="+nam;
+				state = con.createStatement();
+				ResultSet rs = state.executeQuery(Sql);
+				while(rs.next()) {
+					soGioTangCa = rs.getInt(1);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return soGioTangCa;	
+		}
+		public double layGiaTienSanPhamTheoBCC(BangChamCongCN bcc) {
+			double giaTien = 0;
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+				String Sql = "select cd.giaTien from CongNhan cn join BangPhanCongCN bpc on cn.maCN=bpc.maCN join CongDoan cd on bpc.maCD=cd.maCongDoan join SanPham sp on cd.maSP=sp.maSP join BangChamCongCongNhan bcc on bcc.maCN=cn.maCN where bcc.maCN=?";
+				PreparedStatement stmt = null;
+				try {
+					stmt = con.prepareStatement(Sql);
+					stmt.setString(1, bcc.getCn().getMaCN());
+					ResultSet rs = stmt.executeQuery();
+					while(rs.next()) {
+						giaTien = rs.getDouble(1);
+					}	
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return giaTien;
+			}
+		public int laySoNgayNghiKhongPhepCua1CNTheoThangNam(String maCN, int thang, int nam) {
+			int soNgayDiLam = 0;
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String Sql = "SELECT COUNT(NgayCham) FROM dbo.BangChamCongCongNhan where maCN= ? and MONTH(NgayCham)=? and YEAR(NgayCham)=? and VangMat=1 and CoPhep=0";
+			PreparedStatement stmt = null;
+			try {
+				stmt = con.prepareStatement(Sql);
+				stmt.setString(1, maCN);
+				stmt.setInt(2, thang);
+				stmt.setInt(3, nam);
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next()) {
+					soNgayDiLam = rs.getInt(1);
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return soNgayDiLam;
+		}
+		public boolean updateGhiChuBCCCN(BangChamCongCN bcccn) {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "update BangChamCongCongNhan set GhiChu=? where maCC=?";
+			PreparedStatement stmt = null;
+			try {
+				stmt = con.prepareStatement(sql);
+				stmt.setString(1, bcccn.getGhiChu());
+				stmt.setString(2, bcccn.getMaCCCN());
+				stmt.executeUpdate();
+				return true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+		public BangChamCongCN layBangChamCongCuoiCungCuaThang (String maCN,int thang,int nam){
+			BangChamCongCN bcccn = null;
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "SELECT TOP 1 * FROM dbo.BangChamCongCongNhan WHERE maCN = ? AND MONTH(NgayCham) = ? AND YEAR(NgayCham) = ? ORDER BY NgayCham DESC";
+			PreparedStatement stmt = null;
+			try {
+				stmt = con.prepareStatement(sql);
+				stmt.setString(1, maCN);
+				stmt.setInt(2, thang);
+				stmt.setInt(3, nam);
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next()) {
+					bcccn = new BangChamCongCN();
+					bcccn.setMaCCCN(rs.getString(1));
+					java.sql.Date ngayCham = rs.getDate(2);
+					LocalDate NgayCham = ngayCham.toLocalDate();
+					bcccn.setVangMat(rs.getBoolean(4));
+					bcccn.setCoPhep(rs.getBoolean(5));
+					bcccn.setSoGioTangCa(rs.getInt(6));
+					bcccn.setSanLuong(rs.getInt(7));
+					bcccn.setGhiChu(rs.getString(8));
+					cn_DAO = new CongNhan_DAO();
+					CongNhan cn =  cn_DAO.getCongNhanTheoMaCN(rs.getString(3));
+					bcccn.setCn(cn);				
+					bcccn.setCaLam(cn.getCaLamViec());
+				}	
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return bcccn;
+
+		}
 }
 
 

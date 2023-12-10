@@ -62,7 +62,7 @@ create table BangLuongCongNhan (
 )
 
 create table BangChamCongCongNhan (
-	maCC nvarchar(13) not null primary key,
+	maCC nvarchar(14) not null primary key,
 	ngayCham date not null,
 	maCN nvarchar(8) not null,
 	vangMat bit,
@@ -403,23 +403,13 @@ VALUES
     (N'CN230100', N'Trần', N'Đức', 1, '02-10-1989', '606162636465', '0909090909', N'90 Đường GHI, Quận 12', '05-10-2023', 'MA1', 'May', 1, 500000, 2000000)
 go
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-select * from CongNhan
+--select bpccn.* from CongNhan cn join Xuong x
+--on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
+--on cn.maCN = bpccn.maCN
+--where maPCCN is not null and maCD = '07102301013'
 
-=======
-=======
->>>>>>> 5ddeae14ae5d20684b287b24c213123302ceeae0
 
-select bpccn.* from CongNhan cn join Xuong x
-on cn.maXuong = x.maXuong left join BangPhanCongCN bpccn
-on cn.maCN = bpccn.maCN
-where maPCCN is not null and maCD = '07102301013'
-<<<<<<< HEAD
->>>>>>> origin/main
-=======
-
-select * from BangPhanCongCN where maCD = '30092301011'
+--select * from BangPhanCongCN where maCD = '30092301011'
 
 insert into BangLuongNhanVien (maLuongNV,maNV,thang,nam,soNgayDiLam,soNgayNghiKhongPhep,tienPhat,bhxh,luongTong)
 values
@@ -428,5 +418,7 @@ values
 ('MT25632133','NV220010',7,2022,20,10,20000,10000,400000000);
 go
 
-select distinct thang, nam, maBP from BangLuongNhanVien join NhanVien on BangLuongNhanVien.maNV = NhanVien.maNV 
->>>>>>> 5ddeae14ae5d20684b287b24c213123302ceeae0
+insert into BangChamCongCongNhan 
+values ('121023230041', '10-12-2023', 'CN230041', 0, 0, 0, 556, '')
+go
+

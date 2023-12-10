@@ -396,8 +396,18 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 											modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), modelRow, 9);
 											modelTableDSLuongNV.setValueAt(true, modelRow, 10);
 											LocalDate ngayhientai = LocalDate.now();
-											modelTableDSLuongNV.setValueAt("Đã tính lương ở ngày:"+dtf.format(ngayhientai), modelRow, 11);}
-
+											modelTableDSLuongNV.setValueAt("Đã tính lương ở ngày:"+dtf.format(ngayhientai), modelRow, 11);
+											bc_DAO = new BangChamCongNV_DAO();
+											ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
+											if(list.size()>0)
+											for (BangChamCongNV bcc : list) {
+												bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+												bc_DAO.updateGhiChiBangChamCongNV(bcc);
+											}
+											
+										
+										}
+											
 
 										else{
 											int chon =JOptionPane.showConfirmDialog(null, "Nhân viên: "+tenNV+" Mã Số: "+maNV+" chưa có đủ bảng chấm công tháng "+thang+" năm "+nam+". Bạn có muốn tiếp tục tính lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
@@ -410,6 +420,13 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 												modelTableDSLuongNV.setValueAt(true, modelRow, 10);
 												LocalDate ngayhientai = LocalDate.now();
 												modelTableDSLuongNV.setValueAt("Đã tính lương ở ngày:"+dtf.format(ngayhientai), modelRow, 11);
+												bc_DAO = new BangChamCongNV_DAO();
+												ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
+												if(list.size()>0)
+												for (BangChamCongNV bcc : list) {
+													bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+													bc_DAO.updateGhiChiBangChamCongNV(bcc);
+												}
 											}
 										}
 
@@ -448,7 +465,18 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 										double tongLuong = luongTinh - baoHiemXH;
 										modelTableDSLuongNV.setValueAt(decimalFormat.format(baoHiemXH), row, 8);
 										modelTableDSLuongNV.setValueAt(decimalFormat.format(tongLuong), row, 9);
-										modelTableDSLuongNV.setValueAt(true, row, 10);}
+										modelTableDSLuongNV.setValueAt(true, row, 10);
+										LocalDate ngayhientai = LocalDate.now();
+										modelTableDSLuongNV.setValueAt("Đã tính lương ở ngày:"+dtf.format(ngayhientai), row, 11);
+										bc_DAO = new BangChamCongNV_DAO();
+										ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
+										if(list.size()>0)
+										for (BangChamCongNV bcc : list) {
+											bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+											bc_DAO.updateGhiChiBangChamCongNV(bcc);
+										}
+										}
+									
 									else{
 										int chon =JOptionPane.showConfirmDialog(null, "Nhân viên: "+tenNV+" Mã Số: "+maNV+" chưa có đủ bảng chấm công tháng "+thang+" năm "+nam+". Bạn có muốn tiếp tục tính lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
 										if (chon ==JOptionPane.YES_OPTION) {
@@ -460,6 +488,13 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 											modelTableDSLuongNV.setValueAt(true, row, 10);
 											LocalDate ngayhientai = LocalDate.now();
 											modelTableDSLuongNV.setValueAt("Đã tính lương ở ngày:"+dtf.format(ngayhientai), row, 11);
+											bc_DAO = new BangChamCongNV_DAO();
+											ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
+											if(list.size()>0)
+											for (BangChamCongNV bcc : list) {
+												bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+												bc_DAO.updateGhiChiBangChamCongNV(bcc);
+											}
 										}
 									}
 								}
@@ -510,8 +545,17 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 				if (rowdk < 0) {
 					JOptionPane.showMessageDialog(null, "Hãy chọn ít nhất 1 điều kiện để chọn nhanh danh sách nhân viến chưa tính lương!");
 				}else
-					chonTatCaFalse();
-
+					{
+						if(kiemtraCoFalseKhong()){
+							chonTatCaFalse();
+						} else {
+							int chon = JOptionPane.showConfirmDialog(null, "Bạn có muốn chọn tất cả nhân viên không?", "Thông báo", JOptionPane.YES_NO_OPTION);
+							if (chon == JOptionPane.YES_OPTION) {
+								ChonTatCaTrue();
+								
+							}
+						}
+					}
 			}
 		});
 		btnHoanTatLuongNV.addActionListener(new ActionListener() {
@@ -597,11 +641,14 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 								if(bl2==null) {
 									bl_DAO.insertBangLuongNV(bl);
 									thongBao=1;
-									dk=1;}
+									dk=1;
+									}
 								else {
 									bl_DAO.updateBangLuongNV(bl);
 									thongBao=1;
-									dk=1;}
+									dk=1;
+									
+									}
 
 
 
@@ -611,8 +658,21 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 							dk=0;
 							}
 						}
-						if(thongBao==1&&dk==1)
+						if(thongBao==1&&dk==1) {
 							JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thành công!");
+							int row = tblThangLuongNhanVien.getSelectedRow();
+							int thangs = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
+							int nams = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
+							String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
+							
+							taoDSBangLuongtuDBtheoDK(thangs,nams,mahoaTenBoPhan(mabp));
+							bc_DAO = new BangChamCongNV_DAO();
+							BangChamCongNV bc = bc_DAO.layBangCCCuoiCungThangCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam);
+							if(bc!=null) {
+							bc.setGhiChu(bc.getGhiChu()+" và Đã Lưu Vào Ngày:"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+							bc_DAO.updateGhiChiBangChamCongNV(bc);
+						}}
+							
 						else {
 							if(thongBao==1&&dk==0)
 								JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại!Vui Lòng tính lương trước!");
@@ -623,11 +683,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 
 					}
-					int row = tblThangLuongNhanVien.getSelectedRow();
-					int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
-					int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
-					String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
-					taoDSBangLuongtuDBtheoDK(thang,nam,mahoaTenBoPhan(mabp));
+					
 				}}
 		});
 
@@ -762,6 +818,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		// Duyệt qua tất cả các dòng trong bảng
 		for (int i = 0; i < rowCount; i++) {
 			// Lấy giá trị tại cột 10 của dòng hiện tại
+			int rowIndex = tblDSLuongNV.convertRowIndexToModel(i);
 			boolean giaTriCot10 = (boolean) modelTableDSLuongNV.getValueAt(i, 10);
 
 			// Kiểm tra nếu giá trị cột 10 là false
@@ -771,6 +828,38 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			}
 		}
 	}
+	private void ChonTatCaTrue() {
+		int rowCount = tblDSLuongNV.getRowCount();
+		
+		// Duyệt qua tất cả các dòng trong bảng
+		for (int i = 0; i < rowCount; i++) {
+			int rowIndex = tblDSLuongNV.convertRowIndexToModel(i);
+			// Lấy giá trị tại cột 10 của dòng hiện tại
+			boolean giaTriCot10 = (boolean) modelTableDSLuongNV.getValueAt(i, 10);
+
+			// Kiểm tra nếu giá trị cột 10 là false
+			if (giaTriCot10) {
+				// Chọn dòng hiện tại
+				tblDSLuongNV.addRowSelectionInterval(i, i);
+			}
+		}
+	}
+	private boolean kiemtraCoFalseKhong(){
+		int rowCount = tblDSLuongNV.getRowCount();
+
+		// Duyệt qua tất cả các dòng trong bảng
+		for (int i = 0; i < rowCount; i++) {
+			// Lấy giá trị tại cột 10 của dòng hiện tại
+			boolean giaTriCot10 = (boolean) modelTableDSLuongNV.getValueAt(i, 10);
+
+			// Kiểm tra nếu giá trị cột 10 là false
+			if (!giaTriCot10) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private int soNhanVienChuaTinhLuong() {
 		int rowCount = tblDSLuongNV.getRowCount();
 		int dem=0;
