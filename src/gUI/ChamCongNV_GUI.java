@@ -516,6 +516,7 @@ public class ChamCongNV_GUI implements ListSelectionListener, ActionListener {
     						btnCapNhat.setEnabled(true);
     					}
     					else{
+    						dsCongLamViec = taoDefaultDsChamCong(dsNVBPCa);
     						clearTable();
     						docDuLieuVaoTable();
     						btnHoanTat.setEnabled(true);
