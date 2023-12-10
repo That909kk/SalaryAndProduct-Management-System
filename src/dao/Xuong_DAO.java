@@ -69,4 +69,25 @@ public class Xuong_DAO {
 		}
 		return x;
 	}
+	//Minh Thật
+		public ArrayList<Xuong> layTatCaXuongKhacNhau (){
+			ArrayList<Xuong> listXuong = new ArrayList<Xuong>();
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "SELECT DISTINCT * FROM dbo.Xuong";
+			try {
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(sql);
+				while(rs.next()) {
+					String maXuong = rs.getString(1);
+					String tenXuong = rs.getString(2);
+					String diaChi = rs.getString(3);
+					Xuong xuong = new Xuong(maXuong, tenXuong, diaChi);
+					listXuong.add(xuong);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return listXuong;
+		}
 }

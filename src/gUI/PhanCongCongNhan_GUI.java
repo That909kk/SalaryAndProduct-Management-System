@@ -96,10 +96,10 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 	private JButton btnHoanTat;
 	private JLabel lblThongBaoSoLuongPhanCong;
 	
-//	public static void main(String[] args) {
-//		PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
-//		pccn.setVisible(true);
-//	}
+	public static void main(String[] args) {
+		PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
+		pccn.setVisible(true);
+	}
 	/**
 	 * Create the frame.
 	 */
@@ -534,7 +534,10 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			cell.setCellValue(phanCongCN.getSoLuongSanPham());
 			
 			cell = row.createCell(5, CellType.STRING);
-			cell.setCellValue(cn.getCaLamViec());
+			if (cn.getCaLamViec() == 1)
+				cell.setCellValue("Sáng");
+			else
+				cell.setCellValue("Tối");
 			
 			firstSheetRow += 1;
 		}
