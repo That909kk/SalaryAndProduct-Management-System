@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -144,7 +145,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		JLabel lblMaCD = new JLabel("Mã công đoạn:");
 		lblMaCD.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblMaCD.setBounds(15, 20, 100, 26);
+		lblMaCD.setBounds(15, 20, 110, 26);
 		pnlThongTinCongDoan.add(lblMaCD);
 		
 		txtMaCD = new JTextField();
@@ -184,6 +185,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		cboMaCDTienQuyet = new JComboBox<String>(modelCBOTienQuyet);
 		cboMaCDTienQuyet.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		cboMaCDTienQuyet.setBounds(455, 20, 149, 26);
+		cboMaCDTienQuyet.addItem(" ");
 		
 		pnlThongTinCongDoan.add(cboMaCDTienQuyet);
 		
@@ -297,7 +299,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		JLabel lblTim = new JLabel("Tìm kiếm theo tên sản phẩm:");
 		lblTim.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTim.setBounds(10, 590, 210, 30);
+		lblTim.setBounds(10, 590, 220, 30);
 		pnlPCCD.add(lblTim);
 		
 		txtNDTim = new JTextField();
@@ -334,25 +336,35 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		return pnlPCCD;
 	}
-	
+	/**
+	 * Phương thức lấy danh sách sản phẩm từ DB hiển thị lên model
+	 */
 	private void layDSSanPhamTuDB() {
 		sp_DAO = new SanPham_DAO();
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		modelSanPham.setRowCount(0);
-		for (SanPham sp : sp_DAO.getDSSanPham()) {
+		
+		for (SanPham sp : sp_DAO.getDSSanPhamTheoTrangThai(false)) {
 			HopDong hd = hd_DAO.getMotHopDong(sp.getHopDong().getMaHopDong());
 			modelSanPham.addRow(new Object[] {sp.getMaSP(), sp.getTenSP(), sp.getSoLuong(), sp.getSoLuongCongDoan(),
 					hd.getNgayThanhLyHopDong().format(dtf)});
 		}
 	}
-	
+	/**
+	 * Phương thức lấy danh sách công đoạn theo mã sản phẩm
+	 * @param maSP
+	 */
 	private void layDSCongDoanTuDBTheoMaSP(String maSP) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		
 		modelCongDoan.setRowCount(0);
+		
 		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
 			SanPham sp = sp_DAO.getMotSanPham(maSP);
 			modelCongDoan.addRow(new Object[] {sp.getTenSP(), cd.getMaCongDoan(), cd.getTenCongDoan(),
-					cd.getSoLuongSanPham(), cd.getSoLuongCongNhanDuKien(), cd.getGiaTien(), 
+					cd.getSoLuongSanPham(), cd.getSoLuongCongNhanDuKien(), decimalFormat.format(cd.getGiaTien()), 
 					cd.isTrangThai() ? "Đã xong" : "Chưa xong", cd.getNgayBatDau().format(dtf), 
 					cd.getNgayKetThucDuKien().format(dtf), cd.getCongDoanTienQuyet()});
 		}
@@ -374,6 +386,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			txtGiaTien.setEnabled(true);
 			txtSoCNDuKien.setEnabled(true);
 			txtSoLuongSP.setEnabled(true);
+			txtSoLuongSP.setText(sp_DAO.getMotSanPham(maSP).getSoLuong() + "");
 			dcNgayBatDau.setEnabled(true);
 			dcNgayKetThuc.setEnabled(true);
 			btnSua.setEnabled(false);
@@ -390,9 +403,13 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			btnSua.setEnabled(true);
 		}
 	}
-
+	/**
+	 * Phương thức cập nhật combobox công đoạn tiên quyết khi có một công đoạn được thêm vào sản phẩm
+	 * @param maSP
+	 */
 	private void capNhatCBOTienQuyet(String maSP) {
 		modelCBOTienQuyet.removeAllElements();
+		modelCBOTienQuyet.addElement(" ");
 		for (CongDoan cd : cd_DAO.getDSCongDoanTheoMaSP(maSP)) {
 			modelCBOTienQuyet.addElement(cd.getMaCongDoan());
 		}
@@ -445,7 +462,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 				SanPham sp = sp_DAO.getMotSanPham(maSP);
 				
 				CongDoan cd = null;
-				if (tienQuyet == null) {
+				if (tienQuyet.equals(" ")) {
 					cd = new CongDoan(maCD, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, false, "", sp);
 				} else {
 					cd = new CongDoan(maCD, tenCD, soLuongSP, soLuongCN, giaTien, ngayBatDau, ngayKetThuc, false, tienQuyet, sp);
@@ -482,7 +499,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			btnHoanTat.setEnabled(false);
 		}
 	}
-	
+	/**
+	 * Phương thức cập nhật số công đoạn hiện có cho sản phẩm mỗi khi thêm một công đoạn
+	 * @param maSP
+	 */
 	private void capNhatSoCongDoanChoSP(String maSP) {
 		SanPham sp = sp_DAO.getMotSanPham(maSP);
 		sp.setSoLuongCongDoan(cd_DAO.getDSCongDoanTheoMaSP(maSP).size());
@@ -490,7 +510,11 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			layDSSanPhamTuDB();
 		}
 	}
-
+	/**
+	 * Phương thức tạo mã công đoạn dựa trên mã sản phẩm
+	 * @param maSP
+	 * @return String maCD
+	 */
 	private String taoMaCongDoan(String maSP) {
 		return maSP + (cd_DAO.getDSCongDoanTheoMaSP(maSP).size() + 1);
 	}
@@ -559,7 +583,11 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		
 		return true;
 	}
-	
+	/**
+	 * Phương thức thông báo lỗi, khi không hợp lệ sẽ trỏ đến jtextfield không hợp lệ
+	 * @param txt
+	 * @param mess
+	 */
 	private void thongBaoLoi(JTextField txt, String mess) {
 		JOptionPane.showMessageDialog(null, mess);
 		txt.requestFocus();

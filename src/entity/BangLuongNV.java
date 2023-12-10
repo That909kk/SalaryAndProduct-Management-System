@@ -8,6 +8,8 @@ public class BangLuongNV {
 	private int soNgayDiLam;
 	private int soNgayNghiKhongPhep;
 	private double tienPhat;
+	private double bhxh;
+	private double luongTong;
 
 	public BangLuongNV() {
 		super();
@@ -18,9 +20,8 @@ public class BangLuongNV {
 		super();
 		this.maLuongNV = maLuongNV;
 	}
-
 	public BangLuongNV(String maLuongNV, NhanVien nv, int thang, int nam, int soNgayDiLam, int soNgayNghiKhongPhep,
-			double tienPhat) {
+			double tienPhat, double bhxh, double luongTong) {
 		super();
 		this.maLuongNV = maLuongNV;
 		this.nv = nv;
@@ -29,6 +30,8 @@ public class BangLuongNV {
 		this.soNgayDiLam = soNgayDiLam;
 		this.soNgayNghiKhongPhep = soNgayNghiKhongPhep;
 		this.tienPhat = tienPhat;
+		this.bhxh = bhxh;
+		this.luongTong = luongTong;
 	}
 
 	public String getMaLuongNV() {
@@ -87,15 +90,29 @@ public class BangLuongNV {
 		this.tienPhat = tienPhat;
 	}
 
-	private double luongTong() {
-		return 0.0;
+	public double getBhxh() {
+		return bhxh;
 	}
+
+	public void setBhxh(double bhxh) {
+		this.bhxh = bhxh;
+	}
+
+	public double getLuongTong() {
+		return luongTong;
+	}
+
+	public void setLuongTong(double luongTong) {
+		this.luongTong = luongTong;
+	}
+
 	
+
 	@Override
 	public String toString() {
 		return "BangLuongNV [maLuongNV=" + maLuongNV + ", nv=" + nv + ", thang=" + thang + ", nam=" + nam
 				+ ", soNgayDiLam=" + soNgayDiLam + ", soNgayNghiKhongPhep=" + soNgayNghiKhongPhep + ", tienPhat="
-				+ tienPhat + "]";
+				+ tienPhat + ", bhxh=" + bhxh + ", luongTong=" + luongTong + "]";
 	}
 
 	@Override

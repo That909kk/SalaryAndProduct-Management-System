@@ -713,7 +713,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		btnXuatDs = new JButton("Xuất DS");
 		b32.add(btnXuatDs);
 		btnXuatDs.setMaximumSize(new Dimension(140, 45));
-		btnXuatDs.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
+		btnXuatDs.setIcon(new ImageIcon("img\\icons\\icons8-excel-20.png"));
 		btnXuatDs.setBackground(new Color(255, 255, 255));
 		b32.add(Box.createHorizontalStrut(50));
 		

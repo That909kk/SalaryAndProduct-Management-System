@@ -3,7 +3,6 @@ package entity;
 import java.time.LocalDate;
 
 public class BangChamCongCN {
-	private static int idCounter = 0;
 	private String maCCCN;
 	private CongNhan cn;
 	private LocalDate ngayCham;
@@ -35,8 +34,6 @@ public class BangChamCongCN {
 
 	public BangChamCongCN(String maCCCN) {
 		super();
-		idCounter += 1;
-        this.maCCCN = "CN" + String.format("%09d", idCounter);
 	}
 
 	public String getMaCCCN() {
