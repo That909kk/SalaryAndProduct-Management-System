@@ -352,7 +352,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			for (CongNhan cn : cn_DAO.getDSCongNhanTheoXuongVaChuaDuocPhanCong(xuong)) {
 				Xuong x = x_DAO.getMotXuong(cn.getXuong().getMaXuong());
 				modelPCCN.addRow(new Object[] {cn.getMaCN(), cn.getHo(), cn.getTen(), cn.getChuyenMon(), cn.getCaLamViec(),
-						x.getTenXuong(), true, 0});
+						x.getTenXuong(), false, 0});
 			}
 		} else {
 			for (BangPhanCongCN bangPhanCongCN : listPCCN) {
@@ -588,26 +588,35 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 				btnHoanTat.setEnabled(false);
 				btnCapNhat.setEnabled(true);
 				btnIn.setEnabled(true);
+				btnThem.setEnabled(false);
 			} else {
 				lblThongBaoSoLuongPhanCong.setText("(*)");
 				btnHoanTat.setEnabled(true);
 				btnCapNhat.setEnabled(false);
 				btnIn.setEnabled(false);
+				btnThem.setEnabled(true);
 			}
 		}
 		
 		if (o.equals(tablePCCN)) {
 			int rowPCCN = tablePCCN.getSelectedRow();
 			
-			if (!((Boolean) modelPCCN.getValueAt(rowPCCN, 6)).booleanValue()) {
-				modelPCCN.setValueAt(0, rowPCCN, 7);
-				modelPCCN.setValueAt(false, rowPCCN, 6);
-				listRowUnchecked.add(rowPCCN);
-				listRowPCCN.remove(listRowPCCN.indexOf(rowPCCN));
+			String maCD = tableCongDoan.getValueAt(rowCD, 1).toString();
+			ArrayList<BangPhanCongCN> listBPCCNTheoCD = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
+			
+			if (listBPCCNTheoCD.size() != 0) {
+				JOptionPane.showMessageDialog(null, "Công đoạn này đã được phân công. Nếu muốn phân công lại, bạn hãy nhấn cập nhật.");
 			} else {
-				modelPCCN.setValueAt(true, rowPCCN, 6);
-				listRowPCCN.add(rowPCCN);
-				listRowUnchecked.remove(listRowUnchecked.indexOf(rowPCCN));
+				if (!((Boolean) modelPCCN.getValueAt(rowPCCN, 6)).booleanValue()) {
+					modelPCCN.setValueAt(0, rowPCCN, 7);
+					modelPCCN.setValueAt(false, rowPCCN, 6);
+					listRowUnchecked.add(rowPCCN);
+					listRowPCCN.remove(listRowPCCN.indexOf(rowPCCN));
+				} else {
+					modelPCCN.setValueAt(true, rowPCCN, 6);
+					listRowPCCN.add(rowPCCN);
+					listRowUnchecked.remove(listRowUnchecked.indexOf(rowPCCN));
+				}
 			}
 		}
 	}
