@@ -1450,7 +1450,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		 if (o == btnXuatDs) {
 			 try {
 				    XSSFWorkbook workBook = new XSSFWorkbook();
-				    XSSFSheet sheet = workBook.createSheet();
+				    XSSFSheet sheet = workBook.createSheet("Danh sách");
 
 				    XSSFRow headerRow = sheet.createRow(0);
 				    for (int i = 0; i < tblDsNV.getColumnCount(); i++) {
@@ -1480,7 +1480,7 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 				        File selectedFile = fileChooser.getSelectedFile();
 				        String filePath = selectedFile.getAbsolutePath();
 
-				        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+				        try (FileOutputStream fos = new FileOutputStream(filePath+".xlsx")) {
 				            workBook.write(fos);
 				            JOptionPane.showMessageDialog(frame, "In thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 				        } catch (IOException ex) {

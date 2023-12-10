@@ -20,7 +20,6 @@
 	<classpathentry kind="lib" path="D:/HK5/PTUD/SalaryAndProduct-Management-System/lib/poi-4.1.2.jar"/>
 	<classpathentry kind="lib" path="D:/HK5/PTUD/SalaryAndProduct-Management-System/lib/poi-ooxml-4.1.2.jar"/>
 	<classpathentry kind="lib" path="D:/HK5/PTUD/SalaryAndProduct-Management-System/lib/poi-ooxml-schemas-4.1.2.jar"/>
-	<classpathentry kind="lib" path="D:/HK5/PTUD/SalaryAndProduct-Management-System/lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="D:/HK5/PTUD/SalaryAndProduct-Management-System/lib/xmlbeans-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
