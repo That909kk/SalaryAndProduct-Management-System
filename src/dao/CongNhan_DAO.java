@@ -43,7 +43,7 @@ public class CongNhan_DAO {
 				cn.setTen(rs.getString(4));
 				cn.setGioiTinh(rs.getBoolean(5));
 				java.sql.Date ngaySinh = rs.getDate(6);
-				LocalDate NgaySinh = ngaySinh.toLocalDate();
+				cn.setNgaySinh(ngaySinh.toLocalDate());
 				cn.setcCCD(rs.getString(7));
 				cn.setDiaChi(rs.getString(8));
 				cn.setSoDienThoai(rs.getString(9));
@@ -52,7 +52,7 @@ public class CongNhan_DAO {
 				cn.setPhuCap(rs.getDouble(12));
 				cn.setLuongCoBan(rs.getDouble(13));
 				java.sql.Date ngayBatDauLamViec = rs.getDate(14);
-				LocalDate NgayBatDauLamViec = ngayBatDauLamViec.toLocalDate();	
+				cn.setNgayBatDauLamViec(ngayBatDauLamViec.toLocalDate());	
 				Xuong x = new Xuong(rs.getString(15));
 				cn.setXuong(x);
 				dsCN.add(cn);
