@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -545,16 +546,19 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		String filePath = "";
 		
 		JFileChooser fc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setDialogTitle("Chọn thư mục để xuất file excel");
+		fc.setFileFilter(new FileNameExtensionFilter("Tệp excel (*.xlsx)", "xlsx"));
 		int returnValue = fc.showSaveDialog(null);
 		
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			if (fc.getSelectedFile().isDirectory()) {
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy");
-
-				filePath += fc.getSelectedFile();
+				
+				filePath += fc.getSelectedFile().getAbsolutePath();
+				
 				File file = new File(filePath + "//" + sp.getTenSP() + "_" + cd.getTenCongDoan() 
-				+ "_" + hd.getNgayKy().format(dtf) + ".xlsx");
+							+ "_" + hd.getNgayKy().format(dtf) + ".xlsx");					
 				
 				try {
 					FileOutputStream fos = new FileOutputStream(file);

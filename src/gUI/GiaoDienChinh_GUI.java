@@ -514,6 +514,11 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		Object o = e.getSource();
 		
 		if (o.equals(mnHome)) {
+			for (JMenuItem item : listMenu) {
+				item.setBackground(Color.WHITE);
+				item.setForeground(Color.BLACK);
+			}
+			
 			chuyenGUI(pnlBackGround);
 			this.setTitle("Màn Hình Chính");
 			mnHome.setBackground(new Color(0, 169, 255));
