@@ -132,7 +132,7 @@ public class ChiTietNV_GUI extends JFrame {
 		
 		lblBoPhan = new JLabel("Bộ Phận:");
 		lblBoPhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblBoPhan.setBounds(300, 66, 80, 25);
+		lblBoPhan.setBounds(300, 66, 90, 25);
 		pnlChiTietLuongNV.add(lblBoPhan);
 		
 		lblThang = new JLabel("Tháng");
@@ -160,7 +160,7 @@ public class ChiTietNV_GUI extends JFrame {
 		txtBoPhan = new JTextField();
 		txtBoPhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtBoPhan.setColumns(10);
-		txtBoPhan.setBounds(382, 66, 165, 25);
+		txtBoPhan.setBounds(387, 66, 165, 25);
 		pnlChiTietLuongNV.add(txtBoPhan);
 		
 		txtMaNV = new JTextField();
