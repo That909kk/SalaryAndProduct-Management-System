@@ -97,10 +97,10 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 	private JButton btnHoanTat;
 	private JLabel lblThongBaoSoLuongPhanCong;
 	
-	public static void main(String[] args) {
-		PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
-		pccn.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		PhanCongCongNhan_GUI pccn = new PhanCongCongNhan_GUI();
+//		pccn.setVisible(true);
+//	}
 	/**
 	 * Create the frame.
 	 */
@@ -132,16 +132,15 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		contentPane.add(Menu);
 		
 		contentPane.add(this.getPCCNGUI());
-		
-		lblThongBaoSoLuongPhanCong = new JLabel("(*)");
-		lblThongBaoSoLuongPhanCong.setForeground(Color.RED);
-		lblThongBaoSoLuongPhanCong.setFont(new Font("Tahoma", Font.ITALIC, 16));
-		lblThongBaoSoLuongPhanCong.setBounds(500, 590, 500, 30);
-		pnlPCCD.add(lblThongBaoSoLuongPhanCong);
 	}
 	
 	protected JPanel getPCCNGUI() {
 		bPCCN_DAO = new BangPhanCongCN_DAO();
+		
+		sp_DAO = new SanPham_DAO();
+		cd_DAO = new CongDoan_DAO();
+		cn_DAO = new CongNhan_DAO();
+		x_DAO = new Xuong_DAO();
 		
 		pnlPCCD = new JPanel();
 		pnlPCCD.setBackground(new Color(240, 248, 255));
@@ -200,9 +199,9 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		txtSoCN.setText(cn_DAO.getDSCongNhan().size() - bPCCN_DAO.getDSCongNhanDuocPhanCong().size() + "");
 		pnlThongTinCongDoan.add(txtSoCN);
 		
-		JLabel lblSoCD = new JLabel("Số công đoạn chưa phân công:");
+		JLabel lblSoCD = new JLabel("Số công đoạn chưa hoàn thành:");
 		lblSoCD.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblSoCD.setBounds(30, 60, 284, 30);
+		lblSoCD.setBounds(30, 60, 300, 30);
 		pnlThongTinCongDoan.add(lblSoCD);
 		
 		txtSoCD = new JTextField("");
@@ -212,7 +211,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		txtSoCD.setEnabled(false);
 		txtSoCD.setFont(new Font("Tahoma", Font.BOLD, 18));
 		txtSoCD.setColumns(10);
-		txtSoCD.setBounds(315, 60, 100, 30);
+		txtSoCD.setBounds(329, 60, 60, 30);
 		txtSoCD.setText(cd_DAO.getDSCongDoanTheoTrangThai(false).size() + "");
 		pnlThongTinCongDoan.add(txtSoCD);
 		
@@ -303,6 +302,12 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		btnCapNhat.setEnabled(false);
 		btnCapNhat.addActionListener(this);
 		btnHoanTat.setEnabled(false);
+		
+		lblThongBaoSoLuongPhanCong = new JLabel("(*)");
+		lblThongBaoSoLuongPhanCong.setForeground(Color.RED);
+		lblThongBaoSoLuongPhanCong.setFont(new Font("Tahoma", Font.ITALIC, 16));
+		lblThongBaoSoLuongPhanCong.setBounds(500, 590, 500, 30);
+		pnlPCCD.add(lblThongBaoSoLuongPhanCong);
 		
 		btnThem.addActionListener(this);
 		btnIn.addActionListener(this);
@@ -432,8 +437,12 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 				layDSCongDoanVaSanPhamTuDB();
 				
 				if (modelPCCNIsChanging) {
+					lblThongBaoSoLuongPhanCong.setText("(*) Hiện tại công đoạn này đã phân công đủ số sản phẩm.");
 					btnHoanTat.setEnabled(false);
 					btnCapNhat.setEnabled(true);
+					btnIn.setEnabled(true);
+				} else {
+					lblThongBaoSoLuongPhanCong.setText("(*)");
 				}
 			}
 		}
@@ -441,6 +450,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		if (o.equals(btnCapNhat)) {
 			btnCapNhat.setEnabled(false);
 			btnHoanTat.setEnabled(true);
+			btnIn.setEnabled(false);
 			modelPCCNIsChanging = false;
 			
 			rowCD = tableCongDoan.getSelectedRow();
@@ -448,10 +458,11 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			String tenXuong = "%" + layChuoiTruocKyTuTrang(modelCongDoan.getValueAt(rowCD, 2).toString()) + "%";
 			
 			bPCCN_DAO.deleteALLPCCuaCongDoan(maCD);
-			layDSPCCCongNhanTuDBTheoXuong(tenXuong, maCD);
+//			layDSPCCCongNhanTuDBTheoXuong(tenXuong, maCD);
+			hienThiDSPCCNTrenModel();
 			txtSoCN.setText(cn_DAO.getDSCongNhan().size() - bPCCN_DAO.getDSCongNhanDuocPhanCong().size() + "");
 			
-			layDSCongDoanVaSanPhamTuDB();
+			lblThongBaoSoLuongPhanCong.setText("(*) Hiện tại công đoạn này đã phân công đủ số sản phẩm.");
 		}
 		
 		if (o.equals(btnTim)) {
@@ -466,6 +477,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 					System.out.println("Bad regex pattern");
 				}
 			}
+			modelPCCN.setRowCount(0);
 		}
 		
 		if (o.equals(btnIn)) {

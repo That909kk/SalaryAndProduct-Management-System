@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.PatternSyntaxException;
 
@@ -71,18 +72,18 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					HopDong_GUI frame = new HopDong_GUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					HopDong_GUI frame = new HopDong_GUI();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	/**
 	 * Create the frame.
 	 */
@@ -159,7 +160,10 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		dcNgayThanhLi.setDateFormatString("dd/MM/yyyy");
 		dcNgayThanhLi.setBackground(new Color(255, 255, 255));
 		dcNgayThanhLi.setBounds(150, 100, 280, 30);
-		dcNgayThanhLi.setDate(new Date());
+		Calendar currentDate = Calendar.getInstance();
+		currentDate.add(Calendar.DAY_OF_MONTH, 1);
+		
+		dcNgayThanhLi.setDate(currentDate.getTime());
 		pnlThongTin.add(dcNgayThanhLi);
 		
 		JPanel pnlChucNang = new JPanel();
@@ -456,7 +460,7 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 		
 		if (o.equals(btnXoa)) {
 			int row = tblDSHopDong.getSelectedRow();
-			int luaChon = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xoá cột này?", "Lưu Ý", JOptionPane.YES_NO_OPTION);
+			int luaChon = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xoá hợp đồng này?", "Lưu Ý", JOptionPane.YES_NO_OPTION);
 			
 			if (luaChon == JOptionPane.YES_OPTION) {
 				if (hd_DAO.deleteHopDong((String) tblDSHopDong.getValueAt(row, 0))) {
@@ -522,15 +526,26 @@ public class HopDong_GUI extends JFrame implements ActionListener, MouseListener
 	 * @return String maHopDong
 	 */
 	private String taoMaHopDong(LocalDate ngayKi) {
+		int numOfHopDong = 0;
+		
 		hd_DAO = new HopDong_DAO();
+		
 		int day = ngayKi.getDayOfMonth();
 		int month = ngayKi.getMonthValue();
 		int year = ngayKi.getYear();
 		String maCanTao = "00";
+		
 		String day_String = maCanTao.substring(0, maCanTao.length() - String.valueOf(day).length()) + day;
 		String month_String = maCanTao.substring(0, maCanTao.length() - String.valueOf(month).length()) + month;
-		String stt = maCanTao.substring(0, maCanTao.length() - String.valueOf(rootPaneCheckingEnabled).length());
-		return day_String + month_String + (year % 100);
+		String year_String = maCanTao.substring(0, maCanTao.length() - String.valueOf(year % 100).length()) + year % 100;
+
+		for (HopDong hd : hd_DAO.getDSHopDong()) {
+			if (hd.getNgayKy().equals(ngayKi))
+				numOfHopDong++;
+		}
+		String stt = maCanTao.substring(0, maCanTao.length() - String.valueOf(numOfHopDong).length()) + (numOfHopDong + 1);
+		System.out.println(stt);
+		return day_String + month_String + year_String + stt;
 	}
 	/**
 	 * cre: Huỳnh Kim Thành

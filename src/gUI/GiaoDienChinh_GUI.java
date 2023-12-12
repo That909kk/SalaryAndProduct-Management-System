@@ -323,6 +323,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			txtNumHD.setText(hd_DAO.getSize() + "");
 			txtDate.setText(dateFormatted);
 			txtName.setText(hoTen);
+			mnCongDoan.setVisible(false);
 			mnLuong.setVisible(false);
 			mniCCCN.setVisible(false);
 		}
@@ -338,9 +339,12 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		
 		case "QLXU" -> {
+			txtNumberNV.setText(nv_DAO.getListNV().size() + "");
+			txtNumHD.setText(hd_DAO.getSize() + "");
 			txtDate.setText(dateFormatted);
 			txtName.setText(hoTen);
 			mnNhanVien.setVisible(false);
+			mnLuong.setVisible(false);
 			mniHopDong.setVisible(false);
 		}
 		
@@ -365,6 +369,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		listMenu.add(mntmLuongNV);
 		listMenu.add(mntmPCCD);
 		listMenu.add(mntmPCCN);
+		listMenu.add(mnCongDoan);
 		
 		mnHome.addMouseListener(this);
 		mniQuanLyCN.addActionListener(this);
