@@ -245,6 +245,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			for (int i = 1;i <= 12; i++){
 			cboThangLuongNV.addItem(i+"");
 		}
+		cboThangLuongNV.setSelectedItem(" ");
 		pnlLuongNV.add(cboThangLuongNV);
 
 		
@@ -259,6 +260,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 //		pnlLuongNV.add(btnLoc);
 		
 
+		
 		cboNamLuongNV = new JComboBox<String>();
 		cboNamLuongNV.setBounds(230, 29, 100, 30);
 		cboNamLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -270,6 +272,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			cboNamLuongNV.addItem(nam2.toString());
 			
 		}
+		cboNamLuongNV.setSelectedItem(" ");
 		pnlLuongNV.add(cboNamLuongNV);
 		
 		JLabel lblNamcbo = new JLabel("Năm:");
@@ -283,27 +286,21 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		pnlLuongNV.add(cboBoPhanLuongNV);
 		
 		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhau()){
+			cboBoPhanLuongNV.removeAll();
 			ArrayList<String> dsMaBP = bc_DAO.listTatCaBoPhan(bc_DAO.dsBangChamCongNhanVienTheoTungThang(nam1.getMonthValue(), nam1.getYear()));
 			for(String maBP : dsMaBP){
 				String tenBP = hienThiTenBoPhan(maBP);
 				cboBoPhanLuongNV.addItem(tenBP);
 			}
 		}
-
 		
-
+		cboBoPhanLuongNV.setSelectedItem(" ");
+		
 		JLabel lblBoPhanLuongNV = new JLabel("Bộ Phận:");
 		lblBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblBoPhanLuongNV.setBounds(350, 29, 80, 30);
 		pnlLuongNV.add(lblBoPhanLuongNV);
 
-	
-		//Để trống ô nhập combobox
-		cboThangLuongNV.setSelectedItem(" ");
-		cboNamLuongNV.setSelectedItem(" ");
-		cboBoPhanLuongNV.setSelectedItem(" ");
-
-		//Cho phép nhập vào combobox
 
 		JLabel lblSoNVChuaTinhLuong = new JLabel("Số Nhân Viên Chưa Tính Lương:");
 		lblSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -467,14 +464,10 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 						String tenBPLoc = modelTableThangLuongNV.getValueAt(i, 2).toString();
 						if(thangLoc.equals(thang)&&namLoc.equals(nam)&&tenBPLoc.equals(tenBP)){
 							tblThangLuongNhanVien.setRowSelectionInterval(i, i);
-//							modelTableThangLuongNV.setRowCount(0);
 							int row = tblThangLuongNhanVien.getSelectedRow();
 							int thang1 = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
 							int nam1 = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
 							String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
-//							cboThangLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 0).toString());
-//							cboNamLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 1).toString());
-//							cboBoPhanLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 2).toString());
 							taoDSBangLuongtuDBtheoDK(thang1,nam1,mahoaTenBoPhan(mabp));
 						}
 					}
@@ -1109,7 +1102,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 					// Ô Bộ phận chiếm 3 cột bên phải
 					sheet.addMergedRegion(new CellRangeAddress(2, 2, 4, 6));
-					subHeaderRow.createCell(4, CellType.STRING).setCellValue("Bộ Phận: " + boPhan);
+					subHeaderRow.createCell(4, CellType.STRING).setCellValue("" + boPhan);
 
 					sheet.addMergedRegion(new CellRangeAddress(2, 2, 7, 10));
 					subHeaderRow.createCell(7, CellType.STRING).setCellValue("Ngày In: " + dtf.format(LocalDate.now()));

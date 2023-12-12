@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -26,6 +27,15 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.w3c.dom.events.MouseEvent;
 
 import dao.BangChamCongCN_DAO;
@@ -47,8 +57,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -80,6 +96,11 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 	private Xuong_DAO x_DAO;
 	private CongNhan_DAO cn_DAO;
 	private BangLuongCN_DAO bl_DAO;
+	private Component frame;
+	private JComboBox<String> cboThangLuongCN;
+	private JComboBox<String> cboNamLuongCN;
+	private BangChamCongCN_DAO bcc_DAO;
+	private JComboBox<String> cboXuongCN;
 
 	public LuongCongNhan_GUI() {
 		super("Lương Cong Nhan");
@@ -238,13 +259,82 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		pnlThongKeTinhLuong.setBounds(604, 0, 660, 190);
 		pnlLuongCN.add(pnlThongKeTinhLuong);
 		pnlThongKeTinhLuong.setLayout(null);
+		//~~~~~~~~~~
+		cboThangLuongCN = new JComboBox<String>();
+		cboThangLuongCN.setBounds(101, 29, 50, 30);
+		cboThangLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			for (int i = 1;i <= 12; i++){
+			cboThangLuongCN.addItem(i+"");
+		}
+		cboThangLuongCN.setSelectedItem(" ");
+		pnlLuongCN.add(cboThangLuongCN);
+
 		
-		txtGhiChuLuongCN = new JTextField();
-		txtGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtGhiChuLuongCN.setBounds(268, 29, 369, 30);
-		pnlThongKeTinhLuong.add(txtGhiChuLuongCN);
-		txtGhiChuLuongCN.setColumns(10);
+		JLabel Thangcbo = new JLabel("Tháng:");
+		Thangcbo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		Thangcbo.setBounds(21, 29, 80, 30);
+		pnlLuongCN.add(Thangcbo);
 		
+		JButton btnLoc = new JButton("Lọc");
+		btnLoc.setBounds(590, 29, 60, 30);
+		btnLoc.setBackground(new Color(255, 255, 255));
+		
+		
+		cboNamLuongCN = new JComboBox<String>();
+		cboNamLuongCN.setBounds(230, 29, 100, 30);
+		cboNamLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		bcc_DAO = new BangChamCongCN_DAO();
+		ArrayList<Integer> listNam = bcc_DAO.layDSNamKhacnhauCCCN();
+		for(Integer nam2 : listNam){
+			
+			cboNamLuongCN.addItem(nam2.toString());
+			
+		}
+		cboNamLuongCN.setSelectedItem(" ");
+		pnlLuongCN.add(cboNamLuongCN);
+		
+		JLabel lblNamcbo = new JLabel("Năm:");
+		lblNamcbo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNamcbo.setBounds(170, 29, 50, 30);
+		pnlLuongCN.add(lblNamcbo);
+
+		cboXuongCN = new JComboBox<String>();
+		cboXuongCN.setBounds(430, 29, 155, 30);
+		cboXuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongCN.add(cboXuongCN);
+		
+		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhauCN()){
+			ArrayList<Xuong> listXuong = x_DAO.layTatCaXuongKhacNhau();
+			for(Xuong x : listXuong){
+				String tenBP = x.getTenXuong();
+				cboXuongCN.addItem(tenBP);
+			}
+		}
+		cboXuongCN.setSelectedItem(" ");
+		
+
+		JLabel lblXuongCN = new JLabel("Xưởng:");
+		lblXuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblXuongCN.setBounds(350, 29, 80, 30);
+		pnlLuongCN.add(lblXuongCN);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		txtGhiChuLuongCN = new JTextField();
+//		txtGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+//		txtGhiChuLuongCN.setBounds(268, 29, 369, 30);
+//		pnlThongKeTinhLuong.add(txtGhiChuLuongCN);
+//		txtGhiChuLuongCN.setColumns(10);
+//		
 		txtSoCNChuaTinhLuong = new JTextField();
 		txtSoCNChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtSoCNChuaTinhLuong.setBounds(268, 69, 369, 30);
@@ -262,11 +352,11 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		txtTongLuongCanTraCN.setBounds(268, 149, 369, 30);
 		pnlThongKeTinhLuong.add(txtTongLuongCanTraCN);
 		txtTongLuongCanTraCN.setColumns(10);
-		
-		JLabel lblGhiChuLuongCN = new JLabel("Ghi Chú:");
-		lblGhiChuLuongCN.setBounds(21, 29, 98, 30);
-		pnlThongKeTinhLuong.add(lblGhiChuLuongCN);
-		lblGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+//		
+//		JLabel lblGhiChuLuongCN = new JLabel("Ghi Chú:");
+//		lblGhiChuLuongCN.setBounds(21, 29, 98, 30);
+//		pnlThongKeTinhLuong.add(lblGhiChuLuongCN);
+//		lblGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		JLabel lblSoCNChuaTinhLuong = new JLabel("Số Công Nhân Chưa Tính Lương:");
 		lblSoCNChuaTinhLuong.setBounds(21, 69, 243, 30);
@@ -282,6 +372,14 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		lblTongLuongCanTraCN.setBounds(21, 149, 197, 30);
 		pnlThongKeTinhLuong.add(lblTongLuongCanTraCN);
 		lblTongLuongCanTraCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		pnlThongKeTinhLuong.add(cboThangLuongCN);
+		pnlThongKeTinhLuong.add(cboNamLuongCN);
+		pnlThongKeTinhLuong.add(cboXuongCN);
+		pnlThongKeTinhLuong.add(Thangcbo);
+		pnlThongKeTinhLuong.add(lblNamcbo);
+		pnlThongKeTinhLuong.add(lblXuongCN);
+		pnlThongKeTinhLuong.add(btnLoc);
 		tblThangLuongCN.addMouseListener(this);
 		btnChonNhan.addActionListener(this);
 		btnHoanTatLuongCN.addActionListener(this);
@@ -289,7 +387,63 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		btnXemChiTietLuongCN.addActionListener(this);
 		btnInBangLuongCN.addActionListener(this);
 		btnTinhLuongCN.addActionListener(this);
+		
+		btnLoc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String thang = cboThangLuongCN.getSelectedItem().toString().trim();
+				String nam = cboNamLuongCN.getSelectedItem().toString().trim();
+				String Xuong = cboXuongCN.getSelectedItem().toString().trim();
+				bcc_DAO= new BangChamCongCN_DAO();
+				ArrayList<LocalDate> listkt = bcc_DAO.layTatCaThangvaNamkhacNhauCN();
+				int temp=0;
+				
+				if(thang.equals("")||nam.equals("")||Xuong.equals("")){
+					JOptionPane.showMessageDialog(null, "Hãy chọn đầy đủ thông tin để lọc!");
+				}
+				else{
+					for (LocalDate kt : listkt) {
+					if(!(kt.getMonthValue()+"").equals(thang))
+						temp=1;
+					
+				}
+				if(temp==1)
+					JOptionPane.showMessageDialog(null, "Hiện Không Có Danh Sách Tháng Này!");
+				else {
+					int rowCount = modelTableThangLuongCN.getRowCount();
+					System.out.println(rowCount);
+					for (int i = rowCount - 1; i >= 0; i--) {
+						String thangLoc = modelTableThangLuongCN.getValueAt(i, 0).toString();
+						String namLoc = modelTableThangLuongCN.getValueAt(i, 1).toString();
+						String tenBPLoc = modelTableThangLuongCN.getValueAt(i, 2).toString();
+						if(thangLoc.equals(thang)&&namLoc.equals(nam)&&tenBPLoc.equals(Xuong)){
+							tblThangLuongCN.setRowSelectionInterval(i, i);
 
+							int row = tblThangLuongCN.getSelectedRow();
+							int thang1 = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 0).toString());
+							int nam1 = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 1).toString());
+							String xuong = modelTableThangLuongCN.getValueAt(row, 2).toString();
+							taoDSBangLuongtuDBtheoDK(thang1,nam1,xuong);
+						}
+					}
+				}
+			}}
+		});
+		
+		btnInBangLuongCN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = tblThangLuongCN.getSelectedRow();
+				if(row<0) {
+					JOptionPane.showMessageDialog(null, "Hãy chọn danh sách tháng lương để in!");
+				}
+				else {
+				int thang = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 0).toString());
+				int nam = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 1).toString());
+				String xuong = modelTableThangLuongCN.getValueAt(row, 2).toString();
+				String tongTra= txtTongLuongCanTraCN.getText();
+				exportDsToExcel(thang,nam,xuong,tongTra);}
+			}
+		});
+		
 		btnChonNhan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int rowdk = tblThangLuongCN.getSelectedRow();
@@ -663,8 +817,8 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 				modelTableDSLuongCN.addRow(row);
 		}
 	}
-		setTxtSoNVChuaTinhLuong();
-		setTxtTongSoNV();
+		setTxtSoCNChuaTinhLuong();
+		setTxtTongSoCN();
 		setTxtTongLuongCanTra();
 }
 		private boolean kiemSoBangChamCongCua1CN(String maCN,int thang, int nam){
@@ -729,10 +883,10 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		return tongLuongCanTra;
 	}
-	private void setTxtSoNVChuaTinhLuong(){
+	private void setTxtSoCNChuaTinhLuong(){
 		txtSoCNChuaTinhLuong.setText(soCongNhanChuaTinhLuong()+"");
 	}
-	private void setTxtTongSoNV(){
+	private void setTxtTongSoCN(){
 		txtTongSoCN.setText(tongSoCongNhan()+"");
 	}
 	private void setTxtTongLuongCanTra(){
@@ -769,6 +923,101 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		return false;
 	}
+	private void exportDsToExcel(int thang, int nam , String Xuong, String tongLuong) {
+
+		
+		if(kiemtraCoFalseKhong()){
+			JOptionPane.showMessageDialog(this, "Vui Lòng Tính Lương Trước Khi In!");
+		} else {
+			DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				XSSFWorkbook workBook = new XSSFWorkbook();
+				XSSFSheet sheet = workBook.createSheet("Danh sách");
+
+				int columnCount = tblDSLuongCN.getColumnCount() - 2; // Exclude the last two columns
+
+				// Merge the first two rows
+				sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, columnCount - 1));
+				XSSFRow mergedHeaderRow = sheet.createRow(0);
+				mergedHeaderRow.createCell(0, CellType.STRING).setCellValue("Danh Sách Bảng Lương Tháng " + dinhDangThang(thang)+" Năm "+nam );
+				XSSFCellStyle style = sheet.getWorkbook().createCellStyle();
+				XSSFFont font = sheet.getWorkbook().createFont();
+				font.setBold(true);
+				style.setFont(font);
+				style.setAlignment(HorizontalAlignment.CENTER);
+				style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.CENTER);
+
+				XSSFCell cell = mergedHeaderRow.createCell(0, CellType.STRING);
+				cell.setCellValue("Danh Sách Bảng Lương Tháng " + dinhDangThang(thang) + " Năm " + nam);
+				cell.setCellStyle(style);
+
+				// Create the second row
+				// Tạo dòng subHeaderRow
+				XSSFRow subHeaderRow = sheet.createRow(2);
+
+				// Ô Tháng chiếm 2 cột bên phải
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 1));
+				subHeaderRow.createCell(0, CellType.STRING).setCellValue("Tháng: " + dinhDangThang(thang));
+
+				// Ô Năm chiếm 2 cột bên phải
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 2, 3));
+				subHeaderRow.createCell(2, CellType.STRING).setCellValue("Năm: " + nam);
+
+				// Ô Bộ phận chiếm 3 cột bên phải
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 4, 6));
+				subHeaderRow.createCell(4, CellType.STRING).setCellValue("" + Xuong);
+
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 7, 10));
+				subHeaderRow.createCell(7, CellType.STRING).setCellValue("Ngày In: " + dtf.format(LocalDate.now()));
+
+				// Create the header row
+				XSSFRow headerRow = sheet.createRow(3);
+				for (int i = 0; i < columnCount; i++) {
+					headerRow.createCell(i, CellType.STRING).setCellValue(tblDSLuongCN.getColumnName(i));
+				}
+
+				// Populate the data rows
+				for (int i = 0; i < tblDSLuongCN.getRowCount(); i++) {
+					XSSFRow row = sheet.createRow(i + 4); // Start from row 5
+					for (int j = 0; j < columnCount; j++) {
+						Object value = tblDSLuongCN.getValueAt(i, j);
+						if (value != null) {
+							if (value instanceof Number) {
+								row.createCell(j, CellType.NUMERIC).setCellValue(((Number) value).doubleValue());
+							} else {
+								row.createCell(j, CellType.STRING).setCellValue(value.toString());
+							}
+						}
+					}
+				}
+
+				// Create the last row
+				XSSFRow lastRow = sheet.createRow(sheet.getLastRowNum() + 1);
+				lastRow.createCell(0, CellType.STRING).setCellValue("Tổng Cộng: " + tongLuong);
+
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+				fileChooser.setFileFilter(new FileNameExtensionFilter("Tệp Excel (*.xlsx)", "xlsx"));
+				int returnValue = fileChooser.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					String filePath = selectedFile.getAbsolutePath();
+
+					try (FileOutputStream fos = new FileOutputStream(filePath + ".xlsx")) {
+						workBook.write(fos);
+						JOptionPane.showMessageDialog(frame, "In thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+		}
+	}
 	@Override
 	public void mouseClicked(java.awt.event.MouseEvent e) {
 		Object o = e.getSource();
@@ -777,6 +1026,9 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 			int thang = Integer.parseInt(tblThangLuongCN.getValueAt(row, 0).toString());
 			int nam = Integer.parseInt(tblThangLuongCN.getValueAt(row, 1).toString());
 			String xuong = tblThangLuongCN.getValueAt(row, 2).toString();
+			cboThangLuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 0).toString());
+			cboNamLuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 1).toString());
+			cboXuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 2).toString());
 			 taoDSBangLuongtuDBtheoDK(thang, nam, xuong);
 		}
 	}
