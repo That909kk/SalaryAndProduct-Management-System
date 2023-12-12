@@ -65,6 +65,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -618,7 +619,8 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		btnTinhLuongCN.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+				DecimalFormat decimalFormat = new DecimalFormat("#,###");
+				decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				int rowdk = tblThangLuongCN.getSelectedRow();
 				int[] rows = tblDSLuongCN.getSelectedRows();
@@ -813,7 +815,8 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		
 		bc_DAO = new BangChamCongCN_DAO();
 		cn_DAO = new CongNhan_DAO();
-		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		DecimalFormat decimalFormat = new DecimalFormat("#,###");
+		decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		modelTableDSLuongCN.setRowCount(0);
 		
@@ -914,7 +917,8 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		txtTongSoCN.setText(tongSoCongNhan()+"");
 	}
 	private void setTxtTongLuongCanTra(){
-		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		DecimalFormat decimalFormat = new DecimalFormat("#,###");
+		decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 		txtTongLuongCanTraCN.setText(decimalFormat.format(tongLuongCanTra())+" VNĐ");
 	}
 	private void chonTatCaTrue() {
@@ -953,7 +957,8 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		if(kiemtraCoFalseKhong()){
 			JOptionPane.showMessageDialog(this, "Vui Lòng Tính Lương Trước Khi In!");
 		} else {
-			DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+			DecimalFormat decimalFormat = new DecimalFormat("#,###");
+			decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			try {
 				XSSFWorkbook workBook = new XSSFWorkbook();
