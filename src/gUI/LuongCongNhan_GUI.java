@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -26,6 +27,15 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.w3c.dom.events.MouseEvent;
 
 import dao.BangChamCongCN_DAO;
@@ -47,8 +57,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -80,6 +95,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 	private Xuong_DAO x_DAO;
 	private CongNhan_DAO cn_DAO;
 	private BangLuongCN_DAO bl_DAO;
+	private Component frame;
 
 	public LuongCongNhan_GUI() {
 		super("Lương Cong Nhan");
@@ -289,7 +305,22 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		btnXemChiTietLuongCN.addActionListener(this);
 		btnInBangLuongCN.addActionListener(this);
 		btnTinhLuongCN.addActionListener(this);
-
+		
+		btnInBangLuongCN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = tblThangLuongCN.getSelectedRow();
+				if(row<0) {
+					JOptionPane.showMessageDialog(null, "Hãy chọn danh sách tháng lương để in!");
+				}
+				else {
+				int thang = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 0).toString());
+				int nam = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 1).toString());
+				String xuong = modelTableThangLuongCN.getValueAt(row, 2).toString();
+				String tongTra= txtTongLuongCanTraCN.getText();
+				exportDsToExcel(thang,nam,xuong,tongTra);}
+			}
+		});
+		
 		btnChonNhan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int rowdk = tblThangLuongCN.getSelectedRow();
@@ -768,6 +799,101 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 			}
 		}
 		return false;
+	}
+	private void exportDsToExcel(int thang, int nam , String Xuong, String tongLuong) {
+
+		
+		if(kiemtraCoFalseKhong()){
+			JOptionPane.showMessageDialog(this, "Vui Lòng Tính Lương Trước Khi In!");
+		} else {
+			DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				XSSFWorkbook workBook = new XSSFWorkbook();
+				XSSFSheet sheet = workBook.createSheet("Danh sách");
+
+				int columnCount = tblDSLuongCN.getColumnCount() - 2; // Exclude the last two columns
+
+				// Merge the first two rows
+				sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, columnCount - 1));
+				XSSFRow mergedHeaderRow = sheet.createRow(0);
+				mergedHeaderRow.createCell(0, CellType.STRING).setCellValue("Danh Sách Bảng Lương Tháng " + dinhDangThang(thang)+" Năm "+nam );
+				XSSFCellStyle style = sheet.getWorkbook().createCellStyle();
+				XSSFFont font = sheet.getWorkbook().createFont();
+				font.setBold(true);
+				style.setFont(font);
+				style.setAlignment(HorizontalAlignment.CENTER);
+				style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.CENTER);
+
+				XSSFCell cell = mergedHeaderRow.createCell(0, CellType.STRING);
+				cell.setCellValue("Danh Sách Bảng Lương Tháng " + dinhDangThang(thang) + " Năm " + nam);
+				cell.setCellStyle(style);
+
+				// Create the second row
+				// Tạo dòng subHeaderRow
+				XSSFRow subHeaderRow = sheet.createRow(2);
+
+				// Ô Tháng chiếm 2 cột bên phải
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 1));
+				subHeaderRow.createCell(0, CellType.STRING).setCellValue("Tháng: " + dinhDangThang(thang));
+
+				// Ô Năm chiếm 2 cột bên phải
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 2, 3));
+				subHeaderRow.createCell(2, CellType.STRING).setCellValue("Năm: " + nam);
+
+				// Ô Bộ phận chiếm 3 cột bên phải
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 4, 6));
+				subHeaderRow.createCell(4, CellType.STRING).setCellValue("" + Xuong);
+
+				sheet.addMergedRegion(new CellRangeAddress(2, 2, 7, 10));
+				subHeaderRow.createCell(7, CellType.STRING).setCellValue("Ngày In: " + dtf.format(LocalDate.now()));
+
+				// Create the header row
+				XSSFRow headerRow = sheet.createRow(3);
+				for (int i = 0; i < columnCount; i++) {
+					headerRow.createCell(i, CellType.STRING).setCellValue(tblDSLuongCN.getColumnName(i));
+				}
+
+				// Populate the data rows
+				for (int i = 0; i < tblDSLuongCN.getRowCount(); i++) {
+					XSSFRow row = sheet.createRow(i + 4); // Start from row 5
+					for (int j = 0; j < columnCount; j++) {
+						Object value = tblDSLuongCN.getValueAt(i, j);
+						if (value != null) {
+							if (value instanceof Number) {
+								row.createCell(j, CellType.NUMERIC).setCellValue(((Number) value).doubleValue());
+							} else {
+								row.createCell(j, CellType.STRING).setCellValue(value.toString());
+							}
+						}
+					}
+				}
+
+				// Create the last row
+				XSSFRow lastRow = sheet.createRow(sheet.getLastRowNum() + 1);
+				lastRow.createCell(0, CellType.STRING).setCellValue("Tổng Cộng: " + tongLuong);
+
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+				fileChooser.setFileFilter(new FileNameExtensionFilter("Tệp Excel (*.xlsx)", "xlsx"));
+				int returnValue = fileChooser.showSaveDialog(null);
+
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					String filePath = selectedFile.getAbsolutePath();
+
+					try (FileOutputStream fos = new FileOutputStream(filePath + ".xlsx")) {
+						workBook.write(fos);
+						JOptionPane.showMessageDialog(frame, "In thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+		}
 	}
 	@Override
 	public void mouseClicked(java.awt.event.MouseEvent e) {
