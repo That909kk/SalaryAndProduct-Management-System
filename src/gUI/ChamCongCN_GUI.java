@@ -546,11 +546,11 @@ public class ChamCongCN_GUI implements ListSelectionListener, ActionListener {
 						LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
 						String maCC = phatSinhMaCC(ngayChamCong, cn.getMaCN());
 						int soGioTangCa;
-						if(modelDsCN.getValueAt(i, 7).toString().equals("")) {
+						if(modelDsCN.getValueAt(i, 5).toString().equals("")) {
 							soGioTangCa =0;
 						}
 						else {
-							soGioTangCa = Integer.parseInt(modelDsCN.getValueAt(i, 7).toString()) ;
+							soGioTangCa = Integer.parseInt(modelDsCN.getValueAt(i, 5).toString()) ;
 						}
 						int caLam=0;
 						
@@ -558,10 +558,10 @@ public class ChamCongCN_GUI implements ListSelectionListener, ActionListener {
 						caLam = cn.getCaLamViec();
 					
 						String ghiChu;
-						if(modelDsCN.getValueAt(i, 8).toString().equals("")) {
+						if(modelDsCN.getValueAt(i, 6).toString().equals("")) {
 							ghiChu="";
 						}else {
-							ghiChu = String.valueOf(modelDsCN.getValueAt(i, 8)) ;
+							ghiChu = String.valueOf(modelDsCN.getValueAt(i, 6)) ;
 						}
 						BangChamCongCN bangChamCongCn = new BangChamCongCN(maCC);
 						chamCongCNDao.insertBangChamCongCN(bangChamCongCn);
@@ -600,11 +600,11 @@ public class ChamCongCN_GUI implements ListSelectionListener, ActionListener {
 							LocalDate ngayChamCong = dpNgayChamCong.getFullDate().toLocalDate();
 							String maCC = bangCC.getMaCCCN();
 							int soGioTangCa;
-							if(modelDsCN.getValueAt(n, 7).toString().equals("")) {
+							if(modelDsCN.getValueAt(n, 5).toString().equals("")) {
 								soGioTangCa =0;
 							}
 							else {
-								soGioTangCa = Integer.parseInt(modelDsCN.getValueAt(n, 7).toString()) ;
+								soGioTangCa = Integer.parseInt(modelDsCN.getValueAt(n, 5).toString()) ;
 							}
 							int caLam=0;
 							
@@ -612,10 +612,10 @@ public class ChamCongCN_GUI implements ListSelectionListener, ActionListener {
 							caLam = bangCC.getCaLam();
 							
 							String ghiChu;
-							if(modelDsCN.getValueAt(n, 8).toString().equals("")) {
+							if(modelDsCN.getValueAt(n, 6).toString().equals("")) {
 								ghiChu="";
 							}else {
-								ghiChu = String.valueOf(modelDsCN.getValueAt(n, 8)) ;
+								ghiChu = String.valueOf(modelDsCN.getValueAt(n, 6)) ;
 							}
 							BangChamCongCN bangChamCongCN = new BangChamCongCN(maCC);
 							chamCongCNDao.updateBangChamCongCN(bangChamCongCN);
