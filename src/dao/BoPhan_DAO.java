@@ -40,4 +40,26 @@ public class BoPhan_DAO {
 		}
 		return dsBP;
 	}
+	public ArrayList<BoPhan> layTatCaBoPhanKhacNhau(){
+		ArrayList<BoPhan> dsBP = new ArrayList<BoPhan>();
+		ConnectDB.getInstance();
+		Statement state = null;
+		try {
+			Connection con = ConnectDB.getConnection();
+			String Sql = "SELECT DISTINCT * FROM dbo.BoPhan";
+			state = con.createStatement();
+			ResultSet rs = state.executeQuery(Sql);
+			while(rs.next()) {
+				String maBP = rs.getString(1);
+				String tenBP = rs.getString(2);
+				String sdt = rs.getString(3);
+				BoPhan bp = new BoPhan(maBP,tenBP,sdt);
+				dsBP.add(bp);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dsBP;
+	}
 }

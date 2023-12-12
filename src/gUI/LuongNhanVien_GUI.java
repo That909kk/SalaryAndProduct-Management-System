@@ -62,9 +62,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import connectDB.ConnectDB;
 import dao.BangChamCongNV_DAO;
 import dao.BangLuongNV_DAO;
+import dao.BoPhan_DAO;
 import dao.NhanVien_DAO;
 import entity.BangChamCongNV;
 import entity.BangLuongNV;
+import entity.BoPhan;
 import entity.NhanVien;
 
 public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseListener {
@@ -90,6 +92,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	private JComboBox<String> cboBoPhanLuongNV;
 	private JComboBox<String> cboNamLuongNV;
 	private JComboBox<String> cboThangLuongNV;
+	private BoPhan_DAO bp_DAO;
 
 	/**
 	 * Launch the application.
@@ -283,11 +286,11 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		cboBoPhanLuongNV.setBounds(430, 29, 155, 30);
 		cboBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(cboBoPhanLuongNV);
-		
+		bp_DAO=new BoPhan_DAO();
 		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhau()){
-			ArrayList<String> dsMaBP = bc_DAO.listTatCaBoPhan(bc_DAO.dsBangChamCongNhanVienTheoTungThang(nam1.getMonthValue(), nam1.getYear()));
-			for(String maBP : dsMaBP){
-				String tenBP = hienThiTenBoPhan(maBP);
+			ArrayList<BoPhan> dsBP = bp_DAO.layTatCaBoPhanKhacNhau() ;
+			for(BoPhan boPhan : dsBP){
+				String tenBP = hienThiTenBoPhan(boPhan.getMaBoPhan());
 				cboBoPhanLuongNV.addItem(tenBP);
 			}
 		}
