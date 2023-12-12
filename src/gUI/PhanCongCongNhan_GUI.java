@@ -558,7 +558,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		String filePath = "";
 		
 		JFileChooser fc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-//		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fc.setDialogTitle("Chọn thư mục để xuất file excel");
 		fc.setFileFilter(new FileNameExtensionFilter("Tệp excel (*.xlsx)", "xlsx"));
 		int returnValue = fc.showSaveDialog(null);

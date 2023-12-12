@@ -1054,19 +1054,6 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 		Object o = e.getSource();
 		if(o==btnThem) {
 			cboNam.setSelectedItem("Tất cả");
-			String ten = txtTen.getText();
-			byte[] avt = convertImageIconToByteArray((ImageIcon) lblAvt.getIcon()) ;
-			String regexTen = "^[A-Z]";
-			if(ten.equals("")) {
-				JOptionPane.showMessageDialog( frame, "Không được để trống tên");
-				return;
-			}
-			if(Pattern.matches(regexTen, ten)) {
-				JOptionPane.showMessageDialog( frame, "Chữ cái đầu của tên phải viết hoa");
-				return;	
-				
-			}
-			
 			String hoDem = txtHoDem.getText();
 			String regexHoDem = "^(\\p{Lu}\\p{L}*(\\s|$))+";
 	        Pattern patternHoDem = Pattern.compile(regexHoDem);
@@ -1078,6 +1065,18 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 	        	JOptionPane.showMessageDialog( frame, "Các từ trong họ đệm phải có chữ cái đầu viết hoa");
 				return;	
 	        }
+	        
+	        String ten = txtTen.getText();
+			String regexTen = "^[A-Z]";
+			if(ten.equals("")) {
+				JOptionPane.showMessageDialog( frame, "Không được để trống tên");
+				return;
+			}
+			if(Pattern.matches(regexTen, ten)) {
+				JOptionPane.showMessageDialog( frame, "Chữ cái đầu của tên phải viết hoa");
+				return;	
+				
+			}
 	        
 			String diaChi = txtDiaChi.getText();
 			if(diaChi.equals("")) {
@@ -1172,6 +1171,15 @@ public class NhanVien_GUI implements MouseListener, ActionListener {
 			double heSoLuong = Double.valueOf((String) cboHeSoLuong.getSelectedItem());
 			String maBoPhan = dsBP.get(cboBoPhan.getSelectedIndex()).getMaBoPhan();
 			BoPhan boPhan = new BoPhan(maBoPhan);
+			
+			byte[] avt = null;
+			
+			if (lblAvt.getIcon() == null) {
+				JOptionPane.showMessageDialog(null, "Bạn chưa chọn ảnh đại diện cho nhân viên!");
+			} else {
+				avt = convertImageIconToByteArray((ImageIcon) lblAvt.getIcon()) ;
+			}
+			
 			NhanVien nv = new NhanVien(maNV, avt, hoDem, ten, gioiTinh, sdt, diaChi, cccd, ngaySinh, ngayBatDauLam, caLam, luongCB, bacLuong, heSoLuong, phuCap, boPhan);
 			try {
 				if(JOptionPane.showConfirmDialog(frame, "Bạn có muốn thêm nhân viên có mã là "+maNV+" và tên là "+hoDem+" "+ten+" không?","Xác nhận",JOptionPane.YES_NO_CANCEL_OPTION)==JOptionPane.YES_OPTION){
