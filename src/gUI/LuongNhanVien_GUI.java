@@ -287,13 +287,13 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		cboBoPhanLuongNV.setBounds(430, 29, 155, 30);
 		cboBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(cboBoPhanLuongNV);
+		
 		bp_DAO=new BoPhan_DAO();
-		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhau()){
-			ArrayList<BoPhan> dsBP = bp_DAO.layTatCaBoPhanKhacNhau() ;
-			for(BoPhan boPhan : dsBP){
-				String tenBP = hienThiTenBoPhan(boPhan.getMaBoPhan());
-				cboBoPhanLuongNV.addItem(tenBP);
-			}
+		ArrayList<BoPhan> dsBP = bp_DAO.layTatCaBoPhanKhacNhau();
+		System.out.println(dsBP.size());
+		for(BoPhan boPhan : dsBP){
+			String tenBP = hienThiTenBoPhan(boPhan.getMaBoPhan());
+			cboBoPhanLuongNV.addItem(tenBP);
 		}
 		
 		cboBoPhanLuongNV.setSelectedItem(" ");
