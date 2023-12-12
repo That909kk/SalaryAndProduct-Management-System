@@ -154,6 +154,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 //		menuBar.add(mnGioiThieu);
 		
 		contentPane.add(this.getLuongCNGUI());
+		
 	}
 	
 	public JPanel getLuongCNGUI() {
@@ -584,14 +585,36 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		});
 		btnXemChiTietLuongCN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int row = tblThangLuongCN.getSelectedRow();
+				int[] rows = tblDSLuongCN.getSelectedRows();
+
+				if (rows.length <= 0 || row < 0) {
+					JOptionPane.showMessageDialog(null, "Hãy chọn 1 công nhân để xem chi tiết lương");
+				} else if (rows.length > 1) {
+					JOptionPane.showMessageDialog(null, "Xin vui lòng chỉ chọn 1 công nhân để xem chi tiết lương!");
+				} else {
+					int thang = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 0).toString());
+					int nam = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 1).toString());
+					String xu = modelTableThangLuongCN.getValueAt(row, 2).toString();
+					bl_DAO = new BangLuongCN_DAO();
+
+					// Kiểm tra xem có dòng được chọn trong tblDSLuongNV không
+					if (rows[0] < modelTableDSLuongCN.getRowCount()) {
+						String maCN = modelTableDSLuongCN.getValueAt(rows[0], 0).toString();
+						double khauTru =Double.parseDouble(modelTableDSLuongCN.getValueAt(rows[0], 6).toString().replace(",", "")); 
+						BangLuongCN bl= bl_DAO.getMotBangLuongCNTheoThangNam(maCN, thang, nam);
+						if(bl==null) {
+							JOptionPane.showMessageDialog(null, "Công Nhân Chưa Có Bảng Lương Không Thể Xem Chi Tiết Được!");
+						}else
+							new ChiTietCN_GUI(maCN,thang,nam,xu,khauTru);
+					} else {
+						JOptionPane.showMessageDialog(null, "Không thể truy cập dữ liệu công nhân.");
+					}
+				}
 			}
 		});
 		
-		btnInBangLuongCN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
+
 		btnTinhLuongCN.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -787,6 +810,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 	// }
 	// }
 		private void taoDSBangLuongtuDBtheoDK(int thang, int nam,String Xuong) {
+		
 		bc_DAO = new BangChamCongCN_DAO();
 		cn_DAO = new CongNhan_DAO();
 		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
@@ -1029,7 +1053,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 			cboThangLuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 0).toString());
 			cboNamLuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 1).toString());
 			cboXuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 2).toString());
-			 taoDSBangLuongtuDBtheoDK(thang, nam, xuong);
+			taoDSBangLuongtuDBtheoDK(thang, nam, xuong);
 		}
 	}
 

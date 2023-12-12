@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import connectDB.ConnectDB;
+import entity.BangChamCongCN;
 import entity.CongDoan;
 import entity.SanPham;
 
@@ -289,5 +290,27 @@ public class CongDoan_DAO {
 			}
 		}
 		return n > 0;
+	}
+	//Minh Thật
+	public String getMaCDtheomaCC(BangChamCongCN bcc) {
+		String maCD = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "select cd.maCongDoan from CongNhan cn join BangPhanCongCN bpc on cn.maCN=bpc.maCN join CongDoan cd on bpc.maCD=cd.maCongDoan join SanPham sp on cd.maSP=sp.maSP join BangChamCongCongNhan bcc on bcc.maCN=cn.maCN where bcc.maCC =?";
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, bcc.getMaCCCN());
+			
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				maCD = rs.getString(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return maCD;
 	}
 }

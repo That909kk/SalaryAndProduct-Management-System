@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -287,13 +288,12 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		cboBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongNV.add(cboBoPhanLuongNV);
 		bp_DAO=new BoPhan_DAO();
-		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhau()){
+		
 			ArrayList<BoPhan> dsBP = bp_DAO.layTatCaBoPhanKhacNhau() ;
 			for(BoPhan boPhan : dsBP){
 				String tenBP = hienThiTenBoPhan(boPhan.getMaBoPhan());
 				cboBoPhanLuongNV.addItem(tenBP);
 			}
-		}
 		cboBoPhanLuongNV.setSelectedItem(" ");
 		
 
@@ -494,7 +494,8 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		btnTinhLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+				DecimalFormat decimalFormat = new DecimalFormat("#,###");
+				decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				int rowdk = tblThangLuongNhanVien.getSelectedRow();
 				int[] rows = tblDSLuongNV.getSelectedRows();
@@ -548,7 +549,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 											ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 											if(list.size()>0)
 												for (BangChamCongNV bcc : list) {
-													bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+													bcc.setGhiChu("");
 													bc_DAO.updateGhiChiBangChamCongNV(bcc);
 												}
 
@@ -571,7 +572,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 												ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 												if(list.size()>0)
 													for (BangChamCongNV bcc : list) {
-														bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+														bcc.setGhiChu("");
 														bc_DAO.updateGhiChiBangChamCongNV(bcc);
 													}
 											}
@@ -619,7 +620,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 										ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 										if(list.size()>0)
 											for (BangChamCongNV bcc : list) {
-												bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+												bcc.setGhiChu("");
 												bc_DAO.updateGhiChiBangChamCongNV(bcc);
 											}
 									}
@@ -816,7 +817,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 							bc_DAO = new BangChamCongNV_DAO();
 							BangChamCongNV bc = bc_DAO.layBangCCCuoiCungThangCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam);
 							if(bc!=null) {
-								bc.setGhiChu(bc.getGhiChu()+" và Đã Lưu Vào Ngày:"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+								bc.setGhiChu("");
 								bc_DAO.updateGhiChiBangChamCongNV(bc);
 							}}
 
@@ -852,11 +853,12 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 					// Kiểm tra xem có dòng được chọn trong tblDSLuongNV không
 					if (rows[0] < modelTableDSLuongNV.getRowCount()) {
 						String maNV = modelTableDSLuongNV.getValueAt(rows[0], 0).toString();
+						double khauTru = Double.parseDouble(modelTableDSLuongNV.getValueAt(rows[0], 7).toString().replace(",","")); 
 						BangLuongNV bl= bl_DAO.lay1BangLuongTheoMaNVThangNam(maNV, thang, nam);
 						if(bl==null) {
 							JOptionPane.showMessageDialog(null, "Nhân Viên Chưa Có Bảng Lương Không Thể Xem Chi Tiết Được!");
 						}else
-							new ChiTietNV_GUI(maNV, thang, nam,mabp);
+							new ChiTietNV_GUI(maNV, thang, nam,mabp,khauTru);
 					} else {
 						JOptionPane.showMessageDialog(null, "Không thể truy cập dữ liệu nhân viên.");
 					}
@@ -919,7 +921,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	//	private void taoDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
 	//		nv_DAO = new NhanVien_DAO();
 	//
-	//		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+	//		DecimalFormat decimalFormat = new DecimalFormat("#,###");decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 	//		modelTableDSLuongNV.setRowCount(0);
 	//		for(NhanVien nv : nv_DAO.getListNVtheoBP(mabp)){
 	//			
@@ -931,7 +933,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	private void taoDSBangLuongtuDBtheoDK(int thang, int nam, String mabp){
 		nv_DAO = new NhanVien_DAO();
 
-		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		DecimalFormat decimalFormat = new DecimalFormat("#,###");decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 		modelTableDSLuongNV.setRowCount(0);
 		for(NhanVien nv : nv_DAO.getListNVtheoBP(mabp)){
 
@@ -939,11 +941,11 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			BangLuongNV bl=bl_DAO.lay1BangLuongTheoMaNVThangNam(nv.getMaNV(), thang, nam);
 			if (bl == null) {
 				double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/8)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
-				modelTableDSLuongNV.addRow(new Object[] {nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), decimalFormat.format(bc_DAO.getSoNgayDiLamCua1NV(nv.getMaNV(), thang, nam)), decimalFormat.format(thuong+nv.getPhuCap()),0, 0, 0, false, "Chưa được tính lương"});
+				modelTableDSLuongNV.addRow(new Object[] {nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), nv.getHeSoLuong(), decimalFormat.format(bc_DAO.getSoNgayDiLamCua1NV(nv.getMaNV(), thang, nam)), decimalFormat.format(thuong+nv.getPhuCap()),0, 0, 0, false, "Chưa được tính lương"});
 
 			} else {
 				double thuong = (((nv.getLuongCoBan()*nv.getThangBacLuong()*nv.getHeSoLuong())/30)/8)*2*bc_DAO.getTongSoGioTangCaCua1NV(nv.getMaNV(), thang, nam);
-				modelTableDSLuongNV.addRow(new Object[] { nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), decimalFormat.format(nv.getHeSoLuong()), bl.getSoNgayDiLam(), decimalFormat.format(thuong+nv.getPhuCap()), decimalFormat.format(bl.getTienPhat()), decimalFormat.format(bl.getBhxh()), decimalFormat.format(bl.getLuongTong()),bl.getLuongTong()>0?true:false,"Đã có bảng lương" });
+				modelTableDSLuongNV.addRow(new Object[] { nv.getMaNV(), nv.getHo()+" "+nv.getTen(), decimalFormat.format(nv.getLuongCoBan()), decimalFormat.format(nv.getThangBacLuong()), nv.getHeSoLuong(), bl.getSoNgayDiLam(), decimalFormat.format(thuong+nv.getPhuCap()), decimalFormat.format(bl.getTienPhat()), decimalFormat.format(bl.getBhxh()), decimalFormat.format(bl.getLuongTong()),bl.getLuongTong()>0?true:false,"Đã có bảng lương" });
 			}
 
 		}
@@ -1047,7 +1049,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 	}
 	private void setTxtTongLuongCanTraNV() {
-		DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+		DecimalFormat decimalFormat = new DecimalFormat("#,###");decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 		txtTongLuongCanTraNV.setText(decimalFormat.format(tongLuongTra())+" VNĐ");
 
 	}
@@ -1067,7 +1069,8 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			if(kiemtraCoFalseKhong()){
 				JOptionPane.showMessageDialog(this, "Vui Lòng Tính Lương Trước Khi In!");
 			} else {
-				DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+				DecimalFormat decimalFormat = new DecimalFormat("#,###");
+				decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				try {
 					XSSFWorkbook workBook = new XSSFWorkbook();
@@ -1174,6 +1177,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			cboNamLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 1).toString());
 			cboBoPhanLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 2).toString());
 			taoDSBangLuongtuDBtheoDK(thang,nam,mahoaTenBoPhan(mabp));
+			
 		}
 		if (object.equals(tblDSLuongNV)) {
 
