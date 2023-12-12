@@ -354,7 +354,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		listMenu.add(mnHopDong);
 		listMenu.add(mnLuong);
 		listMenu.add(mnGioiThieu);
-		listMenu.add(mnTroGiup);
 		listMenu.add(mniQuanLyCN);
 		listMenu.add(mniQuanLyNV);
 		listMenu.add(mniHopDong);
