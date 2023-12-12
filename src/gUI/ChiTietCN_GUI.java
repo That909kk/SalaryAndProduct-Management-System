@@ -315,10 +315,10 @@ public class ChiTietCN_GUI extends JFrame {
         txtXuong.setText(Xuong);
         txtThang.setText(thang+"");
         txtNam.setText(nam+"");
-        txtLuongNhan.setText(decimalFormat.format(bl.getLuongTong()));
-        txtBHXH.setText(decimalFormat.format(bl.getBhxh()));
-        txtKhauTru.setText(decimalFormat.format(khauTru));
-        txtPhuCap_1.setText(decimalFormat.format(cn.getPhuCap()));
+        txtLuongNhan.setText(decimalFormat.format(bl.getLuongTong())+" VNĐ");
+        txtBHXH.setText(decimalFormat.format(bl.getBhxh())+" VNĐ");
+        txtKhauTru.setText(decimalFormat.format(khauTru)+" VNĐ");
+        txtPhuCap_1.setText(decimalFormat.format(cn.getPhuCap())+" VNĐ");
         txtSoNgayLam.setText(bcc_DAO.laySoNgayDiLamCuaCNTheoThangNam(maCN, thang, nam)+"");
         txtTongSongGioTangCa.setText(bcc_DAO.layTongSoGioTangCaCuaCNTheoThangNam(maCN, thang, nam)+"");
         txtTongSanLuong.setText(bcc_DAO.laySoSanLuongCuaCNTheoThangNam(maCN, thang, nam)+"");
