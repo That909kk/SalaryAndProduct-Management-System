@@ -364,7 +364,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			public void actionPerformed(ActionEvent e) {
 				int row = tblThangLuongNhanVien.getSelectedRow();
 				if(row<0) {
-					JOptionPane.showMessageDialog(null, "Hãy chọn ít nhất 1 nhân viên để tính lương");
+					JOptionPane.showMessageDialog(null, "Hãy chọn danh sách tháng lương để in!");
 				}
 				else {
 				int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
