@@ -202,10 +202,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mniSanPham.setBackground(new Color(255, 255, 255));
 		mnHopDong.add(mniSanPham);
 		
-		mnTroGiup = new JMenu("  TRỢ GIÚP  ");
-		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
-		menuBar.add(mnTroGiup);
-		
 		mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
 		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		menuBar.add(mnGioiThieu);
@@ -372,7 +368,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		listMenu.add(mntmPCCN);
 		listMenu.add(mnCongDoan);
 		listMenu.add(mnGioiThieu);
-		listMenu.add(mnTroGiup);
 		
 		mnHome.addMouseListener(this);
 		mniQuanLyCN.addActionListener(this);
@@ -385,7 +380,6 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mniSanPham.addActionListener(this);
 		mntmLuongCN.addActionListener(this);
 		mntmLuongNV.addActionListener(this);
-		mnTroGiup.addMouseListener(this);
 		mnGioiThieu.addMouseListener(this);
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
