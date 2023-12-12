@@ -245,6 +245,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			for (int i = 1;i <= 12; i++){
 			cboThangLuongNV.addItem(i+"");
 		}
+		cboThangLuongNV.setSelectedItem(" ");
 		pnlLuongNV.add(cboThangLuongNV);
 
 		
@@ -271,6 +272,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			cboNamLuongNV.addItem(nam2.toString());
 			
 		}
+		cboNamLuongNV.setSelectedItem(" ");
 		pnlLuongNV.add(cboNamLuongNV);
 		
 		JLabel lblNamcbo = new JLabel("Năm:");
@@ -291,15 +293,15 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 				cboBoPhanLuongNV.addItem(tenBP);
 			}
 		}
-		cboBoPhanLuongNV.addItem(" ");
-
+		
+		cboBoPhanLuongNV.setSelectedItem(" ");
 		
 		JLabel lblBoPhanLuongNV = new JLabel("Bộ Phận:");
 		lblBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblBoPhanLuongNV.setBounds(350, 29, 80, 30);
 		pnlLuongNV.add(lblBoPhanLuongNV);
 
-		
+
 		JLabel lblSoNVChuaTinhLuong = new JLabel("Số Nhân Viên Chưa Tính Lương:");
 		lblSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblSoNVChuaTinhLuong.setBounds(21, 69, 243, 30);
@@ -462,7 +464,6 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 						String tenBPLoc = modelTableThangLuongNV.getValueAt(i, 2).toString();
 						if(thangLoc.equals(thang)&&namLoc.equals(nam)&&tenBPLoc.equals(tenBP)){
 							tblThangLuongNhanVien.setRowSelectionInterval(i, i);
-							
 							int row = tblThangLuongNhanVien.getSelectedRow();
 							int thang1 = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
 							int nam1 = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());

@@ -532,6 +532,23 @@ public class BangChamCongCN_DAO {
 		return bcccn;
 
 	}
+	public ArrayList<Integer> layDSNamKhacnhauCCCN(){
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		ConnectDB.getInstance();
+		Statement state = null;
+		try {
+			Connection con = ConnectDB.getConnection();
+			String Sql = "SELECT DISTINCT YEAR(NgayCham) FROM dbo.BangChamCongCongNhan";
+			state = con.createStatement();
+			ResultSet rs = state.executeQuery(Sql);
+			while(rs.next()) {
+				list.add(rs.getInt(1));
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;	
+	}
 }
 
 
