@@ -373,81 +373,75 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 	    lblXuong = new JLabel("Xưởng");
 	    lblXuong.setFont(new Font("Tahoma", Font.PLAIN, 14));
 	    lblXuong.setPreferredSize(lblXuong.getPreferredSize());
-	    
-	    for(Xuong x: dsX) {
-	    }
-	    modelXuong.addElement("Tất cả");
-	    modelXuong.setSelectedItem("Tất cả");
-	    
-	    
-	    cboXuong.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-            	String tatCa = String.valueOf(cboXuong.getSelectedItem()); 
-            	if(tatCa.equals("Tất cả")) {
-            		if(String.valueOf(cboNam.getSelectedItem())!= "Tất cả") {
-            			dsCN = congNhanDao.getListCNtheoNamVaoLam(Integer.valueOf((String)cboNam.getSelectedItem()));
-            			if(dsCNX.isEmpty() == true) {						
-//							cboBoPhan.setSelectedItem("Tất cả");
-//							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
-							modelDsCN.setRowCount(0);
-            				return;
-            			}
-            			clearTable();
-            			docDuLieuVaoTable(dsCN);
-            			return;
-            		}
-            		else if(String.valueOf(cboNam.getSelectedItem())== "Tất cả"){
-            			dsCN = congNhanDao.getListCN();
-            			if(dsCNX.isEmpty() == true) {						
-//							cboBoPhan.setSelectedItem("Tất cả");
-//							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
-            				modelDsCN.setRowCount(0);
-            				return;
-            			}
-            			clearTable();
-                		docDuLieuVaoTable(dsCN);
-                		return;
-            		}
-            		
-            	}
-            	else {
-            		if(String.valueOf(cboNam.getSelectedItem())!= "Tất cả") {
-            			dsCNX = congNhanDao.getListNVtheoNamXuong(Integer.valueOf((String)cboNam.getSelectedItem()), dsX.get(cboXuong.getSelectedIndex()).getMaXuong());
-            			if(dsCNX.isEmpty() == true) {
-//							cboNam.setSelectedItem("Tất cả");
-//							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
-            				modelDsCN.setRowCount(0);
-            				return;
-            			}
-            			else {
-            				clearTable();
-                			docDuLieuVaoTable(dsCNX); 		
-                			return;
-            			}
-            
-            			
-            		}
-            		else {
-            			
-            			dsCNX = congNhanDao.getListCNtheoXuong(dsX.get(cboXuong.getSelectedIndex()).getMaXuong());	
-                    	if(dsCNX.isEmpty() == true) {						
-//							cboBoPhan.setSelectedItem("Tất cả");
-//							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
-                    		modelDsCN.setRowCount(0);
-            				return;
-            			}
-                    	clearTable();
-                    	docDuLieuVaoTable(dsCNX);
-                		return;
-            		}
-            		
-            	}
-            	  		
-            }	
-				
-		});
+
+//	    cboXuong.addItemListener(new ItemListener() {
+//			
+//			@Override
+//			public void itemStateChanged(ItemEvent e) {
+//            	String tatCa = String.valueOf(cboXuong.getSelectedItem()); 
+//            	if(tatCa.equals("Tất cả")) {
+//            		if(String.valueOf(cboNam.getSelectedItem())!= "Tất cả") {
+//            			dsCN = congNhanDao.getListCNtheoNamVaoLam(Integer.valueOf((String)cboNam.getSelectedItem()));
+//            			if(dsCNX.isEmpty() == true) {						
+////							cboBoPhan.setSelectedItem("Tất cả");
+////							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
+//							modelDsCN.setRowCount(0);
+//            				return;
+//            			}
+//            			clearTable();
+//            			docDuLieuVaoTable(dsCN);
+//            			return;
+//            		}
+//            		else if(String.valueOf(cboNam.getSelectedItem())== "Tất cả"){
+//            			dsCN = congNhanDao.getListCN();
+//            			if(dsCNX.isEmpty() == true) {						
+////							cboBoPhan.setSelectedItem("Tất cả");
+////							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
+//            				modelDsCN.setRowCount(0);
+//            				return;
+//            			}
+//            			clearTable();
+//                		docDuLieuVaoTable(dsCN);
+//                		return;
+//            		}
+//            		
+//            	}
+//            	else {
+//            		if(String.valueOf(cboNam.getSelectedItem())!= "Tất cả") {
+//            			dsCNX = congNhanDao.getListNVtheoNamXuong(Integer.valueOf((String)cboNam.getSelectedItem()), dsX.get(cboXuong.getSelectedIndex()).getMaXuong());
+//            			if(dsCNX.isEmpty() == true) {
+////							cboNam.setSelectedItem("Tất cả");
+////							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
+//            				modelDsCN.setRowCount(0);
+//            				return;
+//            			}
+//            			else {
+//            				clearTable();
+//                			docDuLieuVaoTable(dsCNX); 		
+//                			return;
+//            			}
+//            
+//            			
+//            		}
+//            		else {
+//            			
+//            			dsCNX = congNhanDao.getListCNtheoXuong(dsX.get(cboXuong.getSelectedIndex()).getMaXuong());	
+//                    	if(dsCNX.isEmpty() == true) {						
+////							cboBoPhan.setSelectedItem("Tất cả");
+////							JOptionPane.showMessageDialog(frame, "Không tìm thấy nhân viên nào");
+//                    		modelDsCN.setRowCount(0);
+//            				return;
+//            			}
+//                    	clearTable();
+//                    	docDuLieuVaoTable(dsCNX);
+//                		return;
+//            		}
+//            		
+//            	}
+//            	  		
+//            }	
+//				
+//		});
 
 	    
 	    b23.add(lblXuong);
@@ -487,6 +481,18 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 		cboNam = new JComboBox<String>(modelNam);
 		cboNam.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cboNam.setPreferredSize(new Dimension(120, 35));
+		
+		modelNam.addElement("Tất cả");
+		modelNam.setSelectedItem("Tất cả");
+		
+		xuongDao = new Xuong_DAO();
+        modelXuong.removeAllElements();
+	    modelXuong.addElement("Tất cả");
+	    modelXuong.setSelectedItem("Tất cả");
+        for (Xuong x : xuongDao.getDSXuong()) {
+			modelXuong.addElement(x.getMaXuong());
+		}
+		
 		cboNam.addItemListener(new ItemListener() {
 			
 			@Override
@@ -558,7 +564,7 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 		btnXemChiTiet.setIcon(new ImageIcon("img\\icons\\icons8-info-20.png"));
 		btnXemChiTiet.setBackground(new Color(255, 255, 255));
 		b32.add(Box.createHorizontalStrut(50));
-		btnXemChiTiet.enable(false);
+		btnXemChiTiet.setEnabled(false);
 		
 		btnThem = new JButton("Thêm");
 		b32.add(btnThem);
@@ -584,7 +590,7 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 		
 		pnCenter = new JPanel();
 		pnlCN.add(pnCenter, BorderLayout.CENTER);
-		String[] cols_datphong = {"Mã nhân viên", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Chuyên môn", "Xưởng", "Trạng thái"};
+		String[] cols_datphong = {"Mã công nhân", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Chuyên môn", "Xưởng", "Trạng thái"};
         modelDsCN = new DefaultTableModel(cols_datphong, 0);
         tblDsCN = new JTable(modelDsCN);
         tblDsCN.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -596,7 +602,6 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
         column.setPreferredWidth(100);
         dsCNX = congNhanDao.getListCNtheoXuong(dsX.get(0).getMaXuong());
         docDuLieuVaoTable(dsCNX);
-        
         
         tblDsCN.addMouseListener(this);
         btnThem.addActionListener(this);
@@ -653,8 +658,8 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 		 for(CongNhan cn: dsCN) {
 			 String tenXuong="" ;
 				for(Xuong x: dsX) {
-				if(x.getMaXuong().equals(cn.getXuong().getMaXuong())) {
-					tenXuong = x.getTenXuong();
+					if(x.getMaXuong().equals(cn.getXuong().getMaXuong())) {
+						tenXuong = x.getTenXuong();
 				}
 			}
 	        	Object[] rowData = {cn.getMaCN(),cn.getHo(),cn.getTen(),tinhTuoi(cn),cn.getNgaySinh(),cn.getcCCD(),laGioiTinh(cn),cn.getSoDienThoai(),cn.getDiaChi(),cn.getNgayBatDauLamViec(),layCaLamViec(cn),cn.getChuyenMon(),tenXuong};
@@ -900,14 +905,14 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 				e1.printStackTrace();
 			}
 			if(tinhTuoiTheoNS(ngaySinh) < 18) {
-				JOptionPane.showMessageDialog(frame, "Nhân viên chưa đủ 18 tuổi");
+				JOptionPane.showMessageDialog(frame, "Công nhân chưa đủ 18 tuổi");
 				return;
 			}
 
 			
 			
 			if(String.valueOf(cboXuong.getSelectedItem()).equals("Tất cả")) {
-				JOptionPane.showMessageDialog(frame, "Bạn chưa chọn bộ phận cho nhân viên");
+				JOptionPane.showMessageDialog(frame, "Bạn chưa chọn xưởng cho công nhân");
 			}
 			
 			LocalDate ngayBatDauLam = null;
@@ -941,7 +946,8 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 			}
 			String maXuong = dsX.get(cboXuong.getSelectedIndex()).getMaXuong();
 			Xuong xuong = new Xuong(maXuong);
-			CongNhan cn = new CongNhan(maNV);
+			CongNhan cn = new CongNhan(maNV, null, hoDem, ten, gioiTinh, ngaySinh, cccd, diaChi, sdt,
+					txtChuyenMon.getText().trim(), caLam, 500000, luongCB, ngayBatDauLam, xuong);
 			congNhanDao.insertCN(cn);
 			dsCN = congNhanDao.getListCN();
 			clearTable();
@@ -952,13 +958,16 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 		}
 		if(o==btnXoa) {
 			int row = tblDsCN.getSelectedRow();
+			ma = modelDsCN.getValueAt(row, 0).toString();
 			int xacNhan;
+			
 			String boPhan = String.valueOf(cboXuong.getSelectedItem());
 			String nam = String.valueOf(cboNam.getSelectedItem());
 			if(boPhan.equals("Tất cả")){
 				if(nam.equals("Tất cả")) {
 					xacNhan = JOptionPane.showConfirmDialog(frame, "Bạn có muốn xóa công nhân có mã là " +dsCN.get(row).getMaCN()+" và có tên là "+dsCN.get(row).getHo()+" "+ dsCN.get(row).getTen()+" không?","Xác nhận",JOptionPane.YES_NO_OPTION);
 					if(xacNhan == JOptionPane.YES_OPTION) {
+						
 						congNhanDao.deleteCN(ma);
 						clearTable();
 						dsCN = congNhanDao.getListCN();
