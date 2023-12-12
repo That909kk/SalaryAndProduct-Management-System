@@ -278,7 +278,9 @@ public class ChiTietNV_GUI extends JFrame {
 		tblChiTietBangLuong.setRowSelectionAllowed(true);
 		tblChiTietBangLuong.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblChiTietBangLuong.setBounds(20, 160, 550, 380);
-		
+		tblChiTietBangLuong.setEnabled(false);
+		tblChiTietBangLuong.setAutoCreateRowSorter(true);
+		tblChiTietBangLuong.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		JScrollPane scrollpane = new JScrollPane(tblChiTietBangLuong);
 		scrollpane.setBounds(0, 160, 1260, 450);
 		pnlChiTietLuongNV.add(scrollpane);

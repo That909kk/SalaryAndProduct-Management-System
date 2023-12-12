@@ -2,6 +2,7 @@ package gUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -10,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +27,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -37,9 +42,21 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import org.apache.poi.sl.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import connectDB.ConnectDB;
 import dao.BangChamCongNV_DAO;
@@ -68,22 +85,23 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	private NhanVien_DAO nv_DAO;
 	private BangChamCongNV_DAO bc_DAO;
 	JButton btnTinhLuongNV;
+	private Component frame;
 
 	/**
 	 * Launch the application.
 	 */
-		public static void main(String[] args) {
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						LuongNhanVien_GUI frame = new LuongNhanVien_GUI();
-						frame.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LuongNhanVien_GUI frame = new LuongNhanVien_GUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			});
-		}
+			}
+		});
+	}
 
 	/**
 	 * Create the frame.
@@ -337,11 +355,23 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		pnlThongKeTinhLuong.add(txtTongSoNV);
 		tblThangLuongNhanVien.addMouseListener(this);
 		btnTinhLuongNV.addActionListener(this);
-
+		txtSoNVChuaTinhLuong.setBorder(null);
+		txtTongSoNV.setBorder(null);
+		txtTongLuongCanTraNV.setBorder(null);
 		btnHoanTatLuongNV.addActionListener(this);
 
 		btnInBangLuongNV.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int row = tblThangLuongNhanVien.getSelectedRow();
+				if(row<0) {
+					JOptionPane.showMessageDialog(null, "Hãy chọn ít nhất 1 nhân viên để tính lương");
+				}
+				else {
+				int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
+				int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
+				String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
+				String tongTra= txtTongLuongCanTraNV.getSelectedText();
+				exportDsToExcel(thang,nam,mabp,tongTra);}
 			}
 		});
 		btnTinhLuongNV.addActionListener(new ActionListener() {
@@ -400,14 +430,14 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 											bc_DAO = new BangChamCongNV_DAO();
 											ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 											if(list.size()>0)
-											for (BangChamCongNV bcc : list) {
-												bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
-												bc_DAO.updateGhiChiBangChamCongNV(bcc);
-											}
-											
-										
+												for (BangChamCongNV bcc : list) {
+													bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+													bc_DAO.updateGhiChiBangChamCongNV(bcc);
+												}
+
+
 										}
-											
+
 
 										else{
 											int chon =JOptionPane.showConfirmDialog(null, "Nhân viên: "+tenNV+" Mã Số: "+maNV+" chưa có đủ bảng chấm công tháng "+thang+" năm "+nam+". Bạn có muốn tiếp tục tính lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
@@ -423,10 +453,10 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 												bc_DAO = new BangChamCongNV_DAO();
 												ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 												if(list.size()>0)
-												for (BangChamCongNV bcc : list) {
-													bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
-													bc_DAO.updateGhiChiBangChamCongNV(bcc);
-												}
+													for (BangChamCongNV bcc : list) {
+														bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+														bc_DAO.updateGhiChiBangChamCongNV(bcc);
+													}
 											}
 										}
 
@@ -471,12 +501,12 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 										bc_DAO = new BangChamCongNV_DAO();
 										ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 										if(list.size()>0)
-										for (BangChamCongNV bcc : list) {
-											bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
-											bc_DAO.updateGhiChiBangChamCongNV(bcc);
-										}
-										}
-									
+											for (BangChamCongNV bcc : list) {
+												bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+												bc_DAO.updateGhiChiBangChamCongNV(bcc);
+											}
+									}
+
 									else{
 										int chon =JOptionPane.showConfirmDialog(null, "Nhân viên: "+tenNV+" Mã Số: "+maNV+" chưa có đủ bảng chấm công tháng "+thang+" năm "+nam+". Bạn có muốn tiếp tục tính lương cho nhân viên này không?", "Thông báo", JOptionPane.YES_NO_OPTION);
 										if (chon ==JOptionPane.YES_OPTION) {
@@ -491,10 +521,10 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 											bc_DAO = new BangChamCongNV_DAO();
 											ArrayList<BangChamCongNV> list = bc_DAO. dsBangCCtheomaNVthangnam(maNV, thang, nam);
 											if(list.size()>0)
-											for (BangChamCongNV bcc : list) {
-												bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
-												bc_DAO.updateGhiChiBangChamCongNV(bcc);
-											}
+												for (BangChamCongNV bcc : list) {
+													bcc.setGhiChu(bcc.getGhiChu()+"Đã tính lương ở ngày:"+dtf.format(ngayhientai));
+													bc_DAO.updateGhiChiBangChamCongNV(bcc);
+												}
 										}
 									}
 								}
@@ -545,17 +575,17 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 				if (rowdk < 0) {
 					JOptionPane.showMessageDialog(null, "Hãy chọn ít nhất 1 điều kiện để chọn nhanh danh sách nhân viến chưa tính lương!");
 				}else
-					{
-						if(kiemtraCoFalseKhong()){
-							chonTatCaFalse();
-						} else {
-							int chon = JOptionPane.showConfirmDialog(null, "Bạn có muốn chọn tất cả nhân viên không?", "Thông báo", JOptionPane.YES_NO_OPTION);
-							if (chon == JOptionPane.YES_OPTION) {
-								ChonTatCaTrue();
-								
-							}
+				{
+					if(kiemtraCoFalseKhong()){
+						chonTatCaFalse();
+					} else {
+						int chon = JOptionPane.showConfirmDialog(null, "Bạn có muốn chọn tất cả nhân viên không?", "Thông báo", JOptionPane.YES_NO_OPTION);
+						if (chon == JOptionPane.YES_OPTION) {
+							ChonTatCaTrue();
+
 						}
 					}
+				}
 			}
 		});
 		btnHoanTatLuongNV.addActionListener(new ActionListener() {
@@ -642,13 +672,13 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 									bl_DAO.insertBangLuongNV(bl);
 									thongBao=1;
 									dk=1;
-									}
+								}
 								else {
 									bl_DAO.updateBangLuongNV(bl);
 									thongBao=1;
 									dk=1;
-									
-									}
+
+								}
 
 
 
@@ -664,15 +694,15 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 							int thangs = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
 							int nams = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
 							String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
-							
+
 							taoDSBangLuongtuDBtheoDK(thangs,nams,mahoaTenBoPhan(mabp));
 							bc_DAO = new BangChamCongNV_DAO();
 							BangChamCongNV bc = bc_DAO.layBangCCCuoiCungThangCua1NV(modelTableDSLuongNV.getValueAt(row, 0).toString(), thang, nam);
 							if(bc!=null) {
-							bc.setGhiChu(bc.getGhiChu()+" và Đã Lưu Vào Ngày:"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-							bc_DAO.updateGhiChiBangChamCongNV(bc);
-						}}
-							
+								bc.setGhiChu(bc.getGhiChu()+" và Đã Lưu Vào Ngày:"+LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+								bc_DAO.updateGhiChiBangChamCongNV(bc);
+							}}
+
 						else {
 							if(thongBao==1&&dk==0)
 								JOptionPane.showMessageDialog(null, "Hoàn tất tính lương thất bại!Vui Lòng tính lương trước!");
@@ -683,7 +713,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 
 					}
-					
+
 				}}
 		});
 
@@ -830,7 +860,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 	}
 	private void ChonTatCaTrue() {
 		int rowCount = tblDSLuongNV.getRowCount();
-		
+
 		// Duyệt qua tất cả các dòng trong bảng
 		for (int i = 0; i < rowCount; i++) {
 			int rowIndex = tblDSLuongNV.convertRowIndexToModel(i);
@@ -859,7 +889,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		}
 		return false;
 	}
-	
+
 	private int soNhanVienChuaTinhLuong() {
 		int rowCount = tblDSLuongNV.getRowCount();
 		int dem=0;
@@ -914,6 +944,102 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		frameChitiet.setResizable(false);
 		frameChitiet.setTitle("Chi Tiết Lương Nhân Viên");
 	}
+	private void exportDsToExcel(int thang, int nam , String boPhan, String tongLuong) {
+
+	
+			if(kiemtraCoFalseKhong()){
+				JOptionPane.showMessageDialog(this, "Vui Lòng Tính Lương Trước Khi In!");
+			} else {
+				DecimalFormat decimalFormat = new DecimalFormat("#,###.###");
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				try {
+					XSSFWorkbook workBook = new XSSFWorkbook();
+					XSSFSheet sheet = workBook.createSheet("Danh sách");
+
+					int columnCount = tblDSLuongNV.getColumnCount() - 2; // Exclude the last two columns
+
+					// Merge the first two rows
+					sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, columnCount - 1));
+					XSSFRow mergedHeaderRow = sheet.createRow(0);
+					mergedHeaderRow.createCell(0, CellType.STRING).setCellValue("Danh Sách Bảng Lương Tháng " + dinhDangThang(thang)+" Năm "+nam );
+					XSSFCellStyle style = sheet.getWorkbook().createCellStyle();
+					XSSFFont font = sheet.getWorkbook().createFont();
+					font.setBold(true);
+					style.setFont(font);
+					style.setAlignment(HorizontalAlignment.CENTER);
+					style.setVerticalAlignment(org.apache.poi.ss.usermodel.VerticalAlignment.CENTER);
+
+					XSSFCell cell = mergedHeaderRow.createCell(0, CellType.STRING);
+					cell.setCellValue("Danh Sách Bảng Lương Tháng " + dinhDangThang(thang) + " Năm " + nam);
+					cell.setCellStyle(style);
+
+					// Create the second row
+					// Tạo dòng subHeaderRow
+					XSSFRow subHeaderRow = sheet.createRow(2);
+
+					// Ô Tháng chiếm 2 cột bên phải
+					sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 1));
+					subHeaderRow.createCell(0, CellType.STRING).setCellValue("Tháng: " + dinhDangThang(thang));
+
+					// Ô Năm chiếm 2 cột bên phải
+					sheet.addMergedRegion(new CellRangeAddress(2, 2, 2, 3));
+					subHeaderRow.createCell(2, CellType.STRING).setCellValue("Năm: " + nam);
+
+					// Ô Bộ phận chiếm 3 cột bên phải
+					sheet.addMergedRegion(new CellRangeAddress(2, 2, 4, 6));
+					subHeaderRow.createCell(4, CellType.STRING).setCellValue("Bộ Phận: " + boPhan);
+
+					sheet.addMergedRegion(new CellRangeAddress(2, 2, 7, 10));
+					subHeaderRow.createCell(7, CellType.STRING).setCellValue("Ngày In: " + dtf.format(LocalDate.now()));
+
+					// Create the header row
+					XSSFRow headerRow = sheet.createRow(3);
+					for (int i = 0; i < columnCount; i++) {
+						headerRow.createCell(i, CellType.STRING).setCellValue(tblDSLuongNV.getColumnName(i));
+					}
+
+					// Populate the data rows
+					for (int i = 0; i < tblDSLuongNV.getRowCount(); i++) {
+						XSSFRow row = sheet.createRow(i + 4); // Start from row 5
+						for (int j = 0; j < columnCount; j++) {
+							Object value = tblDSLuongNV.getValueAt(i, j);
+							if (value != null) {
+								if (value instanceof Number) {
+									row.createCell(j, CellType.NUMERIC).setCellValue(((Number) value).doubleValue());
+								} else {
+									row.createCell(j, CellType.STRING).setCellValue(value.toString());
+								}
+							}
+						}
+					}
+
+					// Create the last row
+					XSSFRow lastRow = sheet.createRow(sheet.getLastRowNum() + 1);
+					lastRow.createCell(0, CellType.STRING).setCellValue("Tổng Cộng: " + tongLuong);
+
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setDialogTitle("Chọn vị trí lưu file Excel");
+					fileChooser.setFileFilter(new FileNameExtensionFilter("Tệp Excel (*.xlsx)", "xlsx"));
+					int returnValue = fileChooser.showSaveDialog(null);
+
+					if (returnValue == JFileChooser.APPROVE_OPTION) {
+						File selectedFile = fileChooser.getSelectedFile();
+						String filePath = selectedFile.getAbsolutePath();
+
+						try (FileOutputStream fos = new FileOutputStream(filePath + ".xlsx")) {
+							workBook.write(fos);
+							JOptionPane.showMessageDialog(frame, "In thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+			}
+		}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
