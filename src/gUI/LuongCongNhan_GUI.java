@@ -57,6 +57,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
@@ -96,6 +97,10 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 	private CongNhan_DAO cn_DAO;
 	private BangLuongCN_DAO bl_DAO;
 	private Component frame;
+	private JComboBox<String> cboThangLuongCN;
+	private JComboBox<String> cboNamLuongCN;
+	private BangChamCongCN_DAO bcc_DAO;
+	private JComboBox<String> cboXuongCN;
 
 	public LuongCongNhan_GUI() {
 		super("Lương Cong Nhan");
@@ -254,13 +259,82 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		pnlThongKeTinhLuong.setBounds(604, 0, 660, 190);
 		pnlLuongCN.add(pnlThongKeTinhLuong);
 		pnlThongKeTinhLuong.setLayout(null);
+		//~~~~~~~~~~
+		cboThangLuongCN = new JComboBox<String>();
+		cboThangLuongCN.setBounds(101, 29, 50, 30);
+		cboThangLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			for (int i = 1;i <= 12; i++){
+			cboThangLuongCN.addItem(i+"");
+		}
+		cboThangLuongCN.setSelectedItem(" ");
+		pnlLuongCN.add(cboThangLuongCN);
+
 		
-		txtGhiChuLuongCN = new JTextField();
-		txtGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtGhiChuLuongCN.setBounds(268, 29, 369, 30);
-		pnlThongKeTinhLuong.add(txtGhiChuLuongCN);
-		txtGhiChuLuongCN.setColumns(10);
+		JLabel Thangcbo = new JLabel("Tháng:");
+		Thangcbo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		Thangcbo.setBounds(21, 29, 80, 30);
+		pnlLuongCN.add(Thangcbo);
 		
+		JButton btnLoc = new JButton("Lọc");
+		btnLoc.setBounds(590, 29, 60, 30);
+		btnLoc.setBackground(new Color(255, 255, 255));
+		
+		
+		cboNamLuongCN = new JComboBox<String>();
+		cboNamLuongCN.setBounds(230, 29, 100, 30);
+		cboNamLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		bcc_DAO = new BangChamCongCN_DAO();
+		ArrayList<Integer> listNam = bcc_DAO.layDSNamKhacnhauCCCN();
+		for(Integer nam2 : listNam){
+			
+			cboNamLuongCN.addItem(nam2.toString());
+			
+		}
+		cboNamLuongCN.setSelectedItem(" ");
+		pnlLuongCN.add(cboNamLuongCN);
+		
+		JLabel lblNamcbo = new JLabel("Năm:");
+		lblNamcbo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNamcbo.setBounds(170, 29, 50, 30);
+		pnlLuongCN.add(lblNamcbo);
+
+		cboXuongCN = new JComboBox<String>();
+		cboXuongCN.setBounds(430, 29, 155, 30);
+		cboXuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlLuongCN.add(cboXuongCN);
+		
+		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhauCN()){
+			ArrayList<Xuong> listXuong = x_DAO.layTatCaXuongKhacNhau();
+			for(Xuong x : listXuong){
+				String tenBP = x.getTenXuong();
+				cboXuongCN.addItem(tenBP);
+			}
+		}
+		cboXuongCN.setSelectedItem(" ");
+		
+
+		JLabel lblXuongCN = new JLabel("Xưởng:");
+		lblXuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblXuongCN.setBounds(350, 29, 80, 30);
+		pnlLuongCN.add(lblXuongCN);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		txtGhiChuLuongCN = new JTextField();
+//		txtGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+//		txtGhiChuLuongCN.setBounds(268, 29, 369, 30);
+//		pnlThongKeTinhLuong.add(txtGhiChuLuongCN);
+//		txtGhiChuLuongCN.setColumns(10);
+//		
 		txtSoCNChuaTinhLuong = new JTextField();
 		txtSoCNChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtSoCNChuaTinhLuong.setBounds(268, 69, 369, 30);
@@ -278,11 +352,11 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		txtTongLuongCanTraCN.setBounds(268, 149, 369, 30);
 		pnlThongKeTinhLuong.add(txtTongLuongCanTraCN);
 		txtTongLuongCanTraCN.setColumns(10);
-		
-		JLabel lblGhiChuLuongCN = new JLabel("Ghi Chú:");
-		lblGhiChuLuongCN.setBounds(21, 29, 98, 30);
-		pnlThongKeTinhLuong.add(lblGhiChuLuongCN);
-		lblGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+//		
+//		JLabel lblGhiChuLuongCN = new JLabel("Ghi Chú:");
+//		lblGhiChuLuongCN.setBounds(21, 29, 98, 30);
+//		pnlThongKeTinhLuong.add(lblGhiChuLuongCN);
+//		lblGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		JLabel lblSoCNChuaTinhLuong = new JLabel("Số Công Nhân Chưa Tính Lương:");
 		lblSoCNChuaTinhLuong.setBounds(21, 69, 243, 30);
@@ -298,6 +372,14 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		lblTongLuongCanTraCN.setBounds(21, 149, 197, 30);
 		pnlThongKeTinhLuong.add(lblTongLuongCanTraCN);
 		lblTongLuongCanTraCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		pnlThongKeTinhLuong.add(cboThangLuongCN);
+		pnlThongKeTinhLuong.add(cboNamLuongCN);
+		pnlThongKeTinhLuong.add(cboXuongCN);
+		pnlThongKeTinhLuong.add(Thangcbo);
+		pnlThongKeTinhLuong.add(lblNamcbo);
+		pnlThongKeTinhLuong.add(lblXuongCN);
+		pnlThongKeTinhLuong.add(btnLoc);
 		tblThangLuongCN.addMouseListener(this);
 		btnChonNhan.addActionListener(this);
 		btnHoanTatLuongCN.addActionListener(this);
@@ -305,6 +387,47 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		btnXemChiTietLuongCN.addActionListener(this);
 		btnInBangLuongCN.addActionListener(this);
 		btnTinhLuongCN.addActionListener(this);
+		
+		btnLoc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String thang = cboThangLuongCN.getSelectedItem().toString().trim();
+				String nam = cboNamLuongCN.getSelectedItem().toString().trim();
+				String Xuong = cboXuongCN.getSelectedItem().toString().trim();
+				bcc_DAO= new BangChamCongCN_DAO();
+				ArrayList<LocalDate> listkt = bcc_DAO.layTatCaThangvaNamkhacNhauCN();
+				int temp=0;
+				
+				if(thang.equals("")||nam.equals("")||Xuong.equals("")){
+					JOptionPane.showMessageDialog(null, "Hãy chọn đầy đủ thông tin để lọc!");
+				}
+				else{
+					for (LocalDate kt : listkt) {
+					if(!(kt.getMonthValue()+"").equals(thang))
+						temp=1;
+					
+				}
+				if(temp==1)
+					JOptionPane.showMessageDialog(null, "Hiện Không Có Danh Sách Tháng Này!");
+				else {
+					int rowCount = modelTableThangLuongCN.getRowCount();
+					System.out.println(rowCount);
+					for (int i = rowCount - 1; i >= 0; i--) {
+						String thangLoc = modelTableThangLuongCN.getValueAt(i, 0).toString();
+						String namLoc = modelTableThangLuongCN.getValueAt(i, 1).toString();
+						String tenBPLoc = modelTableThangLuongCN.getValueAt(i, 2).toString();
+						if(thangLoc.equals(thang)&&namLoc.equals(nam)&&tenBPLoc.equals(Xuong)){
+							tblThangLuongCN.setRowSelectionInterval(i, i);
+
+							int row = tblThangLuongCN.getSelectedRow();
+							int thang1 = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 0).toString());
+							int nam1 = Integer.parseInt(modelTableThangLuongCN.getValueAt(row, 1).toString());
+							String xuong = modelTableThangLuongCN.getValueAt(row, 2).toString();
+							taoDSBangLuongtuDBtheoDK(thang1,nam1,xuong);
+						}
+					}
+				}
+			}}
+		});
 		
 		btnInBangLuongCN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -694,8 +817,8 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 				modelTableDSLuongCN.addRow(row);
 		}
 	}
-		setTxtSoNVChuaTinhLuong();
-		setTxtTongSoNV();
+		setTxtSoCNChuaTinhLuong();
+		setTxtTongSoCN();
 		setTxtTongLuongCanTra();
 }
 		private boolean kiemSoBangChamCongCua1CN(String maCN,int thang, int nam){
@@ -760,10 +883,10 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		}
 		return tongLuongCanTra;
 	}
-	private void setTxtSoNVChuaTinhLuong(){
+	private void setTxtSoCNChuaTinhLuong(){
 		txtSoCNChuaTinhLuong.setText(soCongNhanChuaTinhLuong()+"");
 	}
-	private void setTxtTongSoNV(){
+	private void setTxtTongSoCN(){
 		txtTongSoCN.setText(tongSoCongNhan()+"");
 	}
 	private void setTxtTongLuongCanTra(){
@@ -903,6 +1026,9 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 			int thang = Integer.parseInt(tblThangLuongCN.getValueAt(row, 0).toString());
 			int nam = Integer.parseInt(tblThangLuongCN.getValueAt(row, 1).toString());
 			String xuong = tblThangLuongCN.getValueAt(row, 2).toString();
+			cboThangLuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 0).toString());
+			cboNamLuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 1).toString());
+			cboXuongCN.setSelectedItem(modelTableThangLuongCN.getValueAt(row, 2).toString());
 			 taoDSBangLuongtuDBtheoDK(thang, nam, xuong);
 		}
 	}
