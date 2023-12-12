@@ -1109,7 +1109,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 
 					// Ô Bộ phận chiếm 3 cột bên phải
 					sheet.addMergedRegion(new CellRangeAddress(2, 2, 4, 6));
-					subHeaderRow.createCell(4, CellType.STRING).setCellValue("Bộ Phận: " + boPhan);
+					subHeaderRow.createCell(4, CellType.STRING).setCellValue("" + boPhan);
 
 					sheet.addMergedRegion(new CellRangeAddress(2, 2, 7, 10));
 					subHeaderRow.createCell(7, CellType.STRING).setCellValue("Ngày In: " + dtf.format(LocalDate.now()));
