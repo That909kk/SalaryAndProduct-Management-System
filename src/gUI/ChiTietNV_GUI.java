@@ -351,7 +351,7 @@ public class ChiTietNV_GUI extends JFrame {
 		txtBHXH.setBounds(957, 111, 220, 25);
 		pnlChiTietLuongNV.add(txtBHXH);
 		
-		JLabel lblSoNgayNghi = new JLabel("Số Ngày Nghỉ:");
+		JLabel lblSoNgayNghi = new JLabel("Số Ngày Làm:");
 		lblSoNgayNghi.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblSoNgayNghi.setBounds(35, 631, 135, 25);
 		pnlChiTietLuongNV.add(lblSoNgayNghi);
@@ -416,6 +416,17 @@ public class ChiTietNV_GUI extends JFrame {
 		txtMaNV.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtNam.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		txtThang.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		txtBHXH.setBorder(null);
+		txtBoPhan.setBorder(null);
+		txtHoTen.setBorder(null);
+		txtLuongNhan.setBorder(null);
+		txtMaNV.setBorder(null);
+		txtNam.setBorder(null);
+		txtSoNgayNghi.setBorder(null);
+		txtThang.setBorder(null);
+		txtTongLuong.setBorder(null);
+		txtTongSongGioTangCa.setBorder(null);
+		txtPhuCap_1.setBorder(null);
 		return pnlChiTietLuongNV;
 	}
 	private void khoiTaoChiTietLuong(String maNV,int Thang,int Nam,String mabp) {

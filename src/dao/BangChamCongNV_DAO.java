@@ -475,4 +475,25 @@ public class BangChamCongNV_DAO {
 		}
 		return bangCC;
 	}
+	public ArrayList<Integer> layDSNamKhacnhauCCNV (){
+		ArrayList<Integer> listNam = new ArrayList<Integer>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		String sql = "SELECT DISTINCT YEAR(ngayCham) FROM dbo.BangChamCongNhanVien";
+		PreparedStatement stmt = null;
+		int n =0;
+		try {
+			stmt= con.prepareStatement(sql);
+			ResultSet rs  = stmt.executeQuery();
+			
+			while(rs.next()) {
+				int nam = rs.getInt(1);
+				listNam.add(nam);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listNam;
+	}
 }
