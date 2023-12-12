@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,9 +40,11 @@ import connectDB.ConnectDB;
 import dao.CongDoan_DAO;
 import dao.HopDong_DAO;
 import dao.SanPham_DAO;
+import dao.BangPhanCongCN_DAO;
 import entity.CongDoan;
 import entity.HopDong;
 import entity.SanPham;
+import entity.BangPhanCongCN;
 
 public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, MouseListener {
 
@@ -62,6 +65,7 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 	private SanPham_DAO sp_DAO;
 	private HopDong_DAO hd_DAO;
 	private CongDoan_DAO cd_DAO;
+	private BangPhanCongCN_DAO bPCCN_DAO;
 	private DefaultComboBoxModel<String> modelCBOTienQuyet;
 	private JComboBox<String> cboMaCDTienQuyet;
 	private JButton btnXem;
@@ -75,10 +79,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 	/**
 	 * Create the frame.
 	 */
-	public static void main(String[] args) {
-		PhanChiaCongDoan_GUI pccd_GUI = new PhanChiaCongDoan_GUI();
-		pccd_GUI.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		PhanChiaCongDoan_GUI pccd_GUI = new PhanChiaCongDoan_GUI();
+//		pccd_GUI.setVisible(true);
+//	}
 	
 	public PhanChiaCongDoan_GUI() {
 		super("Phân chia công đoạn");
@@ -88,10 +92,6 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		sp_DAO = new SanPham_DAO();
-		hd_DAO = new HopDong_DAO();
-		cd_DAO = new CongDoan_DAO();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1280, 720);
@@ -112,7 +112,10 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		pnlPCCD.setBounds(0, 50, 1264, 632);
 		pnlPCCD.setLayout(null);
 		
-		
+		sp_DAO = new SanPham_DAO();
+		hd_DAO = new HopDong_DAO();
+		cd_DAO = new CongDoan_DAO();
+		bPCCN_DAO = new BangPhanCongCN_DAO();
 		
 		String[] header = {"Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Số lượng công đoạn hiện có", "Ngày kết thúc hợp đồng"};
 		modelSanPham = new DefaultTableModel(header, 0);
@@ -390,17 +393,26 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 			dcNgayBatDau.setEnabled(true);
 			dcNgayKetThuc.setEnabled(true);
 			btnSua.setEnabled(false);
-			btnXoa.setEnabled(true);
+			btnXoa.setEnabled(false);
 		}
 		
 		if (object.equals(tableCongDoan)) {
-			txtTenCD.setEnabled(false);
-			txtGiaTien.setEnabled(false);
-			txtSoCNDuKien.setEnabled(false);
-			txtSoLuongSP.setEnabled(false);
-			dcNgayBatDau.setEnabled(false);
-			dcNgayKetThuc.setEnabled(false);
-			btnSua.setEnabled(true);
+			int rowCD = tableCongDoan.getSelectedRow();
+			String maCD = modelCongDoan.getValueAt(rowCD, 1).toString();
+			ArrayList<BangPhanCongCN> listBPCCN = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
+			
+			if (listBPCCN.size() != 0) {
+				JOptionPane.showMessageDialog(null, "Lưu ý công đoạn này hiện đã phân công, Không thể thực hiện chỉnh sửa");
+			} else {
+				txtTenCD.setEnabled(false);
+				txtGiaTien.setEnabled(false);
+				txtSoCNDuKien.setEnabled(false);
+				txtSoLuongSP.setEnabled(false);
+				dcNgayBatDau.setEnabled(false);
+				dcNgayKetThuc.setEnabled(false);
+				btnSua.setEnabled(true);
+				btnXoa.setEnabled(true);
+			}
 		}
 	}
 	/**
@@ -477,26 +489,72 @@ public class PhanChiaCongDoan_GUI extends JFrame implements ActionListener, Mous
 		}
 		
 		if (o.equals(btnSua)) {
-			btnSua.setEnabled(false);
-			btnHoanTat.setEnabled(true);
+			String maCD = modelCongDoan.getValueAt(tableCongDoan.getSelectedRow(), 1).toString();
+			ArrayList<BangPhanCongCN> listBPCCN = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
+			
+			if (listBPCCN.size() == 0) {
+				btnSua.setEnabled(false);
+				btnHoanTat.setEnabled(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "Công đoạn này hiện đã phân công, hãy sửa công đoạn khác");
+			}
 		}
 		
 		if (o.equals(btnXoa)) {
 			String maCD = modelCongDoan.getValueAt(tableCongDoan.getSelectedRow(), 1).toString();
 			int luaChon = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xoá công đoạn này", "Lưu ý", JOptionPane.YES_NO_OPTION);
 			
-			if (luaChon == JOptionPane.YES_OPTION) {
-				if (cd_DAO.deleteCongDoan(maCD)) {
-					JOptionPane.showMessageDialog(null, "Xoá thành công");
-					layDSCongDoanTuDBTheoMaSP(modelSanPham.getValueAt(tableSanPham.getSelectedRow(), 0).toString());
-					capNhatSoCongDoanChoSP(modelSanPham.getValueAt(tableSanPham.getSelectedRow(), 0).toString());
+			ArrayList<BangPhanCongCN> listBPCCN = bPCCN_DAO.getDSPhanCongCongDoanTheoMaCD(maCD);
+			
+			if (listBPCCN.size() == 0) {
+				if (luaChon == JOptionPane.YES_OPTION) {
+					if (cd_DAO.deleteCongDoan(maCD)) {
+						int row = tableSanPham.getSelectedRow();
+						String maSP = modelSanPham.getValueAt(row, 0).toString();
+						JOptionPane.showMessageDialog(null, "Xoá thành công");
+						
+						layDSCongDoanTuDBTheoMaSP(maSP);
+						capNhatSoCongDoanChoSP(maSP);
+						capNhatCBOTienQuyet(maSP);
+					}
 				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Công đoạn này hiện đã phân công, hãy xoá công đoạn khác");
 			}
 		}
 		
 		if (o.equals(btnHoanTat)) {
 			btnSua.setEnabled(true);
 			btnHoanTat.setEnabled(false);
+			
+			int row = tableSanPham.getSelectedRow();
+			String maCD = modelCongDoan.getValueAt(row, 1).toString().trim();
+			
+			CongDoan cd = cd_DAO.getMotCongDoanTheoMaCD(maCD);
+			
+			int luaChon = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn sửa sản phẩm này không?", "Lưu Ý", JOptionPane.YES_NO_OPTION);
+			
+			if (row == -1)
+				JOptionPane.showMessageDialog(null, "Hãy chọn sản phẩm cần sửa!!!");
+			else {
+				if (luaChon == JOptionPane.YES_OPTION) {
+					
+					if (validation()) {
+						try {
+							cd.setTenCongDoan(txtMaCD.getText());
+							cd.setSoLuongCongNhanDuKien(Integer.parseInt(txtSoCNDuKien.getText().trim()));
+							cd.setSoLuongSanPham(Integer.parseInt(txtSoCNDuKien.getText().trim()));
+							cd.setGiaTien(Double.parseDouble(txtGiaTien.getText().trim()));
+							cd.setCongDoanTienQuyet(cboMaCDTienQuyet.getSelectedItem().toString());
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						if (cd_DAO.updateCongDoan(cd)) {
+							JOptionPane.showMessageDialog(null, "Sản phẩm đã sửa thành công");
+						}
+					}
+				}
+			}
 		}
 	}
 	/**

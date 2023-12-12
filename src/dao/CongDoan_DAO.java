@@ -257,4 +257,37 @@ public class CongDoan_DAO {
 		}
 		return listCDTheoTT;
 	}
+	
+	public boolean updateCongDoan(CongDoan cd) {
+		int n = 0;
+
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		
+		String sql = "update CongDoan set tenCongDoan = ?, soLuongCongNhanDuKien = ?, soLuongSanPham = ?"
+				+ "trangThai = ?, giaTien = ?, congDoanTienQuyet = ? where maCongDoan = ?";
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, cd.getTenCongDoan());
+			stmt.setInt(2, cd.getSoLuongCongNhanDuKien());
+			stmt.setInt(3, cd.getSoLuongSanPham());
+			stmt.setBoolean(4, cd.isTrangThai());
+			stmt.setDouble(5, cd.getGiaTien());
+			stmt.setString(6, cd.getCongDoanTienQuyet());
+			stmt.setString(7, cd.getMaCongDoan());
+			
+			n = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return n > 0;
+	}
 }
