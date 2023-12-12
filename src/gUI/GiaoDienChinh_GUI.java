@@ -279,6 +279,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		btnCaiDat.setBounds(734, 560, 160, 60);
 		btnCaiDat.setIcon(new ImageIcon("img\\icons\\icons8-setting-24.png"));
 		pnlBackGround.add(btnCaiDat);
+		btnCaiDat.setVisible(false);
 		
 		JLabel lblUser = new JLabel("Xin Chào! ");
 		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -370,6 +371,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		listMenu.add(mntmPCCD);
 		listMenu.add(mntmPCCN);
 		listMenu.add(mnCongDoan);
+		listMenu.add(mnGioiThieu);
+		listMenu.add(mnTroGiup);
 		
 		mnHome.addMouseListener(this);
 		mniQuanLyCN.addActionListener(this);
@@ -382,6 +385,8 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 		mniSanPham.addActionListener(this);
 		mntmLuongCN.addActionListener(this);
 		mntmLuongNV.addActionListener(this);
+		mnTroGiup.addMouseListener(this);
+		mnGioiThieu.addMouseListener(this);
 		btnDangXuat.addActionListener(this);
 		btnCaiDat.addActionListener(this);
 		btnDoiMK.addActionListener(this);
@@ -528,6 +533,18 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			
 			chuyenGUI(pnlBackGround);
 			this.setTitle("Màn Hình Chính");
+			mnHome.setBackground(new Color(0, 169, 255));
+		}
+		
+		if (o.equals(mnGioiThieu)) {
+			for (JMenuItem item : listMenu) {
+				item.setBackground(Color.WHITE);
+				item.setForeground(Color.BLACK);
+			}
+			
+			GioiThieu_GUI gt = new GioiThieu_GUI();
+			chuyenGUI(gt.createGUI());
+			this.setTitle("Giới thiệu phần mềm");
 			mnHome.setBackground(new Color(0, 169, 255));
 		}
 	}
