@@ -545,7 +545,7 @@ public class GiaoDienChinh_GUI extends JFrame implements ActionListener, MouseLi
 			GioiThieu_GUI gt = new GioiThieu_GUI();
 			chuyenGUI(gt.createGUI());
 			this.setTitle("Giới thiệu phần mềm");
-			mnHome.setBackground(new Color(0, 169, 255));
+			mnGioiThieu.setForeground(new Color(95, 189, 255));
 		}
 	}
 	@Override

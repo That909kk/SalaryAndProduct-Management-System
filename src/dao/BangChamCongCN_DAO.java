@@ -376,8 +376,7 @@ public class BangChamCongCN_DAO {
 			while(rs.next()) {
 				BangChamCongCN ccCN = new BangChamCongCN();
 				ccCN.setMaCCCN(rs.getString(1));
-				java.sql.Date ngayCham = rs.getDate(2);
-				LocalDate NgayCham = ngayCham.toLocalDate();
+				ccCN.setNgayCham(rs.getDate(2).toLocalDate());
 				ccCN.setVangMat(rs.getBoolean(4));
 				ccCN.setCoPhep(rs.getBoolean(5));
 				ccCN.setSoGioTangCa(rs.getInt(6));
@@ -548,6 +547,27 @@ public class BangChamCongCN_DAO {
 			e.printStackTrace();
 		}
 		return list;	
+	}
+	public String layMaSPtheoMaCC(BangChamCongCN bc){
+		String maSP = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		
+		String sql = "select sp.maSP from CongNhan cn join BangPhanCongCN bpc on cn.maCN=bpc.maCN join CongDoan cd on bpc.maCD=cd.maCongDoan join SanPham sp on cd.maSP=sp.maSP join BangChamCongCongNhan bcc on bcc.maCN=cn.maCN where bcc.maCC =?";
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, bc.getMaCCCN());
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				maSP = rs.getString(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return maSP;
 	}
 }
 
