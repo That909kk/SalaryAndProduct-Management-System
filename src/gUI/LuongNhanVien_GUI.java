@@ -492,7 +492,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 				int thang = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
 				int nam = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
 				String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
-				String tongTra= txtTongLuongCanTraNV.getSelectedText();
+				String tongTra= txtTongLuongCanTraNV.getText();
 				exportDsToExcel(thang,nam,mabp,tongTra);}
 			}
 		});
