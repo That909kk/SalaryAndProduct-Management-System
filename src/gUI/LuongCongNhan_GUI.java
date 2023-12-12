@@ -113,47 +113,6 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-//		JMenuBar menuBar = new JMenuBar();
-//		menuBar.setBounds(0, 0, 1264, 50);
-//		menuBar.setBackground(new Color(255, 255, 255));
-//		contentPane.add(menuBar);
-//		
-//		mnHome = new JMenu("");
-//		mnHome.setHorizontalAlignment(SwingConstants.CENTER);
-//		mnHome.setIcon(new ImageIcon("D:\\PTUD_Project\\SalaryAndProduct-Management-System\\img\\icons\\icons8-home-40.gif"));
-//		mnHome.setIconTextGap(20);
-//		menuBar.add(mnHome);
-//		
-//		JMenu mnCongNhan = new JMenu("  CÔNG NHÂN  ");
-//		mnCongNhan.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		mnCongNhan.setHorizontalAlignment(SwingConstants.CENTER);
-//		menuBar.add(mnCongNhan);
-//		
-//		JMenu mnNhanVien = new JMenu("  NHÂN VIÊN  ");
-//		mnNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnNhanVien);
-//		
-//		JMenu mnCongDoan = new JMenu("  CÔNG ĐOẠN  ");
-//		mnCongDoan.setHorizontalAlignment(SwingConstants.CENTER);
-//		mnCongDoan.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnCongDoan);
-//		
-//		JMenu mnLuong = new JMenu("  LƯƠNG  ");
-//		mnLuong.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnLuong);
-//		
-//		JMenu mnHopDong = new JMenu("  HỢP ĐỒNG  ");
-//		mnHopDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnHopDong);
-//		
-//		JMenu mnTroGiup = new JMenu("  TRỢ GIÚP  ");
-//		mnTroGiup.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnTroGiup);
-//		
-//		JMenu mnGioiThieu = new JMenu("  GIỚI THIỆU  ");
-//		mnGioiThieu.setFont(new Font("Segoe UI", Font.BOLD, 16));
-//		menuBar.add(mnGioiThieu);
-		
 		contentPane.add(this.getLuongCNGUI());
 		
 	}
@@ -177,6 +136,11 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		String headerDSLuongCN[] = {"Mã Công Nhân", "Họ Tên", "Lương cơ bản", "Lương sản phẩm", "Số ngày làm", "Phụ Cấp", "Khấu trừ",
 				"Bảo hiểm xã hội", "Tổng lương", "Đã Tính Lương", "Ghi chú"};
 		modelTableDSLuongCN = new DefaultTableModel(headerDSLuongCN, 0){
+			 @Override
+			    public boolean isCellEditable(int row, int column) {
+			        // Cho phép chỉnh sửa nếu cột không nằm trong khoảng 0 đến 5
+			        return column >= 6;
+			    }
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				if (columnIndex == 9)
@@ -268,7 +232,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 			for (int i = 1;i <= 12; i++){
 			cboThangLuongCN.addItem(i+"");
 		}
-		cboThangLuongCN.setSelectedItem(" ");
+		cboThangLuongCN.setSelectedItem(LocalDate.now().getMonthValue()+"");
 		pnlLuongCN.add(cboThangLuongCN);
 
 		
@@ -280,8 +244,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		JButton btnLoc = new JButton("Lọc");
 		btnLoc.setBounds(590, 29, 60, 30);
 		btnLoc.setBackground(new Color(255, 255, 255));
-		
-		
+	
 		cboNamLuongCN = new JComboBox<String>();
 		cboNamLuongCN.setBounds(230, 29, 100, 30);
 		cboNamLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -293,7 +256,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 			cboNamLuongCN.addItem(nam2.toString());
 			
 		}
-		cboNamLuongCN.setSelectedItem(" ");
+		cboNamLuongCN.setSelectedItem(LocalDate.now().getYear()+"");
 		pnlLuongCN.add(cboNamLuongCN);
 		
 		JLabel lblNamcbo = new JLabel("Năm:");
@@ -313,30 +276,13 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 				cboXuongCN.addItem(tenBP);
 			}
 		}
-		cboXuongCN.setSelectedItem(" ");
+		cboXuongCN.setSelectedItem(null);
 		
 
 		JLabel lblXuongCN = new JLabel("Xưởng:");
 		lblXuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblXuongCN.setBounds(350, 29, 80, 30);
-		pnlLuongCN.add(lblXuongCN);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		txtGhiChuLuongCN = new JTextField();
-//		txtGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
-//		txtGhiChuLuongCN.setBounds(268, 29, 369, 30);
-//		pnlThongKeTinhLuong.add(txtGhiChuLuongCN);
-//		txtGhiChuLuongCN.setColumns(10);
-//		
+		pnlLuongCN.add(lblXuongCN);		
 		txtSoCNChuaTinhLuong = new JTextField();
 		txtSoCNChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtSoCNChuaTinhLuong.setBounds(268, 69, 369, 30);
@@ -354,12 +300,7 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		txtTongLuongCanTraCN.setBounds(268, 149, 369, 30);
 		pnlThongKeTinhLuong.add(txtTongLuongCanTraCN);
 		txtTongLuongCanTraCN.setColumns(10);
-//		
-//		JLabel lblGhiChuLuongCN = new JLabel("Ghi Chú:");
-//		lblGhiChuLuongCN.setBounds(21, 29, 98, 30);
-//		pnlThongKeTinhLuong.add(lblGhiChuLuongCN);
-//		lblGhiChuLuongCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
+
 		JLabel lblSoCNChuaTinhLuong = new JLabel("Số Công Nhân Chưa Tính Lương:");
 		lblSoCNChuaTinhLuong.setBounds(21, 69, 243, 30);
 		pnlThongKeTinhLuong.add(lblSoCNChuaTinhLuong);
@@ -374,6 +315,13 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		lblTongLuongCanTraCN.setBounds(21, 149, 197, 30);
 		pnlThongKeTinhLuong.add(lblTongLuongCanTraCN);
 		lblTongLuongCanTraCN.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		txtSoCNChuaTinhLuong.setBorder(null);
+		txtTongSoCN.setBorder(null);
+		txtTongLuongCanTraCN.setBorder(null);
+		txtSoCNChuaTinhLuong.setBackground(new Color(240, 248, 255));
+		txtTongSoCN.setBackground(new Color(240, 248, 255));
+		txtTongLuongCanTraCN.setBackground(new Color(240, 248, 255));
 		
 		pnlThongKeTinhLuong.add(cboThangLuongCN);
 		pnlThongKeTinhLuong.add(cboNamLuongCN);
@@ -634,6 +582,19 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 								int row = rows[i];
 								if (row < tblDSLuongCN.getRowCount()){
 									int modelRow = tblDSLuongCN.convertRowIndexToModel(row);
+									double khauTrudk = 0;
+
+					                try {
+					                    khauTrudk = Double.parseDouble(modelTableDSLuongCN.getValueAt(modelRow, 6).toString().replace(",", ""));
+					                } catch (NumberFormatException ex) {
+					                    JOptionPane.showMessageDialog(null, "Khấu trừ phải là một số.");
+					                    return; // Dừng việc tính lương nếu có lỗi
+					                }
+
+					                if (khauTrudk < 0) {
+					                    JOptionPane.showMessageDialog(null, "Khấu trừ không thể là số âm.");
+					                    return; // Dừng việc tính lương nếu có lỗi
+					                }
 									boolean daTinhLuong = (boolean) tblDSLuongCN.getModel().getValueAt(modelRow, 9);
 									boolean coLuongRoi = Double.parseDouble(modelTableDSLuongCN.getValueAt(modelRow, 8).toString().replace(",", ""))>0?true:false;
 									if(daTinhLuong==true&&coLuongRoi==true){
@@ -703,6 +664,19 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 						}else{
 							for (int i=0;i<rows.length;i++){
 								int row = rows[i];
+								double khauTrudk = 0;
+
+				                try {
+				                    khauTrudk = Double.parseDouble(modelTableDSLuongCN.getValueAt(row, 6).toString().replace(",", ""));
+				                } catch (NumberFormatException ex) {
+				                    JOptionPane.showMessageDialog(null, "Khấu trừ phải là một số.");
+				                    return; // Dừng việc tính lương nếu có lỗi
+				                }
+
+				                if (khauTrudk < 0) {
+				                    JOptionPane.showMessageDialog(null, "Khấu trừ không thể là số âm.");
+				                    return; // Dừng việc tính lương nếu có lỗi
+				                }
 								boolean daTinhLuong = (boolean) modelTableDSLuongCN.getValueAt(row, 9);
 								boolean coLuongRoi = Double.parseDouble(modelTableDSLuongCN.getValueAt(row, 8).toString().replace(",", ""))>0?true:false;
 								if (daTinhLuong==true&&coLuongRoi==true){
@@ -791,26 +765,6 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		
 
 	}
-	// private void taoDSBangLuongtuDBtheoDK(int thang, int nam,String Xuong) {
-	// 	bc_DAO = new BangChamCongCN_DAO();
-	// 	cn_DAO = new CongNhan_DAO();
-	// 	modelTableDSLuongCN.setRowCount(0);
-	// 	for(CongNhan cn : cn_DAO.layDanhSachCNTheoDK(Congdoan, Xuong, Sanpham)){
-	// 		bl_DAO = new BangLuongCN_DAO();
-	// 		BangLuongCN bLuongCN = bl_DAO.getMotBangLuongCNTheoThangNam(cn.getMaCN(), thang, nam);
-	// 		if(bLuongCN == null) {
-	// 		ArrayList <BangChamCongCN> list = bc_DAO.getBangCCCNTheomaCNThangNam(cn.getMaCN(), thang, nam);
-	// 		for (BangChamCongCN bc : list) {
-	// 			Object[] row = {cn.getMaCN(), cn.getHo()+" "+ cn.getTen(), cn.getLuongCoBan(), bc_DAO.laySoSanLuongCuaCNTheoThangNam(cn.getMaCN(), thang, nam), bc_DAO.laySoNgayDiLamCuaCNTheoThangNam(cn.getMaCN(), thang, nam),bc_DAO.layTongSoGioTangCaCuaCNTheoThangNam(cn.getMaCN(), thang, nam), 0, 0, 0, false, ""};
-	// 			modelTableDSLuongCN.addRow(row);
-	// 		}
-	// 		}
-	// 		else {
-	// 			Object[] row = {bLuongCN.getCn().getMaCN(),bLuongCN.getCn().getHo()+" "+bLuongCN.getCn().getTen(), cn.getLuongCoBan(), bLuongCN.getTongSanLuong(), bc_DAO.laySoNgayDiLamCuaCNTheoThangNam(cn.getMaCN(), thang, nam), bc_DAO.layTongSoGioTangCaCuaCNTheoThangNam(cn.getMaCN(), thang, nam), bLuongCN.getTienPhat(),bLuongCN.getBhxh(), bLuongCN.getLuongTong(), true, ""};
-	// 			modelTableDSLuongCN.addRow(row);
-	// 	}
-	// }
-	// }
 		private void taoDSBangLuongtuDBtheoDK(int thang, int nam,String Xuong) {
 		
 		bc_DAO = new BangChamCongCN_DAO();

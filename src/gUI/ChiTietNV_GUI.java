@@ -68,27 +68,6 @@ public class ChiTietNV_GUI extends JFrame {
 	private JTextField txtKhauTru;
 	private JTextField textField;
 	private JTextField txtThuong;
-
-
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ChiTietNV_GUI frame = new ChiTietNV_GUI();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	/**
-	 * Create the frame.
-	 */
 	public ChiTietNV_GUI(String maNV,int Thang,int Nam,String boPhan,double khauTru) {
 		super("Chi Tiết Lương Nhân Viên");
 		try {
@@ -105,171 +84,6 @@ public class ChiTietNV_GUI extends JFrame {
 		setVisible(true);
 		getChiTietNV_GUI();
 		khoiTaoChiTietLuong(maNV, Thang, Nam,boPhan,khauTru);
-	
-//		pnlChiTietLuongNV = new JPanel();
-//		pnlChiTietLuongNV.setBorder(new EmptyBorder(5, 5, 5, 5));
-//
-//		setContentPane(pnlChiTietLuongNV);
-//		pnlChiTietLuongNV.setLayout(null);
-//		
-//		JLabel lblChiTietBangLuong = new JLabel("Chi Tiết Bảng Lương");
-//		lblChiTietBangLuong.setHorizontalAlignment(SwingConstants.CENTER);
-//		lblChiTietBangLuong.setFont(new Font("Tahoma", Font.PLAIN, 28));
-//		lblChiTietBangLuong.setBounds(420, 11, 500, 31);
-//		pnlChiTietLuongNV.add(lblChiTietBangLuong);
-//		
-//		JLabel lblMaNV = new JLabel("Mã Nhân Viên:");
-//		lblMaNV.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblMaNV.setBounds(10, 66, 140, 25);
-//		pnlChiTietLuongNV.add(lblMaNV);
-//		
-//		tblChiTietBangLuong = new JTable();
-//		tblChiTietBangLuong.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		tblChiTietBangLuong.setBounds(0, 160, 1260, 450);
-//		pnlChiTietLuongNV.add(tblChiTietBangLuong);
-//		
-//		JScrollBar scrollBar = new JScrollBar();
-//		scrollBar.setBounds(553, 160, 17, 376);
-//		pnlChiTietLuongNV.add(scrollBar);
-//		
-//		lblHoTen = new JLabel("Họ tên:");
-//		lblHoTen.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblHoTen.setBounds(10, 111, 80, 25);
-//		pnlChiTietLuongNV.add(lblHoTen);
-//		
-//		lblBoPhan = new JLabel("Bộ Phận:");
-//		lblBoPhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblBoPhan.setBounds(300, 66, 80, 25);
-//		pnlChiTietLuongNV.add(lblBoPhan);
-//		
-//		lblThang = new JLabel("Tháng");
-//		lblThang.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblThang.setBounds(300, 111, 60, 25);
-//		pnlChiTietLuongNV.add(lblThang);
-//		
-//		txtThang = new JTextField();
-//		txtThang.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtThang.setBounds(360, 111, 50, 25);
-//		pnlChiTietLuongNV.add(txtThang);
-//		txtThang.setColumns(10);
-//		
-//		JLabel lblNam = new JLabel("Năm");
-//		lblNam.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblNam.setBounds(420, 111, 45, 25);
-//		pnlChiTietLuongNV.add(lblNam);
-//		
-//		txtNam = new JTextField();
-//		txtNam.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtNam.setColumns(10);
-//		txtNam.setBounds(465, 111, 85, 25);
-//		pnlChiTietLuongNV.add(txtNam);
-//		
-//		txtBoPhan = new JTextField();
-//		txtBoPhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtBoPhan.setColumns(10);
-//		txtBoPhan.setBounds(382, 66, 165, 25);
-//		pnlChiTietLuongNV.add(txtBoPhan);
-//		
-//		txtMaNV = new JTextField();
-//		txtMaNV.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtMaNV.setColumns(10);
-//		txtMaNV.setBounds(143, 66, 142, 25);
-//		pnlChiTietLuongNV.add(txtMaNV);
-//		
-//		txtHoTen = new JTextField();
-//		txtHoTen.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtHoTen.setColumns(10);
-//		txtHoTen.setBounds(85, 111, 200, 25);
-//		pnlChiTietLuongNV.add(txtHoTen);
-//		
-//		JLabel lblLuongNhan = new JLabel("Lương Nhận:");
-//		lblLuongNhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblLuongNhan.setBounds(560, 66, 160, 25);
-//		pnlChiTietLuongNV.add(lblLuongNhan);
-//		
-//		JLabel lblBHXH = new JLabel("Bảo Hiểm Xã Hội:");
-//		lblBHXH.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblBHXH.setBounds(560, 111, 160, 25);
-//		pnlChiTietLuongNV.add(lblBHXH);
-//		
-//		txtLuongNhan = new JTextField();
-//		txtLuongNhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtLuongNhan.setColumns(10);
-//		txtLuongNhan.setBounds(680, 66, 220, 25);
-//		pnlChiTietLuongNV.add(txtLuongNhan);
-//		
-//		txtBHXH = new JTextField();
-//		txtBHXH.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtBHXH.setColumns(10);
-//		txtBHXH.setBounds(720, 111, 200, 25);
-//		pnlChiTietLuongNV.add(txtBHXH);
-//		
-//		JLabel lblSoNgayLam = new JLabel("Số Ngày Nghỉ:");
-//		lblSoNgayNghi.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblSoNgayNghi.setBounds(35, 631, 135, 25);
-//		pnlChiTietLuongNV.add(lblSoNgayNghi);
-//		
-//		txtSoNgayNghi = new JTextField();
-//		txtSoNgayNghi.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtSoNgayNghi.setColumns(10);
-//		txtSoNgayNghi.setBounds(172, 631, 100, 25);
-//		pnlChiTietLuongNV.add(txtSoNgayNghi);
-//		
-//		txtTongSongGioTangCa = new JTextField();
-//		txtTongSongGioTangCa.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtTongSongGioTangCa.setColumns(10);
-//		txtTongSongGioTangCa.setBounds(490, 631, 100, 25);
-//		pnlChiTietLuongNV.add(txtTongSongGioTangCa);
-//		
-//		lblTongSoGioTangCa = new JLabel("Tổng Số Giờ Tăng Ca:");
-//		lblTongSoGioTangCa.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblTongSoGioTangCa.setBounds(290, 631, 200, 25);
-//		pnlChiTietLuongNV.add(lblTongSoGioTangCa);
-//		
-//		lblTongLuong = new JLabel("Tổng Lương:");
-//		lblTongLuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblTongLuong.setBounds(935, 631, 120, 25);
-//		pnlChiTietLuongNV.add(lblTongLuong);
-//		
-//		txtTongLuong = new JTextField();
-//		txtTongLuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtTongLuong.setColumns(10);
-//		txtTongLuong.setBounds(1050, 631, 200, 25);
-//		pnlChiTietLuongNV.add(txtTongLuong);
-//		
-//		txtPhuCap_1 = new JTextField();
-//		txtPhuCap_1.setEditable(false);
-//		txtPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtPhuCap_1.setColumns(10);
-//		txtPhuCap_1.setBounds(705, 631, 200, 25);
-//		pnlChiTietLuongNV.add(txtPhuCap_1);
-//		
-//		lblPhuCap_1 = new JLabel("Phụ Cấp:");
-//		lblPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblPhuCap_1.setBounds(620, 631, 80, 25);
-//		pnlChiTietLuongNV.add(lblPhuCap_1);
-//		
-//		JLabel lblKhauTru = new JLabel("Khấu Trừ:");
-//		lblKhauTru.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblKhauTru.setBounds(934, 66, 160, 25);
-//		pnlChiTietLuongNV.add(lblKhauTru);
-//		
-//		txtKhauTru = new JTextField();
-//		txtKhauTru.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtKhauTru.setColumns(10);
-//		txtKhauTru.setBounds(1040, 66, 200, 25);
-//		pnlChiTietLuongNV.add(txtKhauTru);
-//		
-//		JLabel lblTngSnLng = new JLabel("Tổng Sản Lượng:");
-//		lblTngSnLng.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblTngSnLng.setBounds(934, 111, 160, 25);
-//		pnlChiTietLuongNV.add(lblTngSnLng);
-//		
-//		textField = new JTextField();
-//		textField.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		textField.setColumns(10);
-//		textField.setBounds(1090, 111, 170, 25);
-//		pnlChiTietLuongNV.add(textField);
 	}
 	public JPanel getChiTietNV_GUI() {
 		pnlChiTietLuongNV = new JPanel();
@@ -284,10 +98,6 @@ public class ChiTietNV_GUI extends JFrame {
 		lblChiTietBangLuong.setBounds(420, 11, 420, 31);
 		pnlChiTietLuongNV.add(lblChiTietBangLuong);
 		
-//		JLabel lblMaNV = new JLabel("Mã Nhân Viên:");
-//		lblMaNV.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblMaNV.setBounds(74, 66, 140, 25);
-//		pnlChiTietLuongNV.add(lblMaNV);
 		JLabel lblMaNV = new JLabel("Mã Nhân Viên:");
 		lblMaNV.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblMaNV.setBounds(10, 66, 140, 25);
@@ -315,120 +125,10 @@ public class ChiTietNV_GUI extends JFrame {
 		scrollpane.setBounds(0, 160, 1260, 450);
 		pnlChiTietLuongNV.add(scrollpane);
 		
-		
-//		lblHoTen = new JLabel("Họ tên:");
-//		lblHoTen.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblHoTen.setBounds(74, 111, 80, 25);
-//		pnlChiTietLuongNV.add(lblHoTen);
 		lblHoTen = new JLabel("Họ tên:");
 		lblHoTen.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblHoTen.setBounds(10, 111, 80, 25);
 		pnlChiTietLuongNV.add(lblHoTen);
-		
-//		lblBoPhan = new JLabel("Bộ Phận:");
-//		lblBoPhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblBoPhan.setBounds(450, 66, 80, 25);
-//		pnlChiTietLuongNV.add(lblBoPhan);
-//		
-//		lblThang = new JLabel("Tháng");
-//		lblThang.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblThang.setBounds(450, 111, 60, 25);
-//		pnlChiTietLuongNV.add(lblThang);
-//		
-//		txtThang = new JTextField();
-//		txtThang.setBounds(520, 111, 50, 25);
-//		pnlChiTietLuongNV.add(txtThang);
-//		txtThang.setColumns(10);
-//		
-//		JLabel lblNam = new JLabel("Năm");
-//		lblNam.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblNam.setBounds(580, 111, 45, 25);
-//		pnlChiTietLuongNV.add(lblNam);
-//		
-//		txtNam = new JTextField();
-//		txtNam.setColumns(10);
-//		txtNam.setBounds(626, 111, 85, 25);
-//		pnlChiTietLuongNV.add(txtNam);
-//		
-//		txtBoPhan = new JTextField();
-//		txtBoPhan.setColumns(10);
-//		txtBoPhan.setBounds(538, 66, 200, 25);
-//		pnlChiTietLuongNV.add(txtBoPhan);
-//		
-//		txtMaNV = new JTextField();
-//		txtMaNV.setColumns(10);
-//		txtMaNV.setBounds(210, 66, 200, 25);
-//		pnlChiTietLuongNV.add(txtMaNV);
-//		
-//		txtHoTen = new JTextField();
-//		txtHoTen.setColumns(10);
-//		txtHoTen.setBounds(210, 111, 200, 25);
-//		pnlChiTietLuongNV.add(txtHoTen);
-//		
-//		JLabel lblLuongNhan = new JLabel("Lương Nhận:");
-//		lblLuongNhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblLuongNhan.setBounds(793, 66, 160, 25);
-//		pnlChiTietLuongNV.add(lblLuongNhan);
-//		
-//		JLabel lblBHXH = new JLabel("Bảo Hiểm Xã Hội:");
-//		lblBHXH.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblBHXH.setBounds(793, 111, 160, 25);
-//		pnlChiTietLuongNV.add(lblBHXH);
-//		
-//		txtLuongNhan = new JTextField();
-//		txtLuongNhan.setColumns(10);
-//		txtLuongNhan.setBounds(957, 66, 220, 25);
-//		pnlChiTietLuongNV.add(txtLuongNhan);
-//		
-//		txtBHXH = new JTextField();
-//		txtBHXH.setColumns(10);
-//		txtBHXH.setBounds(957, 111, 220, 25);
-//		pnlChiTietLuongNV.add(txtBHXH);
-//		
-//		JLabel lblSoNgayNghi = new JLabel("Số Ngày Làm:");
-//		lblSoNgayNghi.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblSoNgayNghi.setBounds(35, 631, 135, 25);
-//		pnlChiTietLuongNV.add(lblSoNgayNghi);
-//		
-//		txtSoNgayNghi = new JTextField();
-//		txtSoNgayNghi.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtSoNgayNghi.setColumns(10);
-//		txtSoNgayNghi.setBounds(172, 631, 100, 25);
-//		pnlChiTietLuongNV.add(txtSoNgayNghi);
-//		
-//		txtTongSongGioTangCa = new JTextField();
-//		txtTongSongGioTangCa.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtTongSongGioTangCa.setColumns(10);
-//		txtTongSongGioTangCa.setBounds(490, 631, 100, 25);
-//		pnlChiTietLuongNV.add(txtTongSongGioTangCa);
-//		
-//		lblTongSoGioTangCa = new JLabel("Tổng Số Giờ Tăng Ca:");
-//		lblTongSoGioTangCa.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblTongSoGioTangCa.setBounds(290, 631, 200, 25);
-//		pnlChiTietLuongNV.add(lblTongSoGioTangCa);
-//		
-//		lblTongLuong = new JLabel("Tổng Lương:");
-//		lblTongLuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblTongLuong.setBounds(935, 631, 120, 25);
-//		pnlChiTietLuongNV.add(lblTongLuong);
-//		
-//		txtTongLuong = new JTextField();
-//		txtTongLuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		txtTongLuong.setColumns(10);
-//		txtTongLuong.setBounds(1050, 631, 200, 25);
-//		pnlChiTietLuongNV.add(txtTongLuong);
-//		
-//		txtPhuCap_1 = new JTextField();
-//		txtPhuCap_1.setEditable(false);
-//		txtPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-//		txtPhuCap_1.setColumns(10);
-//		txtPhuCap_1.setBounds(705, 631, 200, 25);
-//		pnlChiTietLuongNV.add(txtPhuCap_1);
-//		
-//		lblPhuCap_1 = new JLabel("Phụ Cấp:");
-//		lblPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblPhuCap_1.setBounds(620, 631, 80, 25);
-//		pnlChiTietLuongNV.add(lblPhuCap_1);
 		
 		lblBoPhan = new JLabel("Bộ Phận:");
 		lblBoPhan.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -534,39 +234,37 @@ public class ChiTietNV_GUI extends JFrame {
 		txtPhuCap_1.setEditable(false);
 		txtPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtPhuCap_1.setColumns(10);
-//		txtPhuCap_1.setBounds(705, 631, 200, 25);
+
 		txtPhuCap_1.setBounds(1040, 66, 200, 25);
 		pnlChiTietLuongNV.add(txtPhuCap_1);
 		
 		lblPhuCap_1 = new JLabel("Phụ Cấp:");
 		lblPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblPhuCap_1.setBounds(620, 631, 80, 25);
+
 		lblPhuCap_1.setBounds(934, 66, 160, 25);
 		pnlChiTietLuongNV.add(lblPhuCap_1);
 		
 		JLabel lblKhauTru = new JLabel("Khấu Trừ:");
 		lblKhauTru.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblKhauTru.setBounds(934, 66, 160, 25);
+
 		lblKhauTru.setBounds(934, 111, 160, 25);
 		pnlChiTietLuongNV.add(lblKhauTru);
 		
 		txtKhauTru = new JTextField();
 		txtKhauTru.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtKhauTru.setColumns(10);
-//		txtKhauTru.setBounds(1040, 66, 200, 25);
 		txtKhauTru.setBounds(1040, 111, 170, 25);
 		pnlChiTietLuongNV.add(txtKhauTru);
 		
 		JLabel lblThuong = new JLabel("Thưởng:");
 		lblThuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblThuong.setBounds(934, 111, 160, 25);
+
 		lblThuong.setBounds(620, 631, 80, 25);
 		pnlChiTietLuongNV.add(lblThuong);
-//		
+
 		txtThuong = new JTextField();
 		txtThuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtThuong.setColumns(10);
-//		txtThuong.setBounds(1090, 111, 170, 25);
 		txtThuong.setBounds(705, 631, 200, 25);
 		pnlChiTietLuongNV.add(txtThuong);
 		

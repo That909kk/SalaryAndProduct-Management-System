@@ -231,33 +231,32 @@ public class ChiTietCN_GUI extends JFrame {
 		
 		lblPhuCap_1 = new JLabel("Phụ Cấp:");
 		lblPhuCap_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblPhuCap_1.setBounds(620, 631, 80, 25);
+
 		lblPhuCap_1.setBounds(934, 66, 160, 25);
 		pnlChiTietLuongCN.add(lblPhuCap_1);
 		
 		JLabel lblKhauTru = new JLabel("Khấu Trừ:");
 		lblKhauTru.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblKhauTru.setBounds(934, 66, 160, 25);
+
 		lblKhauTru.setBounds(934, 111, 160, 25);
 		pnlChiTietLuongCN.add(lblKhauTru);
 		
 		txtKhauTru = new JTextField();
 		txtKhauTru.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtKhauTru.setColumns(10);
-//		txtKhauTru.setBounds(1040, 66, 200, 25);
+
 		txtKhauTru.setBounds(1040, 111, 170, 25);
 		pnlChiTietLuongCN.add(txtKhauTru);
 		
 		JLabel lblTongSanLuong = new JLabel("Tổng Sản Lượng:");
 		lblTongSanLuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		lblThuong.setBounds(934, 111, 160, 25);
+
 		lblTongSanLuong.setBounds(600, 631, 200, 25);
 		pnlChiTietLuongCN.add(lblTongSanLuong);
-//		
+
 		txtTongSanLuong = new JTextField();
 		txtTongSanLuong.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		txtTongSanLuong.setColumns(10);
-//		txtTongSanLuong.setBounds(1090, 111, 170, 25);
 		txtTongSanLuong.setBounds(760, 631, 170, 25);
 		pnlChiTietLuongCN.add(txtTongSanLuong);
 		
@@ -323,15 +322,6 @@ public class ChiTietCN_GUI extends JFrame {
         txtTongSongGioTangCa.setText(bcc_DAO.layTongSoGioTangCaCuaCNTheoThangNam(maCN, thang, nam)+"");
         txtTongSanLuong.setText(bcc_DAO.laySoSanLuongCuaCNTheoThangNam(maCN, thang, nam)+"");
         double tienCong1Ngay = cn.getLuongCoBan()/30;
-//        for (BangChamCongCN bcc : dsBCC) {
-//            double tienCong = 0;
-//            if (bcc.isVangMat()==true||bcc.isCoPhep()==true) {
-//                tienCong = 0;
-//                
-//            }else{
-//            tienCong= tienCong1Ngay+bcc.getSanLuong()*bcc_DAO.layGiaTienSanPhamTheoBCC(bcc);}
-//            modelTableChiTietBangLuong.addRow(new Object[] {bcc.getMaCCCN(),dtf.format(bcc.getNgayCham()),bcc.getSoGioTangCa(),bcc.getCaLam()==1?"Sáng":"Tối",bcc.isVangMat()?false:true,bcc.isCoPhep()?true:false,bcc.getSanLuong(),cd_DAO.getMotCongDoanTheoMaCD(cd_DAO.getMaCDtheomaCC(bcc)).getTenCongDoan(),sp_DAO.getMotSanPham(bcc_DAO.layMaSPtheoMaCC(bcc)),decimalFormat.format(bcc_DAO.layGiaTienSanPhamTheoBCC(bcc)),decimalFormat.format(tienCong),""});
-//        }
         for (BangChamCongCN bcc : dsBCC) {
             double tienCong = 0;
             if (bcc.isVangMat() || bcc.isCoPhep()) {
