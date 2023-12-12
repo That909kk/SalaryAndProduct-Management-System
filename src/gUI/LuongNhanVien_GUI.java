@@ -259,6 +259,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 //		pnlLuongNV.add(btnLoc);
 		
 
+		
 		cboNamLuongNV = new JComboBox<String>();
 		cboNamLuongNV.setBounds(230, 29, 100, 30);
 		cboNamLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -283,28 +284,22 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 		pnlLuongNV.add(cboBoPhanLuongNV);
 		
 		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhau()){
+			cboBoPhanLuongNV.removeAll();
 			ArrayList<String> dsMaBP = bc_DAO.listTatCaBoPhan(bc_DAO.dsBangChamCongNhanVienTheoTungThang(nam1.getMonthValue(), nam1.getYear()));
 			for(String maBP : dsMaBP){
 				String tenBP = hienThiTenBoPhan(maBP);
 				cboBoPhanLuongNV.addItem(tenBP);
 			}
 		}
+		cboBoPhanLuongNV.addItem(" ");
 
 		
-
 		JLabel lblBoPhanLuongNV = new JLabel("Bộ Phận:");
 		lblBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblBoPhanLuongNV.setBounds(350, 29, 80, 30);
 		pnlLuongNV.add(lblBoPhanLuongNV);
 
-	
-		//Để trống ô nhập combobox
-		cboThangLuongNV.setSelectedItem(" ");
-		cboNamLuongNV.setSelectedItem(" ");
-		cboBoPhanLuongNV.setSelectedItem(" ");
-
-		//Cho phép nhập vào combobox
-
+		
 		JLabel lblSoNVChuaTinhLuong = new JLabel("Số Nhân Viên Chưa Tính Lương:");
 		lblSoNVChuaTinhLuong.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblSoNVChuaTinhLuong.setBounds(21, 69, 243, 30);
@@ -467,14 +462,11 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 						String tenBPLoc = modelTableThangLuongNV.getValueAt(i, 2).toString();
 						if(thangLoc.equals(thang)&&namLoc.equals(nam)&&tenBPLoc.equals(tenBP)){
 							tblThangLuongNhanVien.setRowSelectionInterval(i, i);
-//							modelTableThangLuongNV.setRowCount(0);
+							
 							int row = tblThangLuongNhanVien.getSelectedRow();
 							int thang1 = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 0).toString());
 							int nam1 = Integer.parseInt(modelTableThangLuongNV.getValueAt(row, 1).toString());
 							String mabp = modelTableThangLuongNV.getValueAt(row, 2).toString();
-//							cboThangLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 0).toString());
-//							cboNamLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 1).toString());
-//							cboBoPhanLuongNV.setSelectedItem(modelTableThangLuongNV.getValueAt(row, 2).toString());
 							taoDSBangLuongtuDBtheoDK(thang1,nam1,mahoaTenBoPhan(mabp));
 						}
 					}
