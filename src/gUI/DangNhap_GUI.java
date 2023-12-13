@@ -124,6 +124,7 @@ public class DangNhap_GUI extends JFrame implements ActionListener, MouseListene
 		lblLinkQMK.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLinkQMK.addMouseListener(this);
 		btnDN.addActionListener(this);
+		lblLinkQMK.setVisible(false);
 		
 		txtTK.addKeyListener(this);
 		pwdMK.addKeyListener(this);
