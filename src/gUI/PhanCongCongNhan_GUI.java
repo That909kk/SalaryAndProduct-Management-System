@@ -464,7 +464,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 			hienThiDSPCCNTrenModel();
 			txtSoCN.setText(cn_DAO.getDSCongNhan().size() - bPCCN_DAO.getDSCongNhanDuocPhanCong().size() + "");
 			
-			lblThongBaoSoLuongPhanCong.setText("(*) Hiện tại công đoạn này đã phân công đủ số sản phẩm.");
+			lblThongBaoSoLuongPhanCong.setText("(*)");
 		}
 		
 		if (o.equals(btnTim)) {
