@@ -269,12 +269,10 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 		cboXuongCN.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlLuongCN.add(cboXuongCN);
 		
-		for(LocalDate nam1: bcc_DAO.layTatCaThangvaNamkhacNhauCN()){
-			ArrayList<Xuong> listXuong = x_DAO.layTatCaXuongKhacNhau();
-			for(Xuong x : listXuong){
-				String tenBP = x.getTenXuong();
-				cboXuongCN.addItem(tenBP);
-			}
+		ArrayList<Xuong> listXuong = x_DAO.layTatCaXuongKhacNhau();
+		for(Xuong x : listXuong){
+			String tenBP = x.getTenXuong();
+			cboXuongCN.addItem(tenBP);
 		}
 		cboXuongCN.setSelectedItem(null);
 		
@@ -352,11 +350,11 @@ public class LuongCongNhan_GUI extends JFrame implements ActionListener, MouseLi
 				}
 				else{
 					for (LocalDate kt : listkt) {
-					if(!(kt.getMonthValue()+"").equals(thang))
+					if((kt.getMonthValue()+"").equals(thang))
 						temp=1;
 					
 				}
-				if(temp==1)
+				if(temp==0)
 					JOptionPane.showMessageDialog(null, "Hiện Không Có Danh Sách Tháng Này!");
 				else {
 					int rowCount = modelTableThangLuongCN.getRowCount();
