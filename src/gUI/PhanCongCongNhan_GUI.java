@@ -438,6 +438,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 				
 				if (modelPCCNIsChanging) {
 					lblThongBaoSoLuongPhanCong.setText("(*) Hiện tại công đoạn này đã phân công đủ số sản phẩm.");
+					btnThem.setEnabled(false);
 					btnHoanTat.setEnabled(false);
 					btnCapNhat.setEnabled(true);
 					btnIn.setEnabled(true);
@@ -450,6 +451,7 @@ public class PhanCongCongNhan_GUI extends JFrame implements ActionListener, Mous
 		if (o.equals(btnCapNhat)) {
 			btnCapNhat.setEnabled(false);
 			btnHoanTat.setEnabled(true);
+			btnThem.setEnabled(true);
 			btnIn.setEnabled(false);
 			modelPCCNIsChanging = false;
 			

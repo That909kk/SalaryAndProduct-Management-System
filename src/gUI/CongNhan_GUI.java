@@ -590,7 +590,7 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
 		
 		pnCenter = new JPanel();
 		pnlCN.add(pnCenter, BorderLayout.CENTER);
-		String[] cols_datphong = {"Mã công nhân", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Chuyên môn", "Xưởng", "Trạng thái"};
+		String[] cols_datphong = {"Mã công nhân", "Họ đệm", "Tên", "Tuổi", "Ngày sinh", "CCCD", "Giới tính", "SĐT", "Địa chỉ", "Ngày bắt đầu làm","Ca làm việc", "Chuyên môn", "Xưởng"};
         modelDsCN = new DefaultTableModel(cols_datphong, 0);
         tblDsCN = new JTable(modelDsCN);
         tblDsCN.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -598,8 +598,8 @@ public class CongNhan_GUI implements MouseListener, ActionListener {
         JScrollPane scrollPane = new JScrollPane(tblDsCN);
         pnCenter.add(scrollPane);
         scrollPane.setPreferredSize(new Dimension(1220,400));
-        TableColumn column = tblDsCN.getColumnModel().getColumn(13);
-        column.setPreferredWidth(100);
+//        TableColumn column = tblDsCN.getColumnModel().getColumn(13);
+//        column.setPreferredWidth(100);
         dsCNX = congNhanDao.getListCNtheoXuong(dsX.get(0).getMaXuong());
         docDuLieuVaoTable(dsCNX);
         

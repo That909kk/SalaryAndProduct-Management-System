@@ -246,7 +246,9 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 			String tenBP = hienThiTenBoPhan(boPhan.getMaBoPhan());
 			cboBoPhanLuongNV.addItem(tenBP);
 		}
-		cboBoPhanLuongNV.setSelectedItem(null);
+		cboThangLuongNV.setSelectedItem(" ");
+		cboNamLuongNV.setSelectedItem(" ");
+		cboBoPhanLuongNV.setSelectedItem(" ");
 
 		JLabel lblBoPhanLuongNV = new JLabel("Bộ Phận:");
 		lblBoPhanLuongNV.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -394,6 +396,7 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 				String tenBP = cboBoPhanLuongNV.getSelectedItem().toString().trim();
 				bcc_DAO= new BangChamCongNV_DAO();
 				ArrayList<LocalDate> listkt = bcc_DAO.layTatCaThangvaNamkhacNhau();
+
 				int temp=0;
 
 				if(thang.equals("")||nam.equals("")||tenBP.equals("")){
@@ -401,11 +404,11 @@ public class LuongNhanVien_GUI extends JFrame implements ActionListener ,MouseLi
 				}
 				else{
 					for (LocalDate kt : listkt) {
-						if(!(kt.getMonthValue()+"").equals(thang))
+						if((kt.getMonthValue()+"").equals(thang))
 							temp=1;
 
 					}
-					if(temp==1)
+					if(temp==0)
 						JOptionPane.showMessageDialog(null, "Hiện Không Có Danh Sách Tháng Này!");
 					else {
 						int rowCount = modelTableThangLuongNV.getRowCount();
