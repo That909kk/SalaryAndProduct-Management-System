@@ -247,8 +247,8 @@ go
 insert into HopDong 
 values 
 	(N'14102301', N'Công ty Sản xuất áo sơ mi SMI', '10-14-2023', '11-13-2023', 1),
-	(N'07102301', N'Cửa hàng bán áo thun Z-shirt', '10-07-2023', '11-06-2023', 1),
-	(N'14082301', N'Shop bán quần jeans Jeanist', '08-14-2023', '09-13-2023', 1),
+	(N'07102301', N'Cửa hàng bán áo thun Z-shirt', '10-07-2023', '11-06-2023', 0),
+	(N'14082301', N'Shop bán quần jeans Jeanist', '08-14-2023', '09-13-2023', 0),
 	(N'30092301', N'Shop bán quần short Short-T', '09-30-2023', '10-29-2023', 1),
 	(N'15102301', N'Công ty sản xuất áo thun S-Z', '10-15-2023', '11-30-2023', 0),
 	(N'15112301', N'Shop bán quần áo gen-Z', '11-15-2023', '12-22-2023', 0),
@@ -420,5 +420,14 @@ go
 
 insert into BangChamCongCongNhan 
 values ('121023230041', '10-12-2023', 'CN230041', 0, 0, 0, 556, '')
+go
+
+insert into BangChamCongCongNhan(maCC,ngayCham,maCN,vangMat,coPhep,soGioTangCa,sanLuong,ghiChu)
+values 
+		('21123CN230004','02-11-2023','CN230004',0,0,3,16,''),
+		('21123CN230065','02-11-2023','CN230065',0,0,3,16,''),
+		('21223CN230065','02-12-2023','CN230065',0,0,3,15,''),
+		('21323CN230065','02-13-2023','CN230065',0,0,3,19,''),
+		('21423CN230065','02-14-2023','CN230065',0,0,3,16,'');
 go
 
